@@ -1,14 +1,22 @@
 ===============
-DJANGO-HITCOUNT
+Django-HitCount
 ===============
 
-Basic pluggable app that allows you to track the number of hits/views 
-for a particular object (any object in your project).  Simply add the 
-appropriate template tag (creates javascript) on an `object_detail`
-(or similiar) page and every time that object is viewed by a valid visitor,
+Basic app that allows you to track the number of hits/views 
+for a particular object (any object in your project).  
+
+Add the appropriate template tag (creates javascript) on an `object_detail`
+(or similar) page and every time that object is viewed by a valid visitor,
 you'll get a count.
 
 Most of the documentation is in the source code.
+
+More Info
+_________
+
+I plan to post a quick usage guide on my blog, for starters:
+
+
 
 What it is not
 --------------
