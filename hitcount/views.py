@@ -71,10 +71,10 @@ def update_hit_count_ajax(request):
     if not request.is_ajax():
         raise Http404()
 
-    object_pk = request.POST.get('object_pk')
+    hitcount_pk = request.POST.get('hitcount_pk')
     
     try:
-        hitcount = HitCount.objects.get(pk=object_pk)
+        hitcount = HitCount.objects.get(pk=hitcount_pk)
     except:
         return HttpResponseBadRequest("HitCount object_pk not working")
 
