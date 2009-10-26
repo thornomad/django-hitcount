@@ -5,17 +5,9 @@ Django-HitCount
 Basic app that allows you to track the number of hits/views 
 for a particular object (any object in your project).  
 
-Add the appropriate template tag (creates javascript) on an `object_detail`
-(or similar) page and every time that object is viewed by a valid visitor,
-you'll get a count.
+Visit: http://blog.damontimm.com/django-hitcount-app-count-hits-views/
 
-Most of the documentation is in the source code.
-
-More Info
-_________
-
-I plan to post a quick usage guide on my blog, for starters:
-
+More details are there and documented in the source code.
 
 
 What it is not
@@ -27,7 +19,10 @@ or a comprehensive site traffic monitor (see: Google Analytics).
 It's meant to simply count views of a particular object.
 
 
-TO DO:
-------
+Installation:
+-------------
 
-Everything.  Am learning git, so this should be slow going.
+For now, visit the website:
+
+http://blog.damontimm.com/django-hitcount-app-count-hits-views/
+
