@@ -27,7 +27,7 @@ def _update_hit_count(request, hitcount):
             BlacklistUserAgent.objects.filter(user_agent__exact=user_agent):
         return False
 
-    #start with a fresh active query set (HITCOUNT_GRACE_PERIOD)
+    #start with a fresh active query set (HITCOUNT_KEEP_HIT_ACTIVE )
     qs = Hit.objects.filter_active() 
 
     # check limit on hits from a unique ip address (HITCOUNT_HITS_PER_IP_LIMIT)

@@ -70,12 +70,12 @@ class HitManager(models.Manager):
 
         Change how long the expiration is by adding to settings.py:
 
-        HITCOUNT_GRACE_PERIOD = {'days' : 30, 'minutes' : 30}
+        HITCOUNT_KEEP_HIT_ACTIVE  = {'days' : 30, 'minutes' : 30}
 
         Accepts days, seconds, microseconds, milliseconds, minutes, 
         hours, and weeks.  It's creating a datetime.timedelta object.
         '''
-        grace = getattr(settings, 'HITCOUNT_GRACE_PERIOD', {'days':7})
+        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
         period = datetime.datetime.utcnow() - datetime.timedelta(**grace)
 
         queryset = self.get_query_set()
@@ -91,7 +91,7 @@ class Hit(models.Model):
     IP addresses and User Agents. Blacklisting simply causes those hits 
     to not be counted or recorded any more.
 
-    Depending on how long you set the HITCOUNT_GRACE_PERIOD, and how long
+    Depending on how long you set the HITCOUNT_KEEP_HIT_ACTIVE , and how long
     you want to be able to use `HitCount.hits_in_last(days=30)` you should
     probably also occasionally clean out this database using a cron job.
 
