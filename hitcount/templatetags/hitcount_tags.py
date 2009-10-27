@@ -82,7 +82,7 @@ class GetHitCount(template.Node):
         ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
         
         obj, created = HitCount.objects.get_or_create(content_type=ctype, 
-                                            object_id=object_pk)
+                                            object_pk=object_pk)
         
         if self.period: # if user sets a time period, use it
             try:
@@ -150,7 +150,7 @@ class GetHitCountJavascript(template.Node):
         ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
         
         obj, created = HitCount.objects.get_or_create(content_type=ctype, 
-                        object_id=object_pk)
+                        object_pk=object_pk)
 
         js =    "$.post( '" + reverse('hitcount_update_ajax') + "',"   + \
                 "\n\t{ hitcount_pk : '" + str(obj.pk) + "' },\n"         + \

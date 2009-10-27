@@ -9,19 +9,26 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 
+
 class HitCount(models.Model):
     '''
     Model that stores the hit totals for any content object.
+
     '''
     hits            = models.PositiveIntegerField(default=0)
     modified        = models.DateTimeField(default=datetime.datetime.utcnow)
-    content_type    = models.ForeignKey(ContentType)
-    object_id       = models.PositiveIntegerField()
-    content_object  = generic.GenericForeignKey('content_type', 'object_id')
+    content_type    = models.ForeignKey(ContentType,
+                        verbose_name="Content Type",
+                        related_name="content_type_set_for_%(class)s",)
+
+    # one limitation is that the object_pk field only takes number as a pk
+    # so if someone had a text based pk they would be out of luck
+    object_pk       = models.PositiveIntegerField('Object ID')
+    content_object  = generic.GenericForeignKey('content_type', 'object_pk')
 
     class Meta:
         ordering = ('-hits',)
-        unique_together = (("content_type", "object_id"),)
+        unique_together = (("content_type", "object_pk"),)
         get_latest_by = "modified"
         db_table = "hitcount_hit_count"
         verbose_name = "Hit Count"
@@ -51,6 +58,13 @@ class HitCount(models.Model):
         assert kwargs, "Must provide at least one timedelta arg (eg, days=1)"
         period = datetime.datetime.utcnow() - datetime.timedelta(**kwargs)
         return self.hit_set.filter(created__gte=period).count()
+
+    def get_content_object_url(self):
+        '''
+        Django has this in its contrib.comments.model file -- seems worth
+        implementing though it may take a couple steps.
+        '''
+        pass
 
 
 class HitManager(models.Manager):
