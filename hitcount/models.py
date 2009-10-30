@@ -3,15 +3,73 @@ import datetime
 from django.db import models
 from django.conf import settings
 from django.db.models import F
-from django.db.models.signals import pre_delete
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 
+from django.dispatch import Signal
+
+
+# SIGNALS #
+
+delete_hit_count = Signal(providing_args=['save_hitcount',])
+
+def delete_hit_count_callback(sender, instance, 
+        save_hitcount=False, **kwargs):
+    '''
+    Custom callback for the Hit.delete() method.
+
+    Hit.delete(): removes the hit from the associated HitCount object.
+    Hit.delete(save_hitcount=True): preserves the hit for the associated
+        HitCount object.
+    '''
+    if not save_hitcount:
+        instance.hitcount.hits = F('hits') - 1
+        instance.hitcount.save()
+
+delete_hit_count.connect(delete_hit_count_callback)
+
+
+# EXCEPTIONS #
+
 class DuplicateContentObject(Exception):
     'If content_object already exists for this model'
     pass
+
+# MANAGERS #
+
+class HitManager(models.Manager):
+
+    def filter_active(self, *args, **kwargs):
+        '''
+        Return only the 'active' hits.
+        
+        How you count a hit/view will depend on personal choice: Should the
+        same user/visitor *ever* be counted twice?  After a week, or a month,
+        or a year, should their view be counted again?
+
+        The defaulf is to consider a visitor's hit still 'active' if they 
+        return within a the last seven days..  After that the hit
+        will be counted again.  So if one person visits once a week for a year,
+        they will add 52 hits to a given object.
+
+        Change how long the expiration is by adding to settings.py:
+
+        HITCOUNT_KEEP_HIT_ACTIVE  = {'days' : 30, 'minutes' : 30}
+
+        Accepts days, seconds, microseconds, milliseconds, minutes, 
+        hours, and weeks.  It's creating a datetime.timedelta object.
+        '''
+        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
+        period = datetime.datetime.utcnow() - datetime.timedelta(**grace)
+
+        queryset = self.get_query_set()
+        queryset = queryset.filter(created__gte=period)
+        return queryset.filter(*args, **kwargs)
+
+
+# MODELS #
 
 class HitCount(models.Model):
     '''
@@ -85,35 +143,6 @@ class HitCount(models.Model):
         pass
 
 
-class HitManager(models.Manager):
-
-    def filter_active(self, *args, **kwargs):
-        '''
-        Return only the 'active' hits.
-        
-        How you count a hit/view will depend on personal choice: Should the
-        same user/visitor *ever* be counted twice?  After a week, or a month,
-        or a year, should their view be counted again?
-
-        The defaulf is to consider a visitor's hit still 'active' if they 
-        return within a the last seven days..  After that the hit
-        will be counted again.  So if one person visits once a week for a year,
-        they will add 52 hits to a given object.
-
-        Change how long the expiration is by adding to settings.py:
-
-        HITCOUNT_KEEP_HIT_ACTIVE  = {'days' : 30, 'minutes' : 30}
-
-        Accepts days, seconds, microseconds, milliseconds, minutes, 
-        hours, and weeks.  It's creating a datetime.timedelta object.
-        '''
-        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
-        period = datetime.datetime.utcnow() - datetime.timedelta(**grace)
-
-        queryset = self.get_query_set()
-        queryset = queryset.filter(created__gte=period)
-        return queryset.filter(*args, **kwargs)
-
 class Hit(models.Model):
     '''
     Model captures a single Hit by a visitor.
@@ -159,6 +188,18 @@ class Hit(models.Model):
 
     objects = HitManager()
 
+    def delete(self, save_hitcount=False):
+        '''
+        If a Hit is deleted and save_hitcount=True, it will preserve the 
+        HitCount object's total.  However, under normal circumstances, a 
+        delete() will trigger a subtraction from the HitCount object's total.
+
+        NOTE: This doesn't work at all during a queryset.delete().
+        '''
+        delete_hit_count.send(sender=self, instance=self, 
+                save_hitcount=save_hitcount)
+        super(Hit, self).delete()
+
 
 class BlacklistIP(models.Model):
     ip = models.CharField(max_length=40, unique=True)
@@ -183,14 +224,3 @@ class BlacklistUserAgent(models.Model):
     def __unicode__(self):
         return u'%s' % self.user_agent
 
-# Signal catching below.
-
-def subtract_hit_count(sender, instance, **kwargs):
-    '''
-    When you delete a Hit, it will automatically subtract itself from the
-    totals in the related HitCount object.
-    '''
-    instance.hitcount.hits = F('hits') - 1
-    instance.hitcount.save()
-
-pre_delete.connect(subtract_hit_count, sender=Hit)

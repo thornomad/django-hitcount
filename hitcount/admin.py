@@ -20,7 +20,15 @@ class HitAdmin(admin.ModelAdmin):
                 actions.blacklist_user_agents,
                 actions.blacklist_delete_ips,
                 actions.blacklist_delete_user_agents,
+                actions.delete_queryset,
                 ]
+
+    def get_actions(self, request):
+        # removing standard admin action because it won't call our Hit model's
+        # delete() method (which we want)
+        actions = super(HitAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
 
 
 class HitCountAdmin(admin.ModelAdmin):

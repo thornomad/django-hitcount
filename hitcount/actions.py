@@ -30,9 +30,16 @@ def delete_queryset(modeladmin, request, queryset):
     if not modeladmin.has_delete_permission(request):
         raise PermissionDenied
     else:
-        msg = "Successfully deleted %d hits." % queryset.count() 
-        queryset.delete()
-        modeladmin.message_user(request, msg)
+        if queryset.count() == 1:
+            msg = "1 hit was"
+        else:
+            msg = "%s hits were" % queryset.count()
+
+        for obj in queryset.iterator():
+            obj.delete() # calling it this way to get custom delete() method
+
+        modeladmin.message_user(request, "%s successfully deleted." % msg)
+delete_queryset.short_description = "DELETE selected hits"
 
 def blacklist_delete_ips(modeladmin, request, queryset):
     blacklist_ips(modeladmin, request, queryset)
