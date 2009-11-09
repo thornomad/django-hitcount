@@ -22,10 +22,11 @@ class HitAdmin(admin.ModelAdmin):
                 actions.blacklist_delete_user_agents,
                 actions.delete_queryset,
                 ]
+    #list_display_links = (None,)
 
     def get_actions(self, request):
-        # removing standard admin action because it won't call our Hit model's
-        # delete() method (which we want)
+        # Override the default `get_actions` to ensure that our model's
+        # `delete()` method is called.
         actions = super(HitAdmin, self).get_actions(request)
         del actions['delete_selected']
         return actions

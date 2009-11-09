@@ -7,6 +7,7 @@ from hitcount.models import HitCount
 
 register = template.Library()
 
+
 def get_target_ctype_pk(context, object_expr):
     # I don't really understand how this is working, but I took it from the
     # comment app in django.contrib and the removed it from the Node.
@@ -16,6 +17,7 @@ def get_target_ctype_pk(context, object_expr):
         return None, None
 
     return ContentType.objects.get_for_model(obj), obj.pk
+
 
 def return_period_from_string(arg):
     '''
@@ -34,7 +36,6 @@ def return_period_from_string(arg):
         period[str(key)] = int(value)
 
     return period
-
     
 
 class GetHitCount(template.Node):
