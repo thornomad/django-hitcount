@@ -21,11 +21,18 @@ def _update_hit_count(request, hitcount):
     ip = get_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
     hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
+    exclude_user_group = getattr(settings, 
+                            'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
     # first, check our request against the blacklists before continuing
     if BlacklistIP.objects.filter(ip__exact=ip) or \
             BlacklistUserAgent.objects.filter(user_agent__exact=user_agent):
         return False
+
+    # second, see if we are excluding a specific user group or not
+    if exclude_user_group and user.is_authenticated():
+        if user.groups.filter(name__in=exclude_user_group):
+            return False
 
     #start with a fresh active query set (HITCOUNT_KEEP_HIT_ACTIVE )
     qs = Hit.objects.filter_active() 
