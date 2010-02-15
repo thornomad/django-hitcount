@@ -7,9 +7,10 @@ def created_format(obj):
     '''
     Format the created time for the admin. PS: I am not happy with this.
     '''
-    return "%s" % obj.created.strftime("%H:%M:%S<br />%m.%d.%y")
+    return "%s" % obj.created.strftime("%m/%d/%y<br />%H:%M:%S")
 created_format.short_description = "Date (UTC)"
 created_format.allow_tags = True
+created_format.admin_order_field = 'created'
 
 
 class HitAdmin(admin.ModelAdmin):
