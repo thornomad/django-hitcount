@@ -1,13 +1,14 @@
-===============
 Django-HitCount
 ===============
 
 Basic app that allows you to track the number of hits/views 
-for a particular object.  
+for a particular object.
 
 Visit: http://blog.damontimm.com/django-hitcount-app-count-hits-views/
 
 More details are there and documented in the source code.
+
+(Last updated: 02/12/2010)
 
 What it is not
 --------------
@@ -25,3 +26,8 @@ For now, visit the website:
 
 http://blog.damontimm.com/django-hitcount-app-count-hits-views/
 
+
+
+
+
+vim: set filetype=mkd :
