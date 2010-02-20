@@ -84,7 +84,7 @@ class HitCount(models.Model):
     content_object  = generic.GenericForeignKey('content_type', 'object_pk')
 
     class Meta:
-        ordering = ('-hits',)
+        ordering = ( '-hits', )
         #unique_together = (("content_type", "object_pk"),)
         get_latest_by = "modified"
         db_table = "hitcount_hit_count"
@@ -165,9 +165,8 @@ class Hit(models.Model):
     hitcount        = models.ForeignKey(HitCount, editable=False)
 
     class Meta:
-        ordering = ("created",)    
-        get_latest_by = "created"
-        order_with_respect_to = "hitcount"
+        ordering = ( '-created', )    
+        get_latest_by = 'created'
 
     def __unicode__(self):
         return u'Hit: %s' % self.pk 
