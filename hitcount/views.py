@@ -59,6 +59,10 @@ def _update_hit_count(request, hitcount):
     else:
         if not qs.filter(session=session_key,hitcount=hitcount):
             hit.save()
+
+            # forces a save on this anonymous users session
+            request.session.modified = True
+
             return True
 
     return False 
