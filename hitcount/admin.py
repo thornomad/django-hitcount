@@ -23,7 +23,10 @@ class HitAdmin(admin.ModelAdmin):
                 actions.blacklist_delete_user_agents,
                 actions.delete_queryset,
                 ]
-    #list_display_links = (None,)
+
+    def __init__(self, *args, **kwargs):
+        super(HitAdmin, self).__init__(*args, **kwargs)
+        self.list_display_links = (None,)
 
     def get_actions(self, request):
         # Override the default `get_actions` to ensure that our model's
