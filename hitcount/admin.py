@@ -35,11 +35,23 @@ class HitAdmin(admin.ModelAdmin):
         del actions['delete_selected']
         return actions
 
+# TODO: Add inlines to the HitCount object so we can see a list of the recent
+# hits for the object.  For this inline to work, we need to:
+#   a) be able to see the hit data but *not* edit it
+#   b) have the `delete` command actually alter the HitCount
+#   c) remove the ability to 'add new hit'
+#
+#class HitInline(admin.TabularInline):
+#    model = Hit
+#    fk_name = 'hitcount'
+#    extra = 0
 
 class HitCountAdmin(admin.ModelAdmin):
     list_display = ('content_object','hits','modified')
     fields = ('hits',)
 
+    # TODO - when above is ready
+    #inlines = [ HitInline, ]
 
 class BlacklistIPAdmin(admin.ModelAdmin):
     pass
