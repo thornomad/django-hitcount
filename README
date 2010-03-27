@@ -22,7 +22,9 @@ Contribute
 ----------
 
 I would love to make it better.  Please fork and push.  Some fun additions
-might be [1] a nice graphing utility for the admin site, [2] another approach to caputring a hit (other than jQuery), and [3] a cleanup tool that can remove Hit objects after a certain period (cron job).
+might be [1] a nice graphing utility for the admin site, [2] another approach
+to caputring a hit (other than jQuery), and [3] a cleanup tool that can remove
+Hit objects after a certain period (cron job).
 
 Installation:
 -------------
@@ -35,7 +37,9 @@ Or, you could do a PIP installation:
 
     pip install -e git://github.com/ariddell/django-hitcount.git#egg=django-hitcount
 
-Or, you can link the source to your `site-packages` directory.  This is useful if you plan on pulling future changes and don't want to keep running `./setup.py install`.
+Or, you can link the source to your `site-packages` directory.  This is useful
+if you plan on pulling future changes and don't want to keep running
+`./setup.py install`.
 
     cd ~/src
     git clone git://github.com/thornomad/django-hitcount.git
