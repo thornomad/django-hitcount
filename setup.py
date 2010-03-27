@@ -6,7 +6,7 @@ def read(fname):
  
 setup(
     name = "django-hitcount",
-    version = "0.1",
+    version = "0.2",
     url = 'http://github.com/thornomad/django-hitcount',
     license = 'BSD',
     description = "Django hit counter application that tracks the number of hits/views for chosen objects",
@@ -18,7 +18,7 @@ setup(
     packages = find_packages(),
     
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Plugins',
         'Framework :: Django',
         'Intended Audience :: Developers',
