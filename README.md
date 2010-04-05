@@ -2,11 +2,12 @@ Django-HitCount
 ===============
 
 Basic app that allows you to track the number of hits/views for a particular
-object.  
+object.
 
 For more information you can view comments in the source code or visit:
 
-http://damontimm.com/code/django-hitcount/
+<http://damontimm.com/code/django-hitcount/>
+
 
 What it is not
 --------------
