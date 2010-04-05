@@ -8,7 +8,6 @@ For more information you can view comments in the source code or visit:
 
 <http://damontimm.com/code/django-hitcount/>
 
-
 What it is not
 --------------
 
