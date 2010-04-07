@@ -10,7 +10,7 @@ setup(
     url = 'http://github.com/thornomad/django-hitcount',
     license = 'BSD',
     description = "Django hit counter application that tracks the number of hits/views for chosen objects",
-    long_description = read('README'),
+    long_description = read('README.md'),
  
     author = 'Damon Timm',
     author_email = 'damontimm@gmail.com',
