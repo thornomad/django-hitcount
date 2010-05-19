@@ -11,7 +11,7 @@ For more information you can view comments in the source code or visit:
 What it is not
 --------------
 
-This is not meant to be a user tracking app (see: django-tracking) or a
+This is not meant to be a user tracking app (see: [django-tracking][1]) or a
 comprehensive site traffic monitoring tool (see: Google Analytics).
 
 It's meant to serve as a simple hit counter for chosen objects with a couple
@@ -46,3 +46,7 @@ if you plan on pulling future changes and don't want to keep running
     sudo ln -s `pwd`/django-hitcount/hitcount `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`/hitcount
 
 Special thanks to ariddell for putting the `setup.py` package together.
+
+[1]:http://code.google.com/p/django-tracking/
+
+
