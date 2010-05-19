@@ -35,7 +35,7 @@ Simplest way to formally install is to run:
 
 Or, you could do a PIP installation:
 
-    pip install -e git://github.com/ariddell/django-hitcount.git#egg=django-hitcount
+    pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
 
 Or, you can link the source to your `site-packages` directory.  This is useful
 if you plan on pulling future changes and don't want to keep running
