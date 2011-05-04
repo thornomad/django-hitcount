@@ -32,7 +32,8 @@ class HitAdmin(admin.ModelAdmin):
         # Override the default `get_actions` to ensure that our model's
         # `delete()` method is called.
         actions = super(HitAdmin, self).get_actions(request)
-        del actions['delete_selected']
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
         return actions
 
 # TODO: Add inlines to the HitCount object so we can see a list of the recent
