@@ -154,7 +154,7 @@ class GetHitCountJavascript(template.Node):
                         object_pk=object_pk)
 
         js =    "$.post( '" + reverse('hitcount_update_ajax') + "',"   + \
-                "\n\t{ hitcount_pk : '" + str(obj.pk) + "' },\n"         + \
+                "\n\t{ hitcount_pk : '" + str(obj.pk) + "', csrfmiddlewaretoken: csrf_token },\n"         + \
                 "\tfunction(data, status) {\n"                         + \
                 "\t\tif (data.status == 'error') {\n"                  + \
                 "\t\t\t// do something for error?\n"                   + \
