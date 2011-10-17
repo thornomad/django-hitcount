@@ -26,8 +26,8 @@ def return_period_from_string(arg):
     '''
     period = {}
 
-    if arg[0] == '"' and arg[-1] == '"':
-        opt = arg[1:-1] #remove quotes
+    if arg[1] == '"' and arg[-2] == '"':
+        opt = arg[2:-2] #remove quotes
     else:
         opt = arg
 
