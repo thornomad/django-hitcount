@@ -47,8 +47,8 @@ HITCOUNT_EXCLUDE_USER_GROUP: не считать определенные юзе
     <script src="/media/js/jquery-latest.js" type="text/javascript">
     </script>
     <script type="text/javascript">
-    var csrf_token = '{{ csrf_token }}';
     $(document).ready(function() {
+    var csrf_token = '{{ csrf_token }}';
         {% get_hit_count_javascript for object %}
     });
     </script>
