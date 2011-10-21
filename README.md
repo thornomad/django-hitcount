@@ -44,11 +44,11 @@ HITCOUNT_EXCLUDE_USER_GROUP: не считать определенные юзе
 Считаем посещение объекта object
     {% load hitcount_tags %}
     <script src="/media/js/jquery-latest.js" type="text/javascript"></script>
-    <script type="text/javascript"><!--
+    <script type="text/javascript">
     $(document).ready(function() {
         {% get_hit_count_javascript for object %}
     });
-    --></script>
+    </script>
 
 ### Вывод хитов в шаблонах
     - Показать все хиты объекта:
