@@ -41,10 +41,12 @@ HITCOUNT_EXCLUDE_USER_GROUP: не считать определенные юзе
     )
 
 ### Шаблоны
-Считаем посещение объекта object
+Считаем посещение объекта page
 
     <script src="/media/js/jquery-latest.js" type="text/javascript"></script>
-    {% include "hitcount.html" %}
+    {% with object=page  %}
+      {% include "hitcount.html" %}
+    {% endwith %}
 
 
 ### Вывод хитов в шаблонах
