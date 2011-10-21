@@ -42,10 +42,12 @@ HITCOUNT_EXCLUDE_USER_GROUP: не считать определенные юзе
 
 ### Шаблоны
 Считаем посещение объекта object
+
 ``{% load hitcount_tags %}
     <script src="/media/js/jquery-latest.js" type="text/javascript">
     </script>
     <script type="text/javascript">
+    var csrf_token = '{{ csrf_token }}';
     $(document).ready(function() {
         {% get_hit_count_javascript for object %}
     });
