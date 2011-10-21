@@ -1,52 +1,64 @@
 Django-HitCount
 ===============
 
-Basic app that allows you to track the number of hits/views for a particular
-object.
+Простое приложение для отслеживания просмотров объекта в Django.
+Счетчик посещений для нужных объектов запоминает браузер, сессию, ip
 
-For more information you can view comments in the source code or visit:
-
-<http://damontimm.com/code/django-hitcount/>
-
-What it is not
---------------
-
-This is not meant to be a user tracking app (see: [django-tracking][1]) or a
-comprehensive site traffic monitoring tool (see: Google Analytics).
-
-It's meant to serve as a simple hit counter for chosen objects with a couple
-useful features (user-agent, session, and IP tracking) and tools to help you
-on your way.
-
-Contribute
-----------
-
-I would love to make it better.  Please fork and push.  Some fun additions
-might be [1] a nice graphing utility for the admin site, [2] another approach
-to caputring a hit (other than jQuery), and [3] a cleanup tool that can remove
-Hit objects after a certain period (cron job).
-
-Installation:
+Установка:
 -------------
-
-Simplest way to formally install is to run:
-
-    ./setup.py install
-
-Or, you could do a PIP installation:
-
-    pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
-
-Or, you can link the source to your `site-packages` directory.  This is useful
-if you plan on pulling future changes and don't want to keep running
-`./setup.py install`.
-
-    cd ~/src
-    git clone git://github.com/thornomad/django-hitcount.git
+### Просто копи-пейст
+    git clone git://github.com/Gasoid/django-hitcount.git
     sudo ln -s `pwd`/django-hitcount/hitcount `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`/hitcount
 
-Special thanks to ariddell for putting the `setup.py` package together.
+### Добавляем hitcount в настройки django
+    INSTALLED_APPS = (
+        ...
+        'hitcount',
+    )
 
-[1]:http://code.google.com/p/django-tracking/
+### Добавляем параметры в settings.py
+    HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 7 }
+    HITCOUNT_HITS_PER_IP_LIMIT = 0
+    HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
+HITCOUNT_KEEP_HIT_ACTIVE: это количество дней, недель, месяцев, часов и т.д. в течение которых просмотр считается активным, повторный просмотр не считается
 
+HITCOUNT_HITS_PER_IP_LIMIT: ограничение на количество просмотров с одного IP адреса. 0 - нет ограничений
+
+HITCOUNT_EXCLUDE_USER_GROUP: не считать определенные юзер-группы
+
+### Изменения в urls.py
+    from django.conf.urls.defaults import *
+    from django.views.generic.list_detail import object_detail
+    from hitcount.views import update_hit_count_ajax
+    
+    urlpatterns = patterns('',
+        ...
+        url(r'^ajax/hit/$', # можно изменить на нужный урл
+            update_hit_count_ajax,
+            name='hitcount_update_ajax'), # name не изменять
+        ... 
+    )
+
+### Шаблоны
+Считаем посещение объекта object
+    {% load hitcount_tags %}
+    <script src="/media/js/jquery-latest.js" type="text/javascript"></script>
+    <script type="text/javascript"><!--
+    $(document).ready(function() {
+        {% get_hit_count_javascript for object %}
+    });
+    --></script>
+
+### Вывод хитов в шаблонах
+    - Показать все хиты объекта:
+    {% get_hit_count for [object] %}
+    
+    - Показать все хиты объекта использовав переменную:
+    {% get_hit_count for [object] as [var] %}
+    
+    - Показать хиты объекта за определенный период:
+    {% get_hit_count for [object] within ["days=1,minutes=30"] %}
+    
+    - Показать хиты объета за определенный период использовав переменную:
+    {% get_hit_count for [object] within ["days=1,minutes=30"] as [var] %}
