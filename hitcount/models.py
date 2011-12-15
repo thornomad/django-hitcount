@@ -78,7 +78,7 @@ class HitCount(models.Model):
     hits            = models.PositiveIntegerField(default=0)
     modified        = models.DateTimeField(default=datetime.datetime.utcnow)
     content_type    = models.ForeignKey(ContentType,
-                        verbose_name="content cype",
+                        verbose_name="content type",
                         related_name="content_type_set_for_%(class)s",)
     object_pk       = models.TextField('object ID')
     content_object  = generic.GenericForeignKey('content_type', 'object_pk')
