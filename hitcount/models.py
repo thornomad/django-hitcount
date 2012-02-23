@@ -76,6 +76,7 @@ class HitCount(models.Model):
 
     '''
     hits            = models.PositiveIntegerField(default=0)
+    created         = models.DateTimeField(default=datetime.datetime.utcnow)
     modified        = models.DateTimeField(default=datetime.datetime.utcnow)
     content_type    = models.ForeignKey(ContentType,
                         verbose_name="content type",
