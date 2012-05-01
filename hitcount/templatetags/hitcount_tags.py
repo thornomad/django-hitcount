@@ -153,13 +153,14 @@ class GetHitCountJavascript(template.Node):
         obj, created = HitCount.objects.get_or_create(content_type=ctype, 
                         object_pk=object_pk)
 
-        js =    "$.post( '" + reverse('hitcount_update_ajax') + "',"   + \
-                "\n\t{ hitcount_pk : '" + str(obj.pk) + "' },\n"         + \
-                "\tfunction(data, status) {\n"                         + \
-                "\t\tif (data.status == 'error') {\n"                  + \
-                "\t\t\t// do something for error?\n"                   + \
-                "\t\t}\n\t},\n\t'json');"
-
+        js = "var csrf = $('input[name=csrfmiddlewaretoken]').val();" +\
+            "\n$.post( '" + reverse('hitcount_update_ajax') + "',"   + \
+            "\n{ csrfmiddlewaretoken: csrf, hitcount_pk : '" + str(obj.pk) + "' }," + \
+            "\nfunction(data, status) {\n"                         + \
+            "\tif (data.status == 'error') {\n"                  + \
+            "\t\t// do something for error?\n"                   + \
+            "\t}\n\t},\n'json');"
+            
         return js
 
 def get_hit_count_javascript(parser, token):
