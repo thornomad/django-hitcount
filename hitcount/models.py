@@ -178,7 +178,8 @@ class Hit(models.Model):
         if the Hit is deleted.
         '''
         if not self.created:
-            self.hitcount.hits = F('hits') + 1
+            # increase the counter
+            self.hitcount.hits = self.hitcount.hits + 1
             self.hitcount.save()
             self.created = datetime.datetime.utcnow()
 

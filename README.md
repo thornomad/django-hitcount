@@ -49,4 +49,7 @@ Special thanks to ariddell for putting the `setup.py` package together.
 
 [1]:http://code.google.com/p/django-tracking/
 
+Example Project:
+----------------
 
+Example project illustrates the django-hitcount application with a mongodb noSQL database backend. In order to make example project work, Django MongoDB Engine must be installed. Details can be found on the dollowing website: http://django-mongodb.org/
