@@ -17,11 +17,15 @@ def _update_hit_count(request, hitcount):
     Returns True if the request was considered a Hit; returns False if not.
     '''
     user = request.user
+
+    if not request.session.session_key:
+        request.session.save()
+
     session_key = request.session.session_key
     ip = get_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
     hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
-    exclude_user_group = getattr(settings, 
+    exclude_user_group = getattr(settings,
                             'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
     # first, check our request against the blacklists before continuing
@@ -35,7 +39,7 @@ def _update_hit_count(request, hitcount):
             return False
 
     #start with a fresh active query set (HITCOUNT_KEEP_HIT_ACTIVE )
-    qs = Hit.objects.filter_active() 
+    qs = Hit.objects.filter_active()
 
     # check limit on hits from a unique ip address (HITCOUNT_HITS_PER_IP_LIMIT)
     if hits_per_ip_limit:
@@ -65,7 +69,7 @@ def _update_hit_count(request, hitcount):
 
             return True
 
-    return False 
+    return False
 
 def json_error_response(error_message):
     return HttpResponse(simplejson.dumps(dict(success=False,
@@ -79,7 +83,7 @@ def update_hit_count_ajax(request):
     '''
     Ajax call that can be used to update a hit count.
 
-    Ajax is not the only way to do this, but probably will cut down on 
+    Ajax is not the only way to do this, but probably will cut down on
     bots and spiders.
 
     See template tags for how to implement.
@@ -93,7 +97,7 @@ def update_hit_count_ajax(request):
         return json_error_response("Hits counted via POST only.")
 
     hitcount_pk = request.POST.get('hitcount_pk')
-    
+
     try:
         hitcount = HitCount.objects.get(pk=hitcount_pk)
     except:
