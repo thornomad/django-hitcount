@@ -17,6 +17,10 @@ def _update_hit_count(request, hitcount):
     Returns True if the request was considered a Hit; returns False if not.
     '''
     user = request.user
+
+    if not request.session.session_key:
+        request.session.save()
+
     session_key = request.session.session_key
     ip = get_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
