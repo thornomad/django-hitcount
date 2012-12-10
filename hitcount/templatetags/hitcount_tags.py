@@ -2,6 +2,7 @@ from django import template
 from django.template import TemplateSyntaxError
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.core.exceptions import MultipleObjectsReturned
 
 from hitcount.models import HitCount
 
@@ -82,9 +83,22 @@ class GetHitCount(template.Node):
     def render(self, context):
         ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
         
-        obj, created = HitCount.objects.get_or_create(content_type=ctype, 
-                                            object_pk=object_pk)
-        
+        try:
+            obj, created = HitCount.objects.get_or_create(content_type=ctype, 
+                        object_pk=object_pk)
+        except MultipleObjectsReturned:
+            # from hitcount.models
+            # Because we are using a models.TextField() for `object_pk` to
+            # allow *any* primary key type (integer or text), we
+            # can't use `unique_together` or `unique=True` to gaurantee
+            # that only one HitCount object exists for a given object.
+
+            # remove duplicate
+            items = HitCount.objects.all().filter(content_type=ctype, object_pk=object_pk)
+            obj = items[0]
+            for extra_items in items[1:]:
+                extra_items.delete()
+                
         if self.period: # if user sets a time period, use it
             try:
                 hits = obj.hits_in_last(**self.period)
