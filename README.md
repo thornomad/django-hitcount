@@ -1,3 +1,10 @@
+*NOTE* (02/23/2013) - I have not been actively maintaining this app (as anyone
+can tell from my levels of participation these last few years).  I apologize
+for that because I, myself, hate seeing open source solutions fade with time.
+To that end, I would prefer to point people to an active fork of the project.
+If you have a fork, or know of a good fork to use, please let me know and I
+will post the links/recommendations here.  It's been fun sharing. -Damon
+
 Django-HitCount
 ===============
 
