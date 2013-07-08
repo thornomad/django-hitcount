@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models import F
 
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 
@@ -83,8 +84,8 @@ class HitCount(models.Model):
         unique_together = (("content_type", "object_pk"),)
         get_latest_by = "modified"
         db_table = "hitcount_hit_count"
-        verbose_name = "Hit Count"
-        verbose_name_plural = "Hit Counts"
+        verbose_name = _("hit count")
+        verbose_name_plural = _("hit counts")
 
     def __unicode__(self):
         return u'%s' % self.content_object
@@ -140,6 +141,8 @@ class Hit(models.Model):
     class Meta:
         ordering = ( '-created', )
         get_latest_by = 'created'
+        verbose_name = _("hit")
+        verbose_name_plural = _("hits")
 
     def __unicode__(self):
         return u'Hit: %s' % self.pk
@@ -177,8 +180,8 @@ class BlacklistIP(models.Model):
 
     class Meta:
         db_table = "hitcount_blacklist_ip"
-        verbose_name = "Blacklisted IP"
-        verbose_name_plural = "Blacklisted IPs"
+        verbose_name = _("Blacklisted IP")
+        verbose_name_plural = _("Blacklisted IPs")
 
     def __unicode__(self):
         return u'%s' % self.ip
@@ -189,8 +192,8 @@ class BlacklistUserAgent(models.Model):
 
     class Meta:
         db_table = "hitcount_blacklist_user_agent"
-        verbose_name = "Blacklisted User Agent"
-        verbose_name_plural = "Blacklisted User Agents"
+        verbose_name = _("Blacklisted User Agent")
+        verbose_name_plural = _("Blacklisted User Agents")
 
     def __unicode__(self):
         return u'%s' % self.user_agent
