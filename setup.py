@@ -10,6 +10,7 @@ setup(
     name = "django-hitcount-lite",
     version = "0.2.1",
     packages=['hitcount'],
+    include_package_data=True,
     license = 'BSD',
     description = "Django hit counter application that tracks the number of hits/views for chosen objects",
     long_description = README,
