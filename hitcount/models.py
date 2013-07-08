@@ -1,87 +1,52 @@
-import datetime
+# -*- coding: utf-8 -*-
+
+from datetime import timedelta
 
 from django.db import models
-from django.conf import settings
 from django.db.models import F
-
-from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
 
-from django.dispatch import Signal
+from .managers import HitCountManager, HitManager
+from .signals import delete_hit_count
 
-from django.utils import timezone
 
-# SIGNALS #
-
-delete_hit_count = Signal(providing_args=['save_hitcount',])
-
-def delete_hit_count_callback(sender, instance,
-        save_hitcount=False, **kwargs):
-    '''
+@receiver(delete_hit_count)
+def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
+    """
     Custom callback for the Hit.delete() method.
 
     Hit.delete(): removes the hit from the associated HitCount object.
     Hit.delete(save_hitcount=True): preserves the hit for the associated
-        HitCount object.
-    '''
+    HitCount object.
+
+    """
     if not save_hitcount:
         instance.hitcount.hits = F('hits') - 1
         instance.hitcount.save()
 
-delete_hit_count.connect(delete_hit_count_callback)
-
-
-# MANAGERS #
-
-class HitManager(models.Manager):
-
-    def filter_active(self, *args, **kwargs):
-        '''
-        Return only the 'active' hits.
-
-        How you count a hit/view will depend on personal choice: Should the
-        same user/visitor *ever* be counted twice?  After a week, or a month,
-        or a year, should their view be counted again?
-
-        The defaulf is to consider a visitor's hit still 'active' if they
-        return within a the last seven days..  After that the hit
-        will be counted again.  So if one person visits once a week for a year,
-        they will add 52 hits to a given object.
-
-        Change how long the expiration is by adding to settings.py:
-
-        HITCOUNT_KEEP_HIT_ACTIVE  = {'days' : 30, 'minutes' : 30}
-
-        Accepts days, seconds, microseconds, milliseconds, minutes,
-        hours, and weeks.  It's creating a datetime.timedelta object.
-        '''
-        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
-        period = timezone.now() - datetime.timedelta(**grace)
-        queryset = self.get_query_set()
-        queryset = queryset.filter(created__gte=period)
-        return queryset.filter(*args, **kwargs)
-
-
-# MODELS #
 
 class HitCount(models.Model):
-    '''
+    """
     Model that stores the hit totals for any content object.
 
-    '''
-    hits            = models.PositiveIntegerField(default=0)
-    modified        = models.DateTimeField(auto_now=True)
-    content_type    = models.ForeignKey(ContentType,
-                        verbose_name="content type",
-                        related_name="content_type_set_for_%(class)s",)
-    object_pk       = models.PositiveIntegerField('object ID')
-    content_object  = generic.GenericForeignKey('content_type', 'object_pk')
+    """
+    hits = models.PositiveIntegerField(default=0)
+    modified = models.DateTimeField(auto_now=True)
+    content_type = models.ForeignKey(
+        ContentType, related_name="content_type_set_for_%(class)s")
+    object_pk = models.PositiveIntegerField('object ID')
+    content_object = generic.GenericForeignKey('content_type', 'object_pk')
+
+    objects = HitCountManager()
 
     class Meta:
-        ordering = ( '-hits', )
-        unique_together = (("content_type", "object_pk"),)
+        ordering = ('-hits',)
+        unique_together = ("content_type", "object_pk")
         get_latest_by = "modified"
         db_table = "hitcount_hit_count"
         verbose_name = _("hit count")
@@ -91,7 +56,7 @@ class HitCount(models.Model):
         return u'%s' % self.content_object
 
     def hits_in_last(self, **kwargs):
-        '''
+        """
         Returns hit count for an object during a given time period.
 
         This will only work for as long as hits are saved in the Hit database.
@@ -103,21 +68,22 @@ class HitCount(models.Model):
 
         Accepts days, seconds, microseconds, milliseconds, minutes,
         hours, and weeks.  It's creating a datetime.timedelta object.
-        '''
+
+        """
         assert kwargs, "Must provide at least one timedelta arg (eg, days=1)"
-        period = timezone.now() - datetime.timedelta(**kwargs)
+        period = timezone.now() - timedelta(**kwargs)
         return self.hit_set.filter(created__gte=period).count()
 
     def get_content_object_url(self):
-        '''
+        """
         Django has this in its contrib.comments.model file -- seems worth
         implementing though it may take a couple steps.
-        '''
+        """
         pass
 
 
 class Hit(models.Model):
-    '''
+    """
     Model captures a single Hit by a visitor.
 
     None of the fields are editable because they are all dynamically created.
@@ -130,13 +96,16 @@ class Hit(models.Model):
     probably also occasionally clean out this database using a cron job.
 
     It could get rather large.
-    '''
-    created         = models.DateTimeField(editable=False, auto_now_add=True, db_index=True)
-    ip              = models.CharField(max_length=40, editable=False)
-    session         = models.CharField(max_length=40, editable=False)
-    user_agent      = models.CharField(max_length=255, editable=False)
-    user            = models.ForeignKey(User,null=True, editable=False)
-    hitcount        = models.ForeignKey(HitCount, editable=False)
+
+    """
+    created = models.DateTimeField(editable=False, auto_now_add=True, db_index=True)
+    ip = models.CharField(max_length=40, editable=False)
+    session = models.CharField(max_length=40, editable=False)
+    user_agent = models.CharField(max_length=255, editable=False)
+    user = models.ForeignKey(User,null=True, editable=False)
+    hitcount = models.ForeignKey(HitCount, editable=False)
+
+    objects = HitManager()
 
     class Meta:
         ordering = ( '-created', )
@@ -148,34 +117,34 @@ class Hit(models.Model):
         return u'Hit: %s' % self.pk
 
     def save(self, *args, **kwargs):
-        '''
+        """
         The first time the object is created and saved, we increment
-        the associated HitCount object by one.  The opposite applies
+        the associated HitCount object by one. The opposite applies
         if the Hit is deleted.
-        '''
-        if not self.created:
+
+        """
+        if self.pk is None:
             self.hitcount.hits = F('hits') + 1
             self.hitcount.save()
 
         super(Hit, self).save(*args, **kwargs)
 
-    objects = HitManager()
-
     def delete(self, save_hitcount=False):
-        '''
+        """
         If a Hit is deleted and save_hitcount=True, it will preserve the
-        HitCount object's total.  However, under normal circumstances, a
+        HitCount object's total. However, under normal circumstances, a
         delete() will trigger a subtraction from the HitCount object's total.
 
         NOTE: This doesn't work at all during a queryset.delete().
-        '''
+
+        """
         delete_hit_count.send(sender=self, instance=self,
-                save_hitcount=save_hitcount)
+                              save_hitcount=save_hitcount)
         super(Hit, self).delete()
 
 
-
 class BlacklistIP(models.Model):
+
     ip = models.CharField(max_length=40, unique=True)
 
     class Meta:
@@ -188,6 +157,7 @@ class BlacklistIP(models.Model):
 
 
 class BlacklistUserAgent(models.Model):
+
     user_agent = models.CharField(max_length=255, unique=True)
 
     class Meta:
