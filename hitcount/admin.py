@@ -21,6 +21,9 @@ class HitAdmin(admin.ModelAdmin):
         super(HitAdmin, self).__init__(*args, **kwargs)
         self.list_display_links = (None,)
 
+    def has_add_permission(self, request):
+        return False
+
     def get_actions(self, request):
         actions = super(HitAdmin, self).get_actions(request)
         if 'delete_selected' in actions:
@@ -79,6 +82,9 @@ admin.site.register(Hit, HitAdmin)
 class HitCountAdmin(admin.ModelAdmin):
     list_display = ('content_object', 'hits', 'modified')
     fields = ('hits',)
+
+    def has_add_permission(self, request):
+        return False
 
 admin.site.register(HitCount, HitCountAdmin)
 
