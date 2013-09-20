@@ -1,3 +1,4 @@
+include LICENSE
 include README.md
 recursive-include hitcount/locale *
 recursive-include hitcount/management *

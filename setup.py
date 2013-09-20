@@ -7,8 +7,8 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name = "django-hitcount-lite",
-    version = "0.2.1",
+    name = "django-hitcount",
+    version = "0.2.3a",
     packages=['hitcount'],
     include_package_data=True,
     license = 'BSD',
