@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
 
@@ -35,9 +36,9 @@ class HitAdmin(admin.ModelAdmin):
            ip, created = BlacklistIP.objects.get_or_create(ip=obj.ip)
            if created:
                ip.save()
-        msg = "Successfully blacklisedt %d IPs." % queryset.count()
+        msg = _("Successfully blacklisted %d IPs") % queryset.count()
         self.message_user(request, msg)
-    blacklist_ips.short_description = "BLACKLIST the selected IP ADDRESSES"
+    blacklist_ips.short_description = _("Blacklist selected IP addresses")
 
     def blacklist_user_agents(self, request, queryset):
         for obj in queryset:
@@ -45,21 +46,21 @@ class HitAdmin(admin.ModelAdmin):
                             user_agent=obj.user_agent)
            if created:
                ua.save()
-        msg = "Successfully blacklisted %d User Agents." % queryset.count()
+        msg = _("Successfully blacklisted %d User Agents") % queryset.count()
         self.message_user(request, msg)
-    blacklist_user_agents.short_description = "BLACKLIST the selected USER AGENTS"
+    blacklist_user_agents.short_description = _("Blacklist selected User Agents")
 
     def blacklist_delete_ips(self, request, queryset):
         self.blacklist_ips(request, queryset)
         self.delete_queryset(request, queryset)
-    blacklist_delete_ips.short_description = "DELETE the selected hits and " + \
-                                             "BLACKLIST the IP ADDRESSES"
+    blacklist_delete_ips.short_description = _(
+        "Delete selected hits and blacklist related IP addresses")
 
     def blacklist_delete_user_agents(self, request, queryset):
         self.blacklist_user_agents(request, queryset)
         self.delete_queryset(request, queryset)
-    blacklist_delete_user_agents.short_description = "DELETE the selected hits " + \
-                                                "and BLACKLIST the USER AGENTS"
+    blacklist_delete_user_agents.short_description = _(
+        "Delete selected hits and blacklist related User Agents")
 
     def delete_queryset(self, request, queryset):
         if not self.has_delete_permission(request):
@@ -74,7 +75,7 @@ class HitAdmin(admin.ModelAdmin):
                 obj.delete() # calling it this way to get custom delete() method
 
             self.message_user(request, "%s successfully deleted." % msg)
-    delete_queryset.short_description = "DELETE selected hits"
+    delete_queryset.short_description = _("Delete selected hits")
 
 admin.site.register(Hit, HitAdmin)
 

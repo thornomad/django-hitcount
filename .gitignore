@@ -1,5 +1,2 @@
-*.pyc
-*~
 .DS_Store
-.AppleDouble
-*.swp
+*.pyc

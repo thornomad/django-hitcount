@@ -9,21 +9,6 @@ from ..models import HitCount
 register = template.Library()
 
 
-def get_target_ctype_pk(context, object_expr):
-    # This works by using template machinery to convert the object
-    # name passed in the tag arguments into the actual object.
-    # Really all this does is retreve the object referance from
-    # the context used to compile the template. Doing it this way
-    # just means that we can deal with every possiable method
-    # of passing an object.
-    try:
-        obj = object_expr.resolve(context)
-    except template.VariableDoesNotExist:
-        return None, None
-
-    return ContentType.objects.get_for_model(obj), obj.pk
-
-
 def return_period_from_string(arg):
     """
     Takes a string such as "days=1,seconds=30" and strips the quotes
@@ -46,6 +31,13 @@ def return_period_from_string(arg):
 
 class GetHitCount(template.Node):
 
+    def __init__(self, object_expr, as_varname=None, period=None):
+        self.object_expr = object_expr
+        self.as_varname = as_varname
+        self.period = period
+
+    
+    @classmethod
     def handle_token(cls, parser, token):
         args = token.contents.split()
 
@@ -74,15 +66,23 @@ class GetHitCount(template.Node):
             raise TemplateSyntaxError(
                 """'get_hit_count' requires 'for [object] in [period] as [var]' (got %r)""" % args)
 
-    handle_token = classmethod(handle_token)
 
-    def __init__(self, object_expr, as_varname=None, period=None):
-        self.object_expr = object_expr
-        self.as_varname = as_varname
-        self.period = period
+    def get_target_ctype_pk(self, context, object_expr):
+        # This works by using template machinery to convert the object
+        # name passed in the tag arguments into the actual object.
+        # Really all this does is retreve the object referance from
+        # the context used to compile the template. Doing it this way
+        # just means that we can deal with every possiable method
+        # of passing an object.
+        try:
+            obj = object_expr.resolve(context)
+        except template.VariableDoesNotExist:
+            return None, None
+
+        return ContentType.objects.get_for_model(obj), obj.pk
 
     def render(self, context):
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
+        ctype, object_pk = self.get_target_ctype_pk(context, self.object_expr)
 
         obj, created = HitCount.objects.get_or_create(
             content_type=ctype, object_pk=object_pk)

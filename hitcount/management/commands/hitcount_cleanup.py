@@ -15,7 +15,7 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         from django.db import transaction
 
-        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_IN_DATABASE', {'days':30})
+        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_IN_DATABASE', {'days': 30})
         period = timezone.now() - timedelta(**grace)
         Hit.objects.filter(created__lt=period).delete()
         transaction.commit_unless_managed()

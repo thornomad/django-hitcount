@@ -26,8 +26,7 @@ def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
 
     """
     if not save_hitcount:
-        instance.hitcount.hits = F('hits') - 1
-        instance.hitcount.save()
+        instance.hitcount.decrease()
 
 
 class HitCount(models.Model):
@@ -46,14 +45,22 @@ class HitCount(models.Model):
 
     class Meta:
         ordering = ('-hits',)
-        unique_together = ("content_type", "object_pk")
         get_latest_by = "modified"
-        db_table = "hitcount_hit_count"
         verbose_name = _("hit count")
         verbose_name_plural = _("hit counts")
+        unique_together = ("content_type", "object_pk")
+        db_table = "hitcount_hit_count"
 
     def __unicode__(self):
         return u'%s' % self.content_object
+
+    def increase(self):
+        self.hits = F('hits') + 1
+        self.save()
+
+    def decrease(self):
+        self.hits = F('hits') - 1
+        self.save()
 
     def hits_in_last(self, **kwargs):
         """
@@ -71,6 +78,7 @@ class HitCount(models.Model):
 
         """
         assert kwargs, "Must provide at least one timedelta arg (eg, days=1)"
+
         period = timezone.now() - timedelta(**kwargs)
         return self.hit_set.filter(created__gte=period).count()
 
@@ -78,6 +86,7 @@ class HitCount(models.Model):
         """
         Django has this in its contrib.comments.model file -- seems worth
         implementing though it may take a couple steps.
+
         """
         pass
 
@@ -124,8 +133,7 @@ class Hit(models.Model):
 
         """
         if self.pk is None:
-            self.hitcount.hits = F('hits') + 1
-            self.hitcount.save()
+            self.hitcount.increase()
 
         super(Hit, self).save(*args, **kwargs)
 
@@ -138,8 +146,8 @@ class Hit(models.Model):
         NOTE: This doesn't work at all during a queryset.delete().
 
         """
-        delete_hit_count.send(sender=self, instance=self,
-                              save_hitcount=save_hitcount)
+        delete_hit_count.send(
+            sender=self, instance=self, save_hitcount=save_hitcount)
         super(Hit, self).delete()
 
 
