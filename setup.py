@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 hitcount = __import__('hitcount')
 
 setup(
-    name = "django-hitcount-lite",
+    name = "django-hitcount-headless",
     version = hitcount.get_version(),
     packages=['hitcount'],
     include_package_data=True,
