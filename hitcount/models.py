@@ -11,6 +11,7 @@ from django.dispatch import Signal
 
 from django.utils.timezone import now
 
+
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 # SIGNALS #
