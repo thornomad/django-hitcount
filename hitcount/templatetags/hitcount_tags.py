@@ -27,8 +27,8 @@ def return_period_from_string(arg):
     '''
     period = {}
 
-    if arg[0] == '"' and arg[-1] == '"':
-        opt = arg[1:-1] #remove quotes
+    if arg[1] == '"' and arg[-2] == '"':
+        opt = arg[2:-2] #remove quotes
     else:
         opt = arg
 
@@ -168,7 +168,7 @@ class GetHitCountJavascript(template.Node):
                         object_pk=object_pk)
 
         js =    "$.post( '" + reverse('hitcount_update_ajax') + "',"   + \
-                "\n\t{ hitcount_pk : '" + str(obj.pk) + "' },\n"         + \
+                "\n\t{ hitcount_pk : '" + str(obj.pk) + "', csrfmiddlewaretoken: csrf_token },\n"         + \
                 "\tfunction(data, status) {\n"                         + \
                 "\t\tif (data.status == 'error') {\n"                  + \
                 "\t\t\t// do something for error?\n"                   + \
