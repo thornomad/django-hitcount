@@ -16,7 +16,7 @@ setup(
     license = 'BSD License',
     description = "Django hit counter application that tracks the number of hits/views for chosen objects",
     long_description = README,
-    url='http://github.com/bashu/django-hitcount-lite',
+    url='http://github.com/bashu/django-hitcount-headless',
     author = 'Basil Shubin',
     author_email='basil.shubin@gmail.com',
     classifiers=[
