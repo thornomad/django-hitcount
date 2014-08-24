@@ -1,5 +1,6 @@
+import json
+
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.utils import simplejson
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
@@ -72,11 +73,11 @@ def _update_hit_count(request, hitcount):
     return False
 
 def json_error_response(error_message):
-    return HttpResponse(simplejson.dumps(dict(success=False,
+    return HttpResponse(json.dumps(dict(success=False,
                                               error_message=error_message)))
 
 # TODO better status responses - consider model after django-voting,
-# right now the django handling isn't great.  should return the current
+# right now the Django handling isn't great.  should return the current
 # hit count so we could update it via javascript (since each view will
 # be one behind).
 def update_hit_count_ajax(request):
@@ -106,9 +107,10 @@ def update_hit_count_ajax(request):
     result = _update_hit_count(request, hitcount)
 
     if result:
-        status = "success"
+        status = "Hit successfully recorded"
     else:
-        status = "no hit recorded"
+        status = "Did not save a hit"
 
-    json = simplejson.dumps({'status': status})
-    return HttpResponse(json,mimetype="application/json")
+    json_dump = json.dumps( {'status': status} )
+
+    return HttpResponse(json_dump, mimetype="application/json")
