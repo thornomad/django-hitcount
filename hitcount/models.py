@@ -63,7 +63,7 @@ class HitManager(models.Manager):
         '''
         grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
         period = datetime.datetime.utcnow() - datetime.timedelta(**grace)
-        queryset = self.get_query_set()
+        queryset = self.get_queryset()
         queryset = queryset.filter(created__gte=period)
         return queryset.filter(*args, **kwargs)
 
