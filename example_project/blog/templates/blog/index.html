@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+<h1>django-hitcount</h1>
+<p>Choose a post to trigger a hit</p>
+{% if post_list %}
+    <ul>
+    {% for post in post_list %}
+        <li><a href="/{{ post.id }}/">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
+</div>
+
+{%endblock%}

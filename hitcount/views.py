@@ -1,5 +1,7 @@
+import json
+from collections import namedtuple
+
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.utils import simplejson
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
@@ -16,35 +18,44 @@ def _update_hit_count(request, hitcount):
 
     Returns True if the request was considered a Hit; returns False if not.
     '''
+
+    UpdateHitCountResponse = namedtuple('UpdateHitCountResponse', 'hit_counted hit_message')
+
     user = request.user
-
-    if not request.session.session_key:
-        request.session.save()
-
     session_key = request.session.session_key
     ip = get_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
     hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
-    exclude_user_group = getattr(settings,
-                            'HITCOUNT_EXCLUDE_USER_GROUP', None)
+    exclude_user_group = getattr(settings, 'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
-    # first, check our request against the blacklists before continuing
-    if BlacklistIP.objects.filter(ip__exact=ip) or \
-            BlacklistUserAgent.objects.filter(user_agent__exact=user_agent):
-        return False
+    # first, check our request against the IP blacklist
+    if BlacklistIP.objects.filter(ip__exact=ip):
+        response = UpdateHitCountResponse(False, 'Not counted: user IP has been blacklisted')
+        return response
 
-    # second, see if we are excluding a specific user group or not
+    # second, check our request against the user agent blacklist
+    if BlacklistUserAgent.objects.filter(user_agent__exact=user_agent):
+        response = UpdateHitCountResponse(False, 'Not counted: user agent has been blacklisted')
+        return response
+
+    # third, see if we are excluding a specific user group or not
     if exclude_user_group and user.is_authenticated():
         if user.groups.filter(name__in=exclude_user_group):
-            return False
+            response = UpdateHitCountResponse(False, 'Not counted: user excluded by group')
+            return response
 
-    #start with a fresh active query set (HITCOUNT_KEEP_HIT_ACTIVE )
+    # eliminated first three possible exclusions, now on to checking our database of
+    # active hits to see if we should count another one
+
+    #start with a fresh active query set (HITCOUNT_KEEP_HIT_ACTIVE)
     qs = Hit.objects.filter_active()
 
     # check limit on hits from a unique ip address (HITCOUNT_HITS_PER_IP_LIMIT)
     if hits_per_ip_limit:
         if qs.filter(ip__exact=ip).count() > hits_per_ip_limit:
-            return False
+            response = UpdateHitCountResponse(False,
+                'Not counted: hits per IP address limit reached')
+            return response
 
     # create a generic Hit object with request data
     hit = Hit(  session=session_key,
@@ -54,31 +65,29 @@ def _update_hit_count(request, hitcount):
 
     # first, use a user's authentication to see if they made an earlier hit
     if user.is_authenticated():
-        if not qs.filter(user=user,hitcount=hitcount):
+        if not qs.filter(user=user, hitcount=hitcount):
             hit.user = user #associate this hit with a user
             hit.save()
-            return True
+
+            response = UpdateHitCountResponse(True, 'Hit counted: user authentication')
+        else:
+            response = UpdateHitCountResponse(False, 'Not counted: authenticated user has active hit')
 
     # if not authenticated, see if we have a repeat session
     else:
-        if not qs.filter(session=session_key,hitcount=hitcount):
+        if not qs.filter(session=session_key, hitcount=hitcount):
             hit.save()
+            response = UpdateHitCountResponse(True, 'Hit counted: session key')
+        else:
+            response = UpdateHitCountResponse(False, 'Not counted: session key has active hit')
 
-            # forces a save on this anonymous users session
-            request.session.modified = True
-
-            return True
-
-    return False
+    return response
 
 def json_error_response(error_message):
-    return HttpResponse(simplejson.dumps(dict(success=False,
+    return HttpResponse(json.dumps(dict(success=False,
                                               error_message=error_message)))
 
-# TODO better status responses - consider model after django-voting,
-# right now the django handling isn't great.  should return the current
-# hit count so we could update it via javascript (since each view will
-# be one behind).
+
 def update_hit_count_ajax(request):
     '''
     Ajax call that can be used to update a hit count.
@@ -96,19 +105,13 @@ def update_hit_count_ajax(request):
     if request.method == "GET":
         return json_error_response("Hits counted via POST only.")
 
-    hitcount_pk = request.POST.get('hitcount_pk')
+    hitcount_pk = request.POST.get('hitcountPK')
 
     try:
         hitcount = HitCount.objects.get(pk=hitcount_pk)
     except:
         return HttpResponseBadRequest("HitCount object_pk not working")
 
-    result = _update_hit_count(request, hitcount)
+    response = _update_hit_count(request, hitcount)
 
-    if result:
-        status = "success"
-    else:
-        status = "no hit recorded"
-
-    json = simplejson.dumps({'status': status})
-    return HttpResponse(json,mimetype="application/json")
+    return HttpResponse(json.dumps(response), content_type="application/json")
