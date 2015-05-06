@@ -62,7 +62,9 @@ it should work out of the box with Django 1.8 and Python 2.7.x.
 
 You can load some initial fixtures at:
 
+    python manage.py migrate
     python manage.py loaddata initial_data.json
+    python manage.py createsuperuser
 
 [1]:http://code.google.com/p/django-tracking/
 
