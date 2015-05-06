@@ -1,9 +1,9 @@
-*NOTE* (02/23/2013) - I have not been actively maintaining this app (as anyone
-can tell from my levels of participation these last few years).  I apologize
-for that because I, myself, hate seeing open source solutions fade with time.
-To that end, I would prefer to point people to an active fork of the project.
-If you have a fork, or know of a good fork to use, please let me know and I
-will post the links/recommendations here.  It's been fun sharing. -Damon
+## Updated 5/5/2015:
+
+I'm working to get an active copy of this up and running
+again.  To that end, I've started working the "develop" branch (not "devel").
+I'm currently testing in Django 1.8.1.  Hope to move this to master shortly.
+
 
 Django-HitCount
 ===============
@@ -13,7 +13,7 @@ object.
 
 For more information you can view comments in the source code or visit:
 
-<http://damontimm.com/code/django-hitcount/>
+<http://blog.damontimm.com/code/django-hitcount/>
 
 What it is not
 --------------
@@ -30,7 +30,7 @@ Contribute
 
 I would love to make it better.  Please fork and push.  Some fun additions
 might be [1] a nice graphing utility for the admin site, [2] another approach
-to caputring a hit (other than jQuery), and [3] a cleanup tool that can remove
+to capturing a hit (other than jQuery), and [3] a cleanup tool that can remove
 Hit objects after a certain period (cron job).
 
 Installation:
@@ -53,6 +53,16 @@ if you plan on pulling future changes and don't want to keep running
     sudo ln -s `pwd`/django-hitcount/hitcount `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`/hitcount
 
 Special thanks to ariddell for putting the `setup.py` package together.
+
+Example Project:
+----------------
+
+I have added an example project.  You can use that to test the functionality and
+it should work out of the box with Django 1.8 and Python 2.7.x.
+
+You can load some initial fixtures at:
+
+    python manage.py loaddata initial_data.json
 
 [1]:http://code.google.com/p/django-tracking/
 
