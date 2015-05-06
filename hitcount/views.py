@@ -105,7 +105,7 @@ def update_hit_count_ajax(request):
     if request.method == "GET":
         return json_error_response("Hits counted via POST only.")
 
-    hitcount_pk = request.POST.get('hitcount_pk')
+    hitcount_pk = request.POST.get('hitcountPK')
 
     try:
         hitcount = HitCount.objects.get(pk=hitcount_pk)
