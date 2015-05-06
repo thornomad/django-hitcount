@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Sample Hittest Project</h1>
+<p>
+	this page counts the user {{ user }}
+</p>
+
+{% load hitcount_tags %}
+<script type="text/javascript"><!--
+    $(document).ready(function() {
+        {% get_hit_count_javascript for user %}
+    });
+--></script>
+{% endblock %}
