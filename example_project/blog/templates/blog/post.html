@@ -1,0 +1,48 @@
+{% extends "blog/base.html" %}
+{% load hitcount_tags %}
+
+{% block content %}
+
+{% get_hit_count_js_variables for post as hitcount %}
+{% get_hit_count for post as total_hits %}
+
+<div class="row">
+
+  <div class="col-md-12">
+    <h1>{{post.title}}</h1>
+  </div>
+  <div class="col-md-8">
+    <p class="lead">{{ post.content }}</p>
+  </div>
+
+  <div class="col-md-4 bg-info">
+
+    <h2>Hitcount Info</h2>
+
+    <dl class="dl-horizontal">
+      <dt>Total Hits:</dt>
+      <dd>{{ total_hits }}</dd>
+      <dt>Ajax URL is:</dt>
+      <dd>{{ hitcount.ajax_url }}</dd>
+      <dt>The unique PK is:</dt>
+      <dd>{{ hitcount.pk }}</dd>
+    </dl>
+
+    <p> <br />
+
+
+
+
+    </p>
+    <p> </p>
+
+  </div>
+</div>
+{%endblock%}
+
+
+
+
+{% block hitcount_javascript %}
+{% insert_hit_count_js_variables for post %}
+{% endblock %}
