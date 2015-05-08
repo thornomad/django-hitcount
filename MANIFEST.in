@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 include LICENSE
 include README.md
 recursive-include hitcount/locale *
 recursive-include hitcount/management *
 recursive-include hitcount/templatetags *
+=======
+include README.md
+recursive-include hitcount/locale *
+recursive-include hitcount/management *
+recursive-include hitcount/templatetags *
+>>>>>>> a82cd34... update setup.py

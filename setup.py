@@ -1,8 +1,10 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
+
+# allow setup.py to be run from any path
+os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = "django-hitcount",
@@ -10,13 +12,9 @@ setup(
     url = 'http://github.com/thornomad/django-hitcount',
     license = 'BSD',
     description = "Django hit counter application that tracks the number of hits/views for chosen objects",
-    long_description = read('README.md'),
-
+    long_description = README,
     author = 'Damon Timm',
     author_email = 'damontimm@gmail.com',
-
-    packages = find_packages(),
-
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Plugins',
@@ -26,4 +24,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    zip_safe=False,
 )
