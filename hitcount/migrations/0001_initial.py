@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import datetime
 from django.conf import settings
 
 
@@ -42,7 +41,7 @@ class Migration(migrations.Migration):
             name='Hit',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created', models.DateTimeField(editable=False)),
+                ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('ip', models.CharField(max_length=40, editable=False)),
                 ('session', models.CharField(max_length=40, editable=False)),
                 ('user_agent', models.CharField(max_length=255, editable=False)),
@@ -50,6 +49,8 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('-created',),
                 'get_latest_by': 'created',
+                'verbose_name': 'hit',
+                'verbose_name_plural': 'hits',
             },
         ),
         migrations.CreateModel(
@@ -57,16 +58,16 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('hits', models.PositiveIntegerField(default=0)),
-                ('modified', models.DateTimeField(default=datetime.datetime.utcnow)),
-                ('object_pk', models.TextField(verbose_name=b'object ID')),
-                ('content_type', models.ForeignKey(related_name='content_type_set_for_hitcount', verbose_name=b'content type', to='contenttypes.ContentType')),
+                ('modified', models.DateTimeField(auto_now=True)),
+                ('object_pk', models.PositiveIntegerField(verbose_name=b'object ID')),
+                ('content_type', models.ForeignKey(related_name='content_type_set_for_hitcount', to='contenttypes.ContentType')),
             ],
             options={
-                'ordering': ('-hits',),
-                'db_table': 'hitcount_hit_count',
-                'verbose_name': 'Hit Count',
-                'verbose_name_plural': 'Hit Counts',
                 'get_latest_by': 'modified',
+                'ordering': ('-hits',),
+                'verbose_name_plural': 'hit counts',
+                'db_table': 'hitcount_hit_count',
+                'verbose_name': 'hit count',
             },
         ),
         migrations.AddField(
@@ -78,5 +79,9 @@ class Migration(migrations.Migration):
             model_name='hit',
             name='user',
             field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True),
+        ),
+        migrations.AlterUniqueTogether(
+            name='hitcount',
+            unique_together=set([('content_type', 'object_pk')]),
         ),
     ]

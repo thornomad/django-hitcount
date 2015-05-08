@@ -5,12 +5,12 @@ Basic app that allows you to track the number of hits/views for a particular
 object.
 
 *Update 05/15/2015:* I've finally had some time to integrate some changes
-and get it up to Django 1.8.x speed.  Unfortunately, when I first wrote this app
-I didn't write any unnittests.  I would love to remedy that.  In the meantime
-I do have an example_project that I have added to exhibit the basic functionality.
+and get it up to Django 1.8.x speed.  A pre-1.8 (much older!) version was tagged
+`0.2`; I've bumped the version to 1.0 in case we've introduced any backwards
+incompatible changes.  Am working on things this month (May 2015) so if you want
+to grab a pip version (older) I wouldn't blame you.
 
-A pre-1.8 (much older!) version was tagges `0.2`; I've bumped the version to 1.0
-in case we've introduced any backwards incompatible changes.
+Please post issues in the github issue tracker.
 
 For more information you can view comments in the source code or visit:
 
@@ -25,27 +25,6 @@ comprehensive site traffic monitoring tool (see: Google Analytics).
 It's meant to serve as a simple hit counter for chosen objects with a couple
 useful features (user-agent, session, and IP tracking) and tools to help you
 on your way.
-
-Installation:
--------------
-
-Simplest way to formally install is to run:
-
-    ./setup.py install
-
-Or, you could do a PIP installation:
-
-    pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
-
-Or, you can link the source to your `site-packages` directory.  This is useful
-if you plan on pulling future changes and don't want to keep running
-`./setup.py install`.
-
-    cd ~/src
-    git clone git://github.com/thornomad/django-hitcount.git
-    sudo ln -s `pwd`/django-hitcount/hitcount `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`/hitcount
-
-Special thanks to ariddell for putting the `setup.py` package together.
 
 Example Project:
 ----------------
@@ -65,6 +44,16 @@ Contribute
 I would love to make it better.  Please fork and push.  Some fun additions
 might be [1] a nice graphing utility for the admin site, [2] another approach
 to capturing a hit (other than jQuery).
+
+Additional Authors and Thanks
+__________________
+
+This doesn't include everyone and if I missed someone let me know I will add it.
+
+Thanks goes to:
+
+ * Basil Shubin and his work at <https:/github.com/bashu/django-hitcount-headless>
+ * ariddell for putting the `setup.py` package together
 
 [1]:http://code.google.com/p/django-tracking/
 
