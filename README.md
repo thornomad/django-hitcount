@@ -38,6 +38,15 @@ You can load some initial fixtures at:
     python manage.py loaddata initial_data.json
     python manage.py createsuperuser
 
+Settings:
+---------
+
+Be sure to add this to your `settings.py`
+
+   SESSION_SAVE_EVERY_REQUEST = True
+
+I need more documentation.  Sorry!
+
 Contribute
 ----------
 
