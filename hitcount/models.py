@@ -7,7 +7,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
@@ -39,7 +39,7 @@ class HitCount(models.Model):
     content_type = models.ForeignKey(
         ContentType, related_name="content_type_set_for_%(class)s")
     object_pk = models.PositiveIntegerField('object ID')
-    content_object = generic.GenericForeignKey('content_type', 'object_pk')
+    content_object = GenericForeignKey('content_type', 'object_pk')
 
     objects = HitCountManager()
 
