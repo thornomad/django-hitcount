@@ -30,14 +30,14 @@ on your way.
 Example Project:
 ----------------
 
-I have added an example project.  You can use that to test the functionality and
+I have added an example project with a simple Blog application so you can
+see the hit counting demonstrated.  You can use that to test the functionality and
 it should work out of the box with Django 1.8.1 and Python 2.7.x.
 
 You can load some initial fixtures at:
 
-    python manage.py migrate
-    python manage.py loaddata initial_data.json
-    python manage.py createsuperuser
+    python manage.py migrate            # will load some data fixtures for you
+    python manage.py createsuperuser    # if you want admin access
 
 Settings:
 ---------
@@ -49,8 +49,8 @@ Be sure to add this to your `settings.py`
 TODO:
 _____
 
-    * Docs
-    * Tests
+    * Docs (other settings, etc)
+    * Tests (not a single test yet!)
     * Internationalization (although this has been started)
     * Port to python 3.x (support django 1.8 versions)
     * Upload to pip repository (need to read about this)
