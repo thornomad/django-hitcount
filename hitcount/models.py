@@ -12,6 +12,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
 from .managers import HitCountManager, HitManager
 from .signals import delete_hit_count
 
@@ -112,7 +114,7 @@ class Hit(models.Model):
     ip = models.CharField(max_length=40, editable=False)
     session = models.CharField(max_length=40, editable=False)
     user_agent = models.CharField(max_length=255, editable=False)
-    user = models.ForeignKey(User,null=True, editable=False)
+    user = models.ForeignKey(AUTH_USER_MODEL, null=True, editable=False)
     hitcount = models.ForeignKey(HitCount, editable=False)
 
     objects = HitManager()
