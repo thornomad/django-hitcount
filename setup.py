@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = "django-hitcount",
-    version = hitcount.get_version(),,
+    version = hitcount.get_version(),
     include_package_data=True,
     packages=['hitcount'],
     url = 'http://github.com/thornomad/django-hitcount',

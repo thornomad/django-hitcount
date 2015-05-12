@@ -6,8 +6,9 @@ object.
 
 *Update 05/15/2015:* I've finally had some time to integrate some changes
 and get it up to Django 1.8.x speed.  A pre-1.8 (much older!) version was tagged
-`0.2`; I've bumped the version to 1.0 in case we've introduced any backwards
-incompatible changes.  Am working on things this month (May 2015) so if you want
+`0.2`; I've bumped the version to 1.0dev in case we've introduced any backwards
+incompatible changes (which I know we have because we changed the content type
+model field types).  Am working on things this month (May 2015) so if you want
 to grab a pip version (older) I wouldn't blame you.
 
 Please post issues in the github issue tracker.
@@ -30,7 +31,7 @@ Example Project:
 ----------------
 
 I have added an example project.  You can use that to test the functionality and
-it should work out of the box with Django 1.8 and Python 2.7.x.
+it should work out of the box with Django 1.8.1 and Python 2.7.x.
 
 You can load some initial fixtures at:
 
@@ -45,7 +46,14 @@ Be sure to add this to your `settings.py`
 
    SESSION_SAVE_EVERY_REQUEST = True
 
-I need more documentation.  Sorry!
+TODO:
+_____
+
+    * Docs
+    * Tests
+    * Internationalization (although this has been started)
+    * Port to python 3.x (support django 1.8 versions)
+    * Upload to pip repository (need to read about this)
 
 Contribute
 ----------
