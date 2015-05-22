@@ -3,12 +3,6 @@ Overview
 
 Django-Hitcount allows you to track the number of hits/views for a particular object. This isn’t meant to be a full-fledged tracking application (see django-tracking) or a real analytic tool (try Google Analytics); rather, it’s meant to  count the number of hits/view on an object-per-object basis.
 
-.. toctree::
-   :maxdepth: 2
-
-   installation
-   settings
-
 Example Project
 ---------------
 
