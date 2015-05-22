@@ -6,6 +6,7 @@ django-hitcount allows you to track the number of hits/views for a particular ob
 .. toctree::
    :hidden:
 
+   index
    settings
 
 Installation
@@ -29,7 +30,7 @@ And add the following line to your `settings.py` file::
 View the :doc:`additional settings section </settings>` for more information.
 
 Template Tag Usage
---------------
+------------------
 
 django-hitcount is designed to use Ajax to record the ``Hits`` to an object.  There is an `example jQuery`_ implementation that demonstrates how this might work along with some template tags to assist in embedding the necessary javascript information.  View the `example project`_ for a working demonstration.
 
