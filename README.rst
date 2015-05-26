@@ -1,6 +1,9 @@
 Django-HitCount
 ===============
 
+.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=develop
+    :target: https://travis-ci.org/thornomad/django-hitcount
+
 Basic app that allows you to track the number of hits/views for a particular
 object.  Detailed docs are at:
 
