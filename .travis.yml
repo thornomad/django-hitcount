@@ -16,5 +16,4 @@ install:
 
 script:
     - tox -e $TOX_ENV
-    - coverage run --source="hitcount" -a runtests.py
-after_success: coveralls
+after_script: coveralls
