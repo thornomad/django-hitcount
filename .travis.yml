@@ -1,5 +1,5 @@
 language: python
-
+sudo: no
 env:
     - TOX_ENV=py27-django18
     - TOX_ENV=py27-django17
@@ -16,4 +16,5 @@ install:
 
 script:
     - tox -e $TOX_ENV
+    - coverage run --source="hitcount" -a runtests.py
 after_success: coveralls
