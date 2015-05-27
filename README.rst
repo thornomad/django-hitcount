@@ -1,8 +1,10 @@
 Django-HitCount
 ===============
 
-.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=develop
+.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master
     :target: https://travis-ci.org/thornomad/django-hitcount
+.. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master
+    :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
 
 Basic app that allows you to track the number of hits/views for a particular object.  Full documentation is available at: http://django-hitcount.rtfd.org
 
@@ -19,8 +21,8 @@ I have added an example project with a simple Blog application so you can see th
 
 You can load some initial fixtures at::
 
-    python manage.py migrate            # will load some data fixtures for you
-    python manage.py createsuperuser    # if you want admin access
+    python manage.py migrate          # will load some data fixtures for you
+    python manage.py createsuperuser  # if you want admin access
 
 Settings:
 ---------
@@ -32,10 +34,10 @@ Be sure to add this to your `settings.py`::
 TODO
 -----
 
-* Tests (not a single test yet!)
+* More tests! (low coverage)
 * Internationalization (although this has been started)
 * Port to python 3.x
-* Upload to pip repository (need to read about this)
+* Upload to pip repository
 
 Contribute
 ----------
