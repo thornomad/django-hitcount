@@ -18,13 +18,6 @@ You can load some initial fixtures at::
     python manage.py migrate          # will load some data fixtures for you
     python manage.py createsuperuser  # if you want admin access
 
-Settings:
----------
-
-Be sure to add this to your `settings.py`::
-
-   SESSION_SAVE_EVERY_REQUEST = True
-
 TODO
 -----
 
