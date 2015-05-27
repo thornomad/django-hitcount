@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
 from django.db import models, migrations
@@ -9,8 +8,8 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('contenttypes', '0001_initial'),
     ]
 
     operations = [
@@ -25,6 +24,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Blacklisted IP',
                 'verbose_name_plural': 'Blacklisted IPs',
             },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='BlacklistUserAgent',
@@ -37,6 +37,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Blacklisted User Agent',
                 'verbose_name_plural': 'Blacklisted User Agents',
             },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Hit',
@@ -53,6 +54,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'hit',
                 'verbose_name_plural': 'hits',
             },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='HitCount',
@@ -70,19 +72,22 @@ class Migration(migrations.Migration):
                 'db_table': 'hitcount_hit_count',
                 'verbose_name': 'hit count',
             },
+            bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='hitcount',
+            unique_together=set([('content_type', 'object_pk')]),
         ),
         migrations.AddField(
             model_name='hit',
             name='hitcount',
             field=models.ForeignKey(editable=False, to='hitcount.HitCount'),
+            preserve_default=True,
         ),
         migrations.AddField(
             model_name='hit',
             name='user',
             field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True),
-        ),
-        migrations.AlterUniqueTogether(
-            name='hitcount',
-            unique_together=set([('content_type', 'object_pk')]),
+            preserve_default=True,
         ),
     ]
