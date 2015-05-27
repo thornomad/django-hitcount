@@ -8,10 +8,11 @@ import pytest
 
 DEFAULT_ARGS = [ 'tests' ]
 
-def run_pytest_tests(args):
-    failures = pytest.main(args)
-    if failures:
-        sys.exit(failures)
+sys.path.append(os.path.dirname(__file__))
+
+def exit_on_failure(ret, message=None):
+    if ret:
+        sys.exit(ret)
 
 def run_django_tests(args):
     """This will only work with a later version of Django (1.8?)"""
@@ -24,9 +25,7 @@ def run_django_tests(args):
         settings = pytest_configure()
         TestRunner = get_runner(settings)
         test_runner = TestRunner()
-        failures = test_runner.run_tests(args)
-        if failures:
-            sys.exit(failures)
+        exit_on_failure(test_runner.run_tests(args))
 
     except ImproperlyConfigured:
         sys.exit('TEST #FAIL: The --django arg has only been tested with 1.8')
@@ -38,7 +37,7 @@ if __name__ == "__main__":
         sys.argv.remove('--django')
     except ValueError:
         args = DEFAULT_ARGS.append(sys.argv)
-        run_pytest_tests(args)
+        exit_on_failure(pytest.main(args))
     else:
         args = DEFAULT_ARGS.append(sys.argv)
         run_django_tests(args)
