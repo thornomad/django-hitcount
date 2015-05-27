@@ -2,3 +2,4 @@ pytest==2.7.1
 pytest-django==2.8.0
 mock==1.0.1
 coverage==3.7.1
+tox==2.0.1
