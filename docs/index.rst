@@ -1,6 +1,11 @@
 django-hitcount
 ================
 
+.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master
+    :target: https://travis-ci.org/thornomad/django-hitcount
+.. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master
+    :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
+
 Django-Hitcount allows you to track the number of hits/views for a particular object.
 
 .. toctree::
@@ -9,6 +14,8 @@ Django-Hitcount allows you to track the number of hits/views for a particular ob
    overview
    installation
    settings
+   management
+   contribute
 
 Issues
 ------

@@ -8,12 +8,6 @@ Django-HitCount
 
 Basic app that allows you to track the number of hits/views for a particular object.  Full documentation is available at: http://django-hitcount.rtfd.org
 
-Notes:
-------
-
-2015-05-26: Currently the management command ``hitcount_cleanup`` does not work in versions 1.7.x and 1.8.x.  I've added a test suite, finally, so I can get to working on that.  Hence: build-failing.
-
-
 Example Project:
 ----------------
 
@@ -38,13 +32,6 @@ TODO
 * Internationalization (although this has been started)
 * Port to python 3.x
 * Upload to pip repository
-
-Contribute
-----------
-
-I would love to make it better.  Please fork and push.  Some fun additions
-might be [1] a nice graphing utility for the admin site, [2] another approach
-to capturing a hit (other than jQuery).
 
 Additional Authors and Thanks
 -----------------------------

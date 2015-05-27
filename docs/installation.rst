@@ -8,7 +8,7 @@ Install django-hitcount by running::
 Add django-hitcount to your installed apps::
 
     INSTALLED_APPS = (
-        # ...
+        ...
         'hitcount'
     )
 
@@ -18,14 +18,10 @@ And add the following line to your `settings.py` file::
 
 View the :doc:`additional settings section </settings>` for more information.
 
-.. warning::
-
- In May of 2015 this project was bumped to version 1.0.x and has been tested on Django 1.8; there may be some backwards incompatible changes.  There is a version tagged ``0.2`` that represents the older branch of the app if you are curious.
-
 Template Tags
 -------------
 
-django-hitcount is designed to use Ajax to record the ``Hits`` to an object.  There is an `example jQuery`_ implementation that demonstrates how this might work along with some template tags to assist in embedding the necessary javascript information.  View the `example project`_ for a working demonstration.
+Django-Hitcount is designed to use Ajax to record the ``Hits`` to an object.  There is an `example jQuery`_ implementation that demonstrates how this might work along with some template tags to assist in embedding the necessary javascript information.  View the `example project`_ for a working demonstration.
 
 Start by loading hitcount tags on the desired templates::
 
