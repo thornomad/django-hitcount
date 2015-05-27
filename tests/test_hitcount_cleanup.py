@@ -10,10 +10,12 @@ except ImportError:
 from django.utils import timezone
 from django.core.management import call_command
 from django.test import TestCase
+from django.utils.six import StringIO
 
 from hitcount.models import HitCount, Hit
 from .models import Post
 
+COMMAND_NAME = 'hitcount_cleanup'
 
 class HitCountCleanUp(TestCase):
 
@@ -35,11 +37,16 @@ class HitCountCleanUp(TestCase):
 
     def test_remove_expired_hits(self):
         """There should be only 6 items remaining after cleanup."""
-        call_command('hitcount_cleanup')
+        call_command(COMMAND_NAME)
         self.assertEqual(len(Hit.objects.all()), 6)
 
     def test_preserve_hitcount(self):
         """Removing Hits should not decrease the total HitCount."""
         hit_count = HitCount.objects.get(pk=1)
-        call_command('hitcount_cleanup')
+        call_command(COMMAND_NAME)
         self.assertEqual(hit_count.hits, 10)
+
+    def test_standard_output(self):
+        out = StringIO()
+        call_command(COMMAND_NAME, stdout=out)
+        self.assertIn('Successfully removed 4 Hits', out.getvalue())
