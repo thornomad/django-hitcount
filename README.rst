@@ -1,10 +1,8 @@
 Django-HitCount
 ===============
 
-.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master
-    :target: https://travis-ci.org/thornomad/django-hitcount
-.. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master
-    :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
+.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master :target: https://travis-ci.org/thornomad/django-hitcount
+.. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
 
 Basic app that allows you to track the number of hits/views for a particular object.  Full documentation is available at: http://django-hitcount.rtfd.org
 
