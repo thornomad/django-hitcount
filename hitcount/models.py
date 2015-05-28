@@ -104,14 +104,13 @@ class Hit(models.Model):
 
     None of the fields are editable because they are all dynamically created.
     Browsing the Hit list in the Admin will allow one to blacklist both
-    IP addresses and User Agents. Blacklisting simply causes those hits
-    to not be counted or recorded any more.
+    IP addresses as well as User Agents. Blacklisting simply causes those
+    hits to not be counted or recorded.
 
-    Depending on how long you set the HITCOUNT_KEEP_HIT_ACTIVE , and how long
-    you want to be able to use `HitCount.hits_in_last(days=30)` you should
-    probably also occasionally clean out this database using a cron job.
-
-    It could get rather large.
+    Depending on how long you set the HITCOUNT_KEEP_HIT_ACTIVE, and how long
+    you want to be able to use `HitCount.hits_in_last(days=30)` you can choose
+    to clean up your Hit table by using the management `hitcount_cleanup`
+    management command.
 
     """
     created = models.DateTimeField(editable=False, auto_now_add=True, db_index=True)
@@ -124,7 +123,7 @@ class Hit(models.Model):
     objects = HitManager()
 
     class Meta:
-        ordering = ( '-created', )
+        ordering = ('-created',)
         get_latest_by = 'created'
         verbose_name = _("hit")
         verbose_name_plural = _("hits")

@@ -11,4 +11,4 @@ class Post(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.title
+        return "Post title: %s" % self.title

@@ -38,6 +38,6 @@ class HitManager(models.Manager):
         hours, and weeks.  It's creating a datetime.timedelta object.
 
         """
-        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days':7})
+        grace = getattr(settings, 'HITCOUNT_KEEP_HIT_ACTIVE', {'days': 7})
         period = timezone.now() - timedelta(**grace)
         return self.filter(created__gte=period).filter(*args, **kwargs)
