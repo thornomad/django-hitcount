@@ -89,13 +89,13 @@ class HitCount(models.Model):
         period = timezone.now() - timedelta(**kwargs)
         return self.hit_set.filter(created__gte=period).count()
 
-    def get_content_object_url(self):
-        """
-        Django has this in its contrib.comments.model file -- seems worth
-        implementing though it may take a couple steps.
-
-        """
-        pass
+    # def get_content_object_url(self):
+    #     """
+    #     Django has this in its contrib.comments.model file -- seems worth
+    #     implementing though it may take a couple steps.
+    #
+    #     """
+    #     pass
 
 
 class Hit(models.Model):
