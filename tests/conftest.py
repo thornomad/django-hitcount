@@ -28,6 +28,7 @@ def pytest_configure():
             'hitcount',
             'tests',
         ),
+        ROOT_URLCONF = 'tests.urls',
 
         # HitCount Variables (default values)
         SESSION_SAVE_EVERY_REQUEST = True,

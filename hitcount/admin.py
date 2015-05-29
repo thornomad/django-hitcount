@@ -33,19 +33,19 @@ class HitAdmin(admin.ModelAdmin):
 
     def blacklist_ips(self, request, queryset):
         for obj in queryset:
-           ip, created = BlacklistIP.objects.get_or_create(ip=obj.ip)
-           if created:
-               ip.save()
+            ip, created = BlacklistIP.objects.get_or_create(ip=obj.ip)
+            if created:
+                ip.save()
         msg = _("Successfully blacklisted %d IPs") % queryset.count()
         self.message_user(request, msg)
     blacklist_ips.short_description = _("Blacklist selected IP addresses")
 
     def blacklist_user_agents(self, request, queryset):
         for obj in queryset:
-           ua, created = BlacklistUserAgent.objects.get_or_create(
-                            user_agent=obj.user_agent)
-           if created:
-               ua.save()
+            ua, created = BlacklistUserAgent.objects.get_or_create(
+                user_agent=obj.user_agent)
+            if created:
+                ua.save()
         msg = _("Successfully blacklisted %d User Agents") % queryset.count()
         self.message_user(request, msg)
     blacklist_user_agents.short_description = _("Blacklist selected User Agents")
@@ -72,7 +72,7 @@ class HitAdmin(admin.ModelAdmin):
                 msg = "%s hits were" % queryset.count()
 
             for obj in queryset.iterator():
-                obj.delete() # calling it this way to get custom delete() method
+                obj.delete()  # calling it this way to get custom delete() method
 
             self.message_user(request, "%s successfully deleted." % msg)
     delete_queryset.short_description = _("Delete selected hits")
