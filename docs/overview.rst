@@ -5,7 +5,7 @@ Django-Hitcount allows you to track the number of hits (views) for a particular 
 
 .. warning::
 
-May/June 2015: I bumped the version to the 1.x series because I am actively working on bringing the project up to speed (tests, python 3.x, and internal upgrades).  I am still not finished with all the work -- when complete, it will be released as a ``pip`` package.
+  May/June 2015: I bumped the version to the 1.x series because I am actively working on bringing the project up to speed (tests, python 3.x, and internal upgrades).  I am still not finished with all the work -- when complete, it will be released as a ``pip`` package.
 
 Requirements and Compatibility
 ------------------------------
