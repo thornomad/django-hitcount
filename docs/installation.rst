@@ -5,16 +5,25 @@ Install django-hitcount by running::
 
     pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
 
-Add django-hitcount to your installed apps::
+Edit your ``settings.py`` file and add django-hitcount to your installed apps, as well as enabling ``SESSION_SAVE_EVERY_REQUEST``::
+
+    # settings.py
 
     INSTALLED_APPS = (
         ...
         'hitcount'
     )
 
-And add the following line to your `settings.py` file::
-
+    # needed for django-hitcount to function
     SESSION_SAVE_EVERY_REQUEST = True
+
+In your ``urls.py`` file add the following::
+
+    # urls.py
+    urlpatterns = patterns('',
+        ...
+        url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
+    )
 
 View the :doc:`additional settings section </settings>` for more information.
 
@@ -30,12 +39,12 @@ Start by loading hitcount tags on the desired templates::
 Recording a Hit
 ^^^^^^^^^^^^^^^
 
-If you want to use the `example jQuery`_ on your project, you can add it like so::
+If you want to use the `example jQuery`_ script on your project, you can add it like so::
 
     {% load staticfiles %}
     <script src="{% static 'hitcount/hitcount-jquery.js' %}"></script>
 
-Then, on your object detail page (or similar) you inject the needed javascript variables::
+Then, on your object detail page you inject the needed javascript variables::
 
     # use default insertion method for hitcount-jquery.js:
     {% insert_hit_count_js_variables for object %}
