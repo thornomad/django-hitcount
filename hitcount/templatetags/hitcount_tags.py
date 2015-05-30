@@ -1,31 +1,41 @@
 # -*- coding: utf-8 -*-
-
 from collections import namedtuple
 
 from django import template
-from django.template import TemplateSyntaxError
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.core.exceptions import MultipleObjectsReturned
 
 from hitcount.models import HitCount
 
 register = template.Library()
 
 
-def get_target_ctype_pk(context, object_expr):
-    # This works by using template machinery to convert the object
-    # name passed in the tag arguments into the actual object.
-    # Really all this does is retreve the object referance from
-    # the context used to compile the template. Doing it this way
-    # just means that we can deal with every possiable method
-    # of passing an object.
-    try:
-        obj = object_expr.resolve(context)
-    except template.VariableDoesNotExist:
-        return None, None
+def get_hit_count_from_obj_variable(context, obj_variable, tag_name):
+    """
+    Helper function to return a HitCount for a given template object variable.
 
-    return ContentType.objects.get_for_model(obj), obj.pk
+    Raises TemplateSyntaxError if the passed object variable cannot be parsed.
+    """
+    error_to_raise = template.TemplateSyntaxError(
+        "'%(a)s' requires a valid individual model variable "
+        "in the form of '%(a)s for [model_obj]'.\n"
+        "Got: %(b)s" % {'a': tag_name, 'b': obj_variable}
+    )
+
+    try:
+        obj = obj_variable.resolve(context)
+    except template.VariableDoesNotExist:
+        raise error_to_raise
+
+    try:
+        ctype = ContentType.objects.get_for_model(obj)
+    except AttributeError:
+        raise error_to_raise
+
+    hit_count, created = HitCount.objects.get_or_create(
+        content_type=ctype, object_pk=obj.pk)
+
+    return hit_count
 
 
 def return_period_from_string(arg):
@@ -55,49 +65,54 @@ class GetHitCount(template.Node):
 
         # {% get_hit_count for [obj] %}
         if len(args) == 3 and args[1] == 'for':
-            return cls(object_expr = parser.compile_filter(args[2]))
+            return cls(obj_as_str=args[2])
 
         # {% get_hit_count for [obj] as [var] %}
         elif len(args) == 5 and args[1] == 'for' and args[3] == 'as':
-            return cls(object_expr = parser.compile_filter(args[2]),
-                       as_varname  = args[4],)
+            return cls(obj_as_str=args[2],
+                       as_varname=args[4],)
 
         # {% get_hit_count for [obj] within ["days=1,minutes=30"] %}
         elif len(args) == 5 and args[1] == 'for' and args[3] == 'within':
-            return cls(object_expr = parser.compile_filter(args[2]),
-                       period = return_period_from_string(args[4]))
+            return cls(obj_as_str=args[2],
+                       period=return_period_from_string(args[4]))
 
         # {% get_hit_count for [obj] within ["days=1,minutes=30"] as [var] %}
-        elif len(args) == 7 and args [1] == 'for' and \
+        elif len(args) == 7 and args[1] == 'for' and \
                 args[3] == 'within' and args[5] == 'as':
-            return cls(object_expr = parser.compile_filter(args[2]),
-                       as_varname  = args[6],
-                       period      = return_period_from_string(args[4]))
+            return cls(obj_as_str=args[2],
+                       as_varname=args[6],
+                       period=return_period_from_string(args[4]))
 
         else:  # TODO - should there be more troubleshooting prior to bailing?
-            raise TemplateSyntaxError(
-                """'get_hit_count' requires 'for [object] in [period] as [var]' (got %r)""" % args)
+            raise template.TemplateSyntaxError(
+                "'get_hit_count' requires "
+                "'for [object] in [period] as [var]' (got %r)" % args
+            )
 
     handle_token = classmethod(handle_token)
 
-    def __init__(self, object_expr, as_varname=None, period=None):
-        self.object_expr = object_expr
+    def __init__(self, obj_as_str, as_varname=None, period=None):
+        self.obj_variable = template.Variable(obj_as_str)
         self.as_varname = as_varname
         self.period = period
 
     def render(self, context):
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
-
-        obj, created = HitCount.objects.get_or_create(
-            content_type=ctype, object_pk=object_pk)
+        hit_count = get_hit_count_from_obj_variable(context,
+            self.obj_variable, 'get_hit_count')
 
         if self.period:  # if user sets a time period, use it
             try:
-                hits = obj.hits_in_last(**self.period)
-            except:
-                hits = """[hitcount error w/time period]"""
+                hits = hit_count.hits_in_last(**self.period)
+            except TypeError:
+                raise template.TemplateSyntaxError(
+                    "'get_hit_count for [obj] within [timedelta]' requires "
+                    "a valid comma separated list of timedelta arguments. "
+                    "For example, ['days=5,hours=6']. "
+                    "Got these instead: %s" % self.period
+                )
         else:
-            hits = obj.hits
+            hits = hit_count.hits
 
         if self.as_varname:  # if user gives us a variable to return
             context[self.as_varname] = str(hits)
@@ -131,50 +146,52 @@ def get_hit_count(parser, token):
 
 register.tag('get_hit_count', get_hit_count)
 
+
 class WriteHitCountJavascriptVariables(template.Node):
 
     def handle_token(cls, parser, token):
         args = token.contents.split()
 
         if len(args) == 3 and args[1] == 'for':
-            return cls(object_expr = parser.compile_filter(args[2]))
+            return cls(obj_variable=args[2])
 
         else:
-            raise TemplateSyntaxError, \
-                    'insert_hit_count_js_variables requires this syntax: ' + \
-                    '"insert_hit_count_js_variables for [object]"\n' + \
-                    'got %r' % args
+            raise template.TemplateSyntaxError(
+                'insert_hit_count_js_variables requires this syntax: '
+                '"insert_hit_count_js_variables for [object]"\n'
+                'Got: %s' % ' '.join(str(i) for i in args)
+            )
 
     handle_token = classmethod(handle_token)
 
-    def __init__(self, object_expr):
-        self.object_expr = object_expr
+    def __init__(self, obj_variable):
+        self.obj_variable = template.Variable(obj_variable)
 
     def render(self, context):
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
+        hit_count = get_hit_count_from_obj_variable(context,
+            self.obj_variable, 'insert_hit_count_js_variables')
 
-        obj, created = HitCount.objects.get_or_create(content_type=ctype, object_pk=object_pk)
-
-        js =    '<script type="text/javascript">\n'   + \
-                "var hitcountJS = {" + \
-                "hitcountPK : '" + str(obj.pk) + "'," + \
-                "hitcountURL : '"+ str(reverse('hitcount_update_ajax')) + "'};"         + \
-                "\n</script>"
+        js = '<script type="text/javascript">\n' + \
+            "var hitcountJS = {" + \
+            "hitcountPK : '" + str(hit_count.pk) + "'," + \
+            "hitcountURL : '" + str(reverse('hitcount:hit_ajax')) + "'};" + \
+            "\n</script>"
 
         return js
 
 
 def insert_hit_count_js_variables(parser, token):
-    '''
+    """
     Injects JavaScript global variables into your template.  These variables
     can be used in your JavaScript files to send the correctly mapped HitCount
     ID to the server (see: hitcount-jquery.js for an example).
 
     {% insert_hit_count_js_variables for [object] %}
-    '''
+    """
     return WriteHitCountJavascriptVariables.handle_token(parser, token)
 
 register.tag('insert_hit_count_js_variables', insert_hit_count_js_variables)
+
 
 class GetHitCountJavascriptVariables(template.Node):
 
@@ -182,33 +199,34 @@ class GetHitCountJavascriptVariables(template.Node):
         args = token.contents.split()
 
         if len(args) == 5 and args[1] == 'for' and args[3] == 'as':
-            return cls(object_expr = parser.compile_filter(args[2]), as_varname  = args[4])
+            return cls(obj_variable=args[2], as_varname=args[4])
 
         else:
-            raise TemplateSyntaxError, \
-                    'get_hit_count_js_variables requires this syntax: ' + \
-                    '"get_hit_count_js_variables for [object] as [var_name]"\n' + \
-                    'got %r' % args
+            raise template.TemplateSyntaxError(
+                'get_hit_count_js_variables requires this syntax: '
+                '"get_hit_count_js_variables for [object] as [var_name]."\n'
+                'Got: %s' % ' '.join(str(i) for i in args)
+            )
 
     handle_token = classmethod(handle_token)
 
-    def __init__(self, object_expr, as_varname):
-        self.object_expr = object_expr
+    def __init__(self, obj_variable, as_varname):
+        self.obj_variable = template.Variable(obj_variable)
         self.as_varname = as_varname
 
     def render(self, context):
-        HitcountVariables = namedtuple('HitcountVariables', 'pk ajax_url')
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
+        HitcountVariables = namedtuple('HitcountVariables', 'pk ajax_url hits')
 
-        obj, created = HitCount.objects.get_or_create(content_type=ctype, object_pk=object_pk)
+        hit_count = get_hit_count_from_obj_variable(context, self.obj_variable, 'get_hit_count_js_variables')
 
-        context[self.as_varname] = HitcountVariables(obj.pk, str(reverse('hitcount_update_ajax')))
+        context[self.as_varname] = HitcountVariables(hit_count.pk,
+            str(reverse('hitcount:hit_ajax')), str(hit_count.hits))
 
         return ''
 
 
 def get_hit_count_js_variables(parser, token):
-    '''
+    """
     Injects JavaScript global variables into your template.  These variables
     can be used in your JavaScript files to send the correctly mapped HitCount
     ID to the server (see: hitcount-jquery.js for an example).
@@ -218,100 +236,7 @@ def get_hit_count_js_variables(parser, token):
     Will provide two variables:
         [var_name].pk = the hitcount pk to be sent via JavaScript
         [var_name].ajax_url = the relative url to post the ajax request to
-    '''
-    return GetHitCountJavascriptVariables.handle_token(parser, token)
-
-register.tag('get_hit_count_js_variables', get_hit_count_js_variables)
-
-
-class WriteHitCountJavascriptVariables(template.Node):
-
-    def handle_token(cls, parser, token):
-        args = token.contents.split()
-
-        if len(args) == 3 and args[1] == 'for':
-            return cls(object_expr = parser.compile_filter(args[2]))
-
-        else:
-            raise TemplateSyntaxError, \
-                    'insert_hit_count_js_variables requires this syntax: ' + \
-                    '"insert_hit_count_js_variables for [object]"\n' + \
-                    'got %r' % args
-
-    handle_token = classmethod(handle_token)
-
-    def __init__(self, object_expr):
-        self.object_expr = object_expr
-
-    def render(self, context):
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
-
-        obj, created = HitCount.objects.get_or_create(content_type=ctype, object_pk=object_pk)
-
-        js =    '<script type="text/javascript">\n'   + \
-                "var hitcountJS = {" + \
-                "hitcountPK : '" + str(obj.pk) + "'," + \
-                "hitcountURL : '"+ str(reverse('hitcount_update_ajax')) + "'};"         + \
-                "\n</script>"
-
-        return js
-
-
-def insert_hit_count_js_variables(parser, token):
-    '''
-    Injects JavaScript global variables into your template.  These variables
-    can be used in your JavaScript files to send the correctly mapped HitCount
-    ID to the server (see: hitcount-jquery.js for an example).
-
-    {% insert_hit_count_js_variables for [object] %}
-    '''
-    return WriteHitCountJavascriptVariables.handle_token(parser, token)
-
-register.tag('insert_hit_count_js_variables', insert_hit_count_js_variables)
-
-class GetHitCountJavascriptVariables(template.Node):
-
-    def handle_token(cls, parser, token):
-        args = token.contents.split()
-
-        if len(args) == 5 and args[1] == 'for' and args[3] == 'as':
-            return cls(object_expr = parser.compile_filter(args[2]), as_varname  = args[4])
-
-        else:
-            raise TemplateSyntaxError, \
-                    'get_hit_count_js_variables requires this syntax: ' + \
-                    '"get_hit_count_js_variables for [object] as [var_name]"\n' + \
-                    'got %r' % args
-
-    handle_token = classmethod(handle_token)
-
-    def __init__(self, object_expr, as_varname):
-        self.object_expr = object_expr
-        self.as_varname = as_varname
-
-    def render(self, context):
-        HitcountVariables = namedtuple('HitcountVariables', 'pk ajax_url')
-        ctype, object_pk = get_target_ctype_pk(context, self.object_expr)
-
-        obj, created = HitCount.objects.get_or_create(content_type=ctype, object_pk=object_pk)
-
-        context[self.as_varname] = HitcountVariables(obj.pk, str(reverse('hitcount_update_ajax')))
-
-        return ''
-
-
-def get_hit_count_js_variables(parser, token):
-    '''
-    Injects JavaScript global variables into your template.  These variables
-    can be used in your JavaScript files to send the correctly mapped HitCount
-    ID to the server (see: hitcount-jquery.js for an example).
-
-    {% get_hit_count_js_variables for [object] as [var_name] %}
-
-    Will provide two variables:
-        [var_name].pk = the hitcount pk to be sent via JavaScript
-        [var_name].ajax_url = the relative url to post the ajax request to
-    '''
+    """
     return GetHitCountJavascriptVariables.handle_token(parser, token)
 
 register.tag('get_hit_count_js_variables', get_hit_count_js_variables)
