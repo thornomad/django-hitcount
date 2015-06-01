@@ -6,13 +6,15 @@ import os
 
 import pytest
 
-DEFAULT_ARGS = [ 'tests' ]
+DEFAULT_ARGS = ['tests']
 
 sys.path.append(os.path.dirname(__file__))
+
 
 def exit_on_failure(ret, message=None):
     if ret:
         sys.exit(ret)
+
 
 def run_django_tests(args):
     """This will only work with a later version of Django (1.8?)"""

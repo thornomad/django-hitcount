@@ -29,6 +29,7 @@ def pytest_configure():
             'tests',
         ),
         ROOT_URLCONF = 'tests.urls',
+        SESSION_ENGINE = 'django.contrib.sessions.backends.file',
 
         # HitCount Variables (default values)
         SESSION_SAVE_EVERY_REQUEST = True,
