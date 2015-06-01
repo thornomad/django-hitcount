@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 from datetime import timedelta
 
 try:
@@ -225,8 +226,8 @@ class UpdateHitCountJSONTests(TestCase):
         non_ajax_request = self.factory.get('/',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         response = update_hit_count_ajax(non_ajax_request)
-        self.assertEqual(response.content,
-            '{"error_message": "Hits counted via POST only.", "success": false}')
+        self.assertEqual(json.loads(response.content),
+            json.loads('{"error_message": "Hits counted via POST only.", "success": false}'))
 
     def test_count_hit(self):
         """
