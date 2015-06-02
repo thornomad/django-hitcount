@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from datetime import timedelta
 
@@ -91,8 +92,8 @@ class HitTests(TestCase):
         hit_count = HitCount.objects.get(pk=1)
 
         # add 9 more Hits
-        for x in xrange(1, 10):
-            created = timezone.now() - timedelta(days=x)
+        for x in range(9):
+            created = timezone.now() - timedelta(days=x + 1)
             with mock.patch('django.utils.timezone.now') as mock_now:
                 mock_now.return_value = created
 
@@ -154,7 +155,7 @@ class HitCountTests(TestCase):
         """
         hit_count = HitCount.objects.create(content_object=self.post)
 
-        for x in xrange(0, 10):
+        for x in range(10):
             created = timezone.now() - timedelta(days=x * 5)
             with mock.patch('django.utils.timezone.now') as mock_now:
                 mock_now.return_value = created
