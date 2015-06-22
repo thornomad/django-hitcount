@@ -22,9 +22,8 @@ env:
     - TOX_ENV=py27-django14
     - TOX_ENV=py26-django14
     - TOX_ENV=py27-djangomaster
-    - TOX_ENV=py32-djangomaster
-    - TOX_ENV=py33-djangomaster
     - TOX_ENV=py34-djangomaster
+    - TOX_ENV=py35-djangomaster
 
 install:
     - pip install tox coveralls
