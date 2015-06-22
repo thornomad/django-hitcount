@@ -11,7 +11,7 @@ Basic app that allows you to track the number of hits/views for a particular obj
 Example Project:
 ----------------
 
-I have added an example project with a simple Blog application so you can see the hit counting demonstrated.  You can use that to test the functionality and it should work out of the box with Django 1.8.1 and Python 2.7.x.
+I have added an example project with a simple Blog application so you can see the hit counting demonstrated.  You can use that to test the functionality and it should work out of the box with Django 1.8.x and Python 2.7.x.
 
 You can load some initial fixtures at::
 
@@ -21,11 +21,9 @@ You can load some initial fixtures at::
 TODO
 -----
 
-* More tests! (low coverage)
+* Upload to pip repository
 * Mixin for a direct relationship on other models when desired
 * Internationalization (although this has been started)
-* Port to python 3.x
-* Upload to pip repository
 
 Additional Authors and Thanks
 -----------------------------
