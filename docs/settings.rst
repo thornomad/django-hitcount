@@ -6,7 +6,7 @@ There are a few additional settings you can use to customize django-hitcount and
 HITCOUNT_KEEP_HIT_ACTIVE
 ------------------------
 
-This is the number of days, weeks, months, hours, etc (using a ``timedelta`` keyword argument), that an ``Hit`` is kept **active**. If a Hit is **active** a repeat viewing will not be counted.  After the **active** period ends, however, a new ``Hit`` will be recorded. You can decide how long you want this period to last and it is probably a matter of preference.::
+This is the number of days, weeks, months, hours, etc (using a ``timedelta`` keyword argument), that an ``Hit`` is kept **active**. If a ``Hit`` is **active** a repeat viewing will not be counted.  After the **active** period ends, however, a new ``Hit`` will be recorded. You can decide how long you want this period to last and it is probably a matter of preference.::
 
     # default value
     HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 7 }

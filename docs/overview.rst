@@ -3,29 +3,11 @@ Overview
 
 Django-Hitcount allows you to track the number of hits (views) for a particular object. This isn’t meant to be a full-fledged tracking application or a real analytic tool; it's just a basic hit counter.
 
-.. warning::
+How one tracks a "hit" or "view" of a web page is not such a simple thing as it might seem.  That's why folks rely on Google Analytics or similiar tools.  It's tough!  This is a simple app with some settings and features that should suit the basic needs of smaller sites.
 
-  May/June 2015: I bumped the version to the 1.x series because I am actively working on bringing the project up to speed (tests, python 3.x, and internal upgrades).  I am still not finished with all the work -- when complete, it will be released as a ``pip`` package and most likely brought to version 1.1.x when that has been released.
+It comes ready to track hits (to use the out-of-the-box method, you will need jQuery -- although writing your own JavaScript implementation is not hard).
 
 Requirements and Compatibility
 ------------------------------
 
-Currently supporting Django >= 1.4.
-
-Example Project
----------------
-
-If you would like to see how this works there is an `example project`_ included on the GitHub repository that should demonstrate the functionality out-of-the-box (`using javascript`_).  Of course, recommending you install this in a virtual environment.::
-
-    $ git clone git@github.com:thornomad/django-hitcount.git
-    $ cd django-hitcount/example_project
-    $ pip install -r requirements.txt   # sqlite requires pytz
-    $ python manage.py migrate          # will load some data fixtures for you
-    $ python manage.py createsuperuser  # for access to the admin portion
-    $ python manage.py runserver        # should be all set!
-
-You can run the server and visit the admin and see it all in action.  When you are ready to work on your own site, check out the :doc:`installation` and :doc:`settings` sections.
-
-.. _using javascript: https://github.com/thornomad/django-hitcount/blob/master/hitcount/static/hitcount/hitcount-jquery.js
-
-.. _example project: https://github.com/thornomad/django-hitcount/tree/master/example_project
+Currently supporting Django >= 1.4 and any Python version supported by your Django version.

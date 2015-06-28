@@ -1,11 +1,16 @@
 Installation and Usage
 ======================
 
-Install django-hitcount by running::
+For a working implementation, you can view the `example project`_ on Github.
+
+Install django-hitcount::
 
     pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
 
-Edit your ``settings.py`` file and add django-hitcount to your installed apps, as well as enabling ``SESSION_SAVE_EVERY_REQUEST``::
+Settings.py
+-----------
+
+Add django-hitcount to your ``INSTALLED_APPS``, enable ``SESSION_SAVE_EVERY_REQUEST``::
 
     # settings.py
 
@@ -14,9 +19,11 @@ Edit your ``settings.py`` file and add django-hitcount to your installed apps, a
         'hitcount'
     )
 
-    # needed for django-hitcount to function
+    # needed for django-hitcount to function properly
     SESSION_SAVE_EVERY_REQUEST = True
 
+Urls.py
+-------
 In your ``urls.py`` file add the following::
 
     # urls.py
@@ -27,10 +34,10 @@ In your ``urls.py`` file add the following::
 
 View the :doc:`additional settings section </settings>` for more information.
 
-Template Tags
--------------
+Template Magic
+--------------
 
-Django-Hitcount is designed to use Ajax to record the ``Hits`` to an object.  There is an `example jQuery`_ implementation that demonstrates how this might work along with some template tags to assist in embedding the necessary javascript information.  View the `example project`_ for a working demonstration.
+Django-Hitcount can utilize Javascript out-of-the-box to record the ``Hits`` to an object (be it a blog post, poll, etc).  There is a `jQuery implementation`_ included with the app though you could write your own implementation, or copy-paste the one included, easily enough.
 
 Start by loading hitcount tags on the desired templates::
 
@@ -39,17 +46,17 @@ Start by loading hitcount tags on the desired templates::
 Recording a Hit
 ^^^^^^^^^^^^^^^
 
-If you want to use the `example jQuery`_ script on your project, you can add it like so::
+If you want to use the `jQuery implementation`_ in your project, you can add the Javascript file to your template like so::
 
     {% load staticfiles %}
     <script src="{% static 'hitcount/hitcount-jquery.js' %}"></script>
 
-Then, on your object detail page you inject the needed javascript variables::
+Then, on your object detail page (blog, page, poll, etc) you inject the needed javascript variables::
 
     # use default insertion method for hitcount-jquery.js:
     {% insert_hit_count_js_variables for object %}
 
-    # OR: use a template variable to inject as you see fit
+    # or you can use a template variable to inject as you see fit
     {% get_hit_count_js_variables for object as hitcount %}
     ({ hitcount.ajax_url }}
     {{ hitcount.pk }}
@@ -71,6 +78,6 @@ You can retrieve the number of hits for an object many different ways::
     # Get total hits for an object over a certain time period as a variable:
     {% get_hit_count for [object] within ["days=1,minutes=30"] as [var] %}
 
-.. _example jQuery: https://github.com/thornomad/django-hitcount/blob/master/hitcount/static/hitcount/hitcount-jquery.js
+.. _jQuery implementation: https://github.com/thornomad/django-hitcount/blob/master/hitcount/static/hitcount/hitcount-jquery.js
 
 .. _example project: https://github.com/thornomad/django-hitcount/tree/master/example_project
