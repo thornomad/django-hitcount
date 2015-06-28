@@ -3,3 +3,4 @@ recursive-include hitcount/locale *
 recursive-include hitcount/management *
 recursive-include hitcount/templatetags *
 recursive-include hitcount/migrations *
+recursive-include hitcount/static *
