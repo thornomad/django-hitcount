@@ -18,6 +18,7 @@ Django-Hitcount allows you to track the number of hits/views for a particular ob
    example_project
    contribute
    authors
+   changelog
 
 Issues
 ------
@@ -25,4 +26,3 @@ Issues
 Use the GitHub `issue tracker`_ for django-hitcount to submit bugs, issues, and feature requests.
 
 .. _issue tracker: https://github.com/thornomad/django-hitcount/issues
-
