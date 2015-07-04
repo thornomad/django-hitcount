@@ -5,7 +5,7 @@ For a working implementation, you can view the `example project`_ on Github.
 
 Install django-hitcount::
 
-    pip install -e git://github.com/thornomad/django-hitcount.git#egg=django-hitcount
+    pip install django-hitcount
 
 Settings.py
 -----------

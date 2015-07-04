@@ -11,3 +11,4 @@ Version 1.1.0:
  * created an example project
  * squashed bugs
  * released to pip
+ * more, I'm sure!
