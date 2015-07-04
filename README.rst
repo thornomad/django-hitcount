@@ -1,4 +1,4 @@
-Django-HitCount
+django-hitcount
 ===============
 
 .. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master
