@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from django.test import TestCase, RequestFactory
 from django.core.exceptions import PermissionDenied
@@ -43,7 +44,7 @@ class HitAdminTest(TestCase):
         post = Post.objects.create(title='my title', content='my text')
         hit_count = HitCount.objects.create(content_object=post)
 
-        for x in xrange(0, 10):
+        for x in range(10):
             Hit.objects.create(hitcount=hit_count,
                 ip="127.0.0.%s" % x, user_agent="agent_%s" % x)
         # self.user = User.objects.create_user(
@@ -70,7 +71,8 @@ class HitAdminTest(TestCase):
                    'blacklist_delete_user_agents',
                    'delete_queryset',
                    ]
-        self.assertEqual(actions, self.admin.get_actions(self.request).keys())
+        self.assertEqual(actions,
+            list(self.admin.get_actions(self.request).keys()))
 
     def test_blacklist_ips_single(self):
         """
@@ -90,7 +92,7 @@ class HitAdminTest(TestCase):
         qs = Hit.objects.all()[:5]
         self.admin.blacklist_ips(self.request, qs)
         ips = BlacklistIP.objects.values_list('ip', flat=True)
-        self.assertEqual(ips[4], u'127.0.0.5')
+        self.assertEqual(ips[4], '127.0.0.5')
         self.assertEqual(len(BlacklistIP.objects.all()), 5)
 
     def test_blacklist_ips_add_only_once(self):
@@ -114,7 +116,7 @@ class HitAdminTest(TestCase):
         qs = Hit.objects.filter(ip="127.0.0.5")
         self.admin.blacklist_user_agents(self.request, qs)
         ua = BlacklistUserAgent.objects.get(pk=1)
-        self.assertEqual(ua.user_agent, u'agent_5')
+        self.assertEqual(ua.user_agent, 'agent_5')
         self.assertEqual(len(BlacklistUserAgent.objects.all()), 1)
 
     def test_blacklist_user_agents_multiple(self):
@@ -124,7 +126,7 @@ class HitAdminTest(TestCase):
         qs = Hit.objects.all()[:5]
         self.admin.blacklist_user_agents(self.request, qs)
         uas = BlacklistUserAgent.objects.values_list('user_agent', flat=True)
-        self.assertEqual(uas[2], u'agent_7')
+        self.assertEqual(uas[2], 'agent_7')
         self.assertEqual(len(BlacklistUserAgent.objects.all()), 5)
 
     def test_blacklist_user_agents_add_only_once(self):

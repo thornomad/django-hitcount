@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 import re
 
 # this is not intended to be an all-knowing IP address regex

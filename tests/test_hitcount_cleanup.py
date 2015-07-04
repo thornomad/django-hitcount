@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-#
+from __future__ import unicode_literals
+
 from datetime import timedelta
 
 try:
@@ -25,7 +26,7 @@ class HitCountCleanUp(TestCase):
         post = Post.objects.create(title='hi', content='some text')
         hit_count = HitCount.objects.create(content_object=post)
 
-        for x in xrange(0, 10):
+        for x in range(10):
             created = timezone.now() - timedelta(days=x * 5)
             with mock.patch('django.utils.timezone.now') as mock_now:
                 mock_now.return_value = created

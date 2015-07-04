@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 from datetime import timedelta
 
 from django.db import models
@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db.models import F
 from django.utils import timezone
 from django.dispatch import receiver
+from django.utils.encoding import python_2_unicode_compatible
 
 try:
     from django.contrib.contenttypes.fields import GenericForeignKey
@@ -36,6 +37,7 @@ def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
         instance.hitcount.decrease()
 
 
+@python_2_unicode_compatible
 class HitCount(models.Model):
     """
     Model that stores the hit totals for any content object.
@@ -58,8 +60,8 @@ class HitCount(models.Model):
         unique_together = ("content_type", "object_pk")
         db_table = "hitcount_hit_count"
 
-    def __unicode__(self):
-        return u'%s' % self.content_object
+    def __str__(self):
+        return '%s' % self.content_object
 
     def increase(self):
         self.hits = F('hits') + 1
@@ -98,6 +100,7 @@ class HitCount(models.Model):
     #     pass
 
 
+@python_2_unicode_compatible
 class Hit(models.Model):
     """
     Model captures a single Hit by a visitor.
@@ -128,8 +131,8 @@ class Hit(models.Model):
         verbose_name = _("hit")
         verbose_name_plural = _("hits")
 
-    def __unicode__(self):
-        return u'Hit: %s' % self.pk
+    def __str__(self):
+        return 'Hit: %s' % self.pk
 
     def save(self, *args, **kwargs):
         """
@@ -157,6 +160,7 @@ class Hit(models.Model):
         super(Hit, self).delete()
 
 
+@python_2_unicode_compatible
 class BlacklistIP(models.Model):
 
     ip = models.CharField(max_length=40, unique=True)
@@ -166,10 +170,11 @@ class BlacklistIP(models.Model):
         verbose_name = _("Blacklisted IP")
         verbose_name_plural = _("Blacklisted IPs")
 
-    def __unicode__(self):
-        return u'%s' % self.ip
+    def __str__(self):
+        return '%s' % self.ip
 
 
+@python_2_unicode_compatible
 class BlacklistUserAgent(models.Model):
 
     user_agent = models.CharField(max_length=255, unique=True)
@@ -179,5 +184,5 @@ class BlacklistUserAgent(models.Model):
         verbose_name = _("Blacklisted User Agent")
         verbose_name_plural = _("Blacklisted User Agents")
 
-    def __unicode__(self):
-        return u'%s' % self.user_agent
+    def __str__(self):
+        return '%s' % self.user_agent

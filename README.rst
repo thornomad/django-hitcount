@@ -6,34 +6,26 @@ Django-HitCount
 .. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master
     :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
 
-Basic app that allows you to track the number of hits/views for a particular object.  Full documentation is available at: http://django-hitcount.rtfd.org
+Basic app that allows you to track the number of hits/views for a particular object.
 
-Example Project:
-----------------
+Documentation:
+--------------
 
-I have added an example project with a simple Blog application so you can see the hit counting demonstrated.  You can use that to test the functionality and it should work out of the box with Django 1.8.1 and Python 2.7.x.
+`<http://django-hitcount.rtfd.org>`_
 
-You can load some initial fixtures at::
+Source Code:
+------------
 
-    python manage.py migrate          # will load some data fixtures for you
-    python manage.py createsuperuser  # if you want admin access
+`<https://github.com/thornomad/django-hitcount>`_
 
-TODO
------
+Issues
+------
 
-* More tests! (low coverage)
-* Mixin for a direct relationship on other models when desired
-* Internationalization (although this has been started)
-* Port to python 3.x
-* Upload to pip repository
+Use the GitHub `issue tracker`_ for django-hitcount to submit bugs, issues, and feature requests.
 
-Additional Authors and Thanks
------------------------------
+Changelog
+---------
 
-This doesn't include everyone and if I missed someone let me know I will add it.
+`<http://django-hitcount.rtfd.org/changelog.html>`_
 
-Thanks goes to:
-
- * Basil Shubin and his work at <https:/github.com/bashu/django-hitcount-headless>
- * ariddell for putting the `setup.py` package together
-
+.. _issue tracker: https://github.com/thornomad/django-hitcount/issues

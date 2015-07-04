@@ -14,7 +14,6 @@
 
 import sys
 import os
-import shlex
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -48,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-hitcount'
-copyright = u'2015, Damon Timm'
+copyright = u'2009-2015 Damon Timm'
 author = u'Damon Timm'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -283,3 +282,12 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# on_rtd is whether we are on readthedocs.org
+import os
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
