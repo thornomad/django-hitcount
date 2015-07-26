@@ -37,7 +37,7 @@ View the :doc:`additional settings section </settings>` for more information.
 Template Magic
 --------------
 
-Django-Hitcount can utilize Javascript out-of-the-box to record the ``Hits`` to an object (be it a blog post, poll, etc).  There is a `jQuery implementation`_ included with the app though you could write your own implementation, or copy-paste the one included, easily enough.
+Django-hitcount comes packaged with a `jQuery implementation`_ that works out-of-the-box to record the ``Hits`` to an object (be it a blog post, poll, etc).  To use the `jQuery implementation`_ you can either include the app's script file (as the documentation below shows) or to copy-paste the script into your own jQuery code.  Of course: you could also implement this without relying on jQuery.
 
 Start by loading hitcount tags on the desired templates::
 
@@ -49,6 +49,7 @@ Recording a Hit
 If you want to use the `jQuery implementation`_ in your project, you can add the Javascript file to your template like so::
 
     {% load staticfiles %}
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="{% static 'hitcount/hitcount-jquery.js' %}"></script>
 
 Then, on your object detail page (blog, page, poll, etc) you inject the needed javascript variables::
