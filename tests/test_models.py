@@ -141,7 +141,8 @@ class HitCountTests(TestCase):
 
     def test_hits_in_last_assert_error_when_no_args(self):
         """
-        When no args presented for `hits_in_last` should raise an AssertionError.
+        When no args presented for `hits_in_last` should raise an
+        AssertionError.
 
         """
         hit_count = HitCount.objects.create(content_object=self.post)
@@ -176,3 +177,14 @@ class HitCountTests(TestCase):
         hit_count2 = HitCount.objects.create(content_object=post2)
         self.assertEqual(HitCount.objects.get_for_object(self.post), hit_count)
         self.assertEqual(HitCount.objects.get_for_object(post2), hit_count2)
+
+    def test_generic_relation(self):
+        """
+        Test generic relation back to HitCount from a model.
+
+        """
+        hit_count = HitCount.objects.create(content_object=self.post)
+        hit_count.increase()
+
+        self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
+                         self.post.hit_count.get().hits)
