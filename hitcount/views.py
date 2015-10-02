@@ -24,6 +24,11 @@ def _update_hit_count(request, hitcount):
     UpdateHitCountResponse = namedtuple('UpdateHitCountResponse',
         'hit_counted hit_message')
 
+    # as of Django 1.8.4 empty sessions are not being saved
+    # https://code.djangoproject.com/ticket/25489
+    if request.session.session_key is None:
+        request.session.save()
+
     user = request.user
     session_key = request.session.session_key
     ip = get_ip(request)
