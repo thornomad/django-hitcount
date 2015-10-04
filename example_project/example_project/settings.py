@@ -87,7 +87,8 @@ STATIC_URL = '/static/'
 
 # DJANGO HITCOUNT SPECIFIC VARIABLES
 
-SESSION_SAVE_EVERY_REQUEST = True
+# As of v1.1.1 this setting is no longer needed
+# SESSION_SAVE_EVERY_REQUEST = True
 
 HITCOUNT_KEEP_HIT_ACTIVE = { 'minutes': 60 }
 HITCOUNT_HITS_PER_IP_LIMIT = 0 #unlimited

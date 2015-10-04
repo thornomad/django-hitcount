@@ -38,7 +38,6 @@ def pytest_configure():
             },
         ],
         # HitCount Variables (default values)
-        SESSION_SAVE_EVERY_REQUEST = True,
         HITCOUNT_KEEP_HIT_ACTIVE = {'days': 7},
         HITCOUNT_HITS_PER_IP_LIMIT = 0,
         HITCOUNT_EXCLUDE_USER_GROUP = (),

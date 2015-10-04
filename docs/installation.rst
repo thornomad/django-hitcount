@@ -10,7 +10,7 @@ Install django-hitcount::
 Settings.py
 -----------
 
-Add django-hitcount to your ``INSTALLED_APPS``, enable ``SESSION_SAVE_EVERY_REQUEST``::
+Add django-hitcount to your ``INSTALLED_APPS``::
 
     # settings.py
 
@@ -18,9 +18,6 @@ Add django-hitcount to your ``INSTALLED_APPS``, enable ``SESSION_SAVE_EVERY_REQU
         ...
         'hitcount'
     )
-
-    # needed for django-hitcount to function properly
-    SESSION_SAVE_EVERY_REQUEST = True
 
 Urls.py
 -------
