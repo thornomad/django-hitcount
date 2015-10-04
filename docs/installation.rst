@@ -13,23 +13,38 @@ Settings.py
 Add django-hitcount to your ``INSTALLED_APPS``::
 
     # settings.py
-
     INSTALLED_APPS = (
         ...
         'hitcount'
     )
+
+View the :doc:`additional settings section </settings>` for a list of the django-hitcount settings that are available.
 
 Urls.py
 -------
 In your ``urls.py`` file add the following::
 
     # urls.py
-    urlpatterns = patterns('',
+    urlpatterns = [
         ...
         url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
-    )
+    ]
 
-View the :doc:`additional settings section </settings>` for more information.
+Models.py
+---------
+
+There is nothing you are required to do with your own models as that django-hitcount relies on a ``GenericForeignKey`` to create the relationship to your model's ``HitCount``.  You can add a ``GenericRelation`` to your model if you would like to be able to access its ``HitCount`` model easily::
+
+    from django.db import models
+    from django.contrib.contenttypes.fields import GenericRelation
+
+    from hitcount.models import HitCount
+
+    # here is an example model with a GenericRelation
+    class MyModel(models.Model):
+        ...
+        # Note that you need to specify the object_id_field as written below
+        hit_count = GenericRelation(HitCount, object_id_field='object_pk')
 
 Template Magic
 --------------

@@ -26,6 +26,6 @@ Use the GitHub `issue tracker`_ for django-hitcount to submit bugs, issues, and 
 Changelog
 ---------
 
-`<http://django-hitcount.rtfd.org/changelog.html>`_
+`<http://django-hitcount.readthedocs.org/en/latest/changelog.html>`_
 
 .. _issue tracker: https://github.com/thornomad/django-hitcount/issues
