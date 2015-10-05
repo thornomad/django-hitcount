@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
 
-from .models import Post
+from blog.models import Post
 
 
 class BlacklistUserAgentTests(TestCase):

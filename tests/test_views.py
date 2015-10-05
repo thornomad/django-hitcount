@@ -27,7 +27,7 @@ from django.utils import timezone
 from hitcount.models import HitCount, BlacklistIP, BlacklistUserAgent
 from hitcount.views import _update_hit_count, update_hit_count_ajax
 
-from .models import Post
+from blog.models import Post
 
 
 class UpdateHitCountTests(TestCase):

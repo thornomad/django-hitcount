@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from hitcount.admin import HitAdmin, HitCountAdmin
 from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
 
-from .models import Post
+from blog.models import Post
 
 
 class HitCountAdminTest(TestCase):
@@ -19,8 +19,6 @@ class HitCountAdminTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.admin = HitCountAdmin(HitCount, AdminSite())
-        # self.user = User.objects.create_user(
-        #     username='jacob', email='jacob@…', password='top_secret')
 
     def test_has_add_permission(self):
         """

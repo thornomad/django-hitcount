@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import sys
+
+sys.path.insert(0, '../django-hitcount/example_project')
+
 
 def pytest_configure():
     from django.conf import settings
@@ -11,8 +15,12 @@ def pytest_configure():
                                'NAME': ':memory:'}},
         SITE_ID=1,
         SECRET_KEY='HitCounts Rock!',
+        DEBUG=True,
+        TEMPLATE_DEBUG=True,
+        ALLOWED_HOSTS=[],
         USE_I18N=True,
         USE_L10N=True,
+        STATIC_URL='/static/',
         MIDDLEWARE_CLASSES=(
             'django.middleware.common.CommonMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
@@ -25,7 +33,7 @@ def pytest_configure():
             'django.contrib.sessions',
             'django.contrib.sites',
             'django.contrib.staticfiles',
-
+            'blog',
             'hitcount',
             'tests',
         ),

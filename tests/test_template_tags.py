@@ -14,13 +14,13 @@ from django.utils import timezone
 
 from hitcount.models import Hit, HitCount
 
-from .models import Post
+from blog.models import Post
 
 
 class TemplateTagGetHitCountTests(TestCase):
 
     def setUp(self):
-        self.post = Post.objects.create(title='my title', content='my text')
+        self.post = Post.objects.get(pk=1)
         hit_count = HitCount.objects.create(content_object=self.post)
 
         for x in range(10):

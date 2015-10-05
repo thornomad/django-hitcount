@@ -14,7 +14,7 @@ from django.test import TestCase
 from django.utils.six import StringIO
 
 from hitcount.models import HitCount, Hit
-from .models import Post
+from blog.models import Post
 
 COMMAND_NAME = 'hitcount_cleanup'
 
