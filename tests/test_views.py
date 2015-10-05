@@ -8,16 +8,9 @@ try:
 except ImportError:
     import mock
 
-try:
-    from importlib import import_module
-except ImportError:  # prior to 1.7
-    from django.utils.importlib import import_module
+from importlib import import_module
 
-try:
-    from django.test import override_settings
-except ImportError:  # prior to 1.7
-    from django.test.utils import override_settings
-
+from django.test import override_settings
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User, Group
 from django.http import Http404

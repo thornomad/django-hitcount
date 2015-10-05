@@ -8,12 +8,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
-
-try:
-    from django.contrib.contenttypes.fields import GenericForeignKey
-except ImportError:
-    from django.contrib.contenttypes.generic import GenericForeignKey
-
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
