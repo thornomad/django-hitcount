@@ -4,5 +4,5 @@
 -r tests/requirements.txt
 -r example_project/requirements.txt
 -r docs/requirements.txt
-twine==1.6.2
+twine==1.6.3
 wheel==0.26.0
