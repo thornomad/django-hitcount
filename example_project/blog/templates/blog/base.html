@@ -70,22 +70,14 @@
 
     </div> <!-- /container -->
 
-    {% comment %}
-      Am using this template block so we can inject our javascript variables
-      when needed on the particular templates that we want them.  See `post.html`
-      as an example.
-    {% endcomment %}
-    {% block hitcount_javascript %}{% endblock %}
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    {% load staticfiles %}
-
-    {# example of adding your own hitcount-jquery #}
-    <script src="{% static 'hitcount/hitcount-jquery.js' %}"></script>
-
+    {# This template block is here so we can insert the JavaScript on correct template #}
+    {% block inline_javascript %}{% endblock %}
   </body>
 </html>

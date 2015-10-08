@@ -241,3 +241,78 @@ def get_hit_count_js_variables(parser, token):
     return GetHitCountJavascriptVariables.handle_token(parser, token)
 
 register.tag('get_hit_count_js_variables', get_hit_count_js_variables)
+
+
+class WriteHitCountJavascript(template.Node):
+
+    JS_TEMPLATE = """
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function($) {
+    $.postCSRF("%s", {
+      hitcountPK: "%s"
+    });
+});
+//]]>
+</script>
+"""
+
+    JS_TEMPLATE_DEBUG = """
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function($) {
+    $.postCSRF("%s", {
+      hitcountPK: "%s"
+    }).done(function(data) {
+      console.log('django-hitcount: AJAX POST succeeded.');
+      console.log(data);
+    }).fail(function(data) {
+      console.log('django-hitcount: AJAX POST failed.');
+      console.log(data);
+    });
+});
+//]]>
+</script>
+"""
+
+    def handle_token(cls, parser, token):
+        args = token.contents.split()
+
+        if len(args) == 3 and args[1] == 'for':
+            return cls(obj_variable=args[2], debug=False)
+        elif len(args) == 4 and args[1] == 'for' and args[3] == 'debug':
+            return cls(obj_variable=args[2], debug=True)
+        else:
+            raise template.TemplateSyntaxError(
+                'insert_hit_count_js requires this syntax: '
+                '"insert_hit_count_js for [object]"\n'
+                '"insert_hit_count_js for [object] debug"'
+                'Got: %s' % ' '.join(str(i) for i in args)
+            )
+
+    handle_token = classmethod(handle_token)
+
+    def __init__(self, obj_variable, debug):
+        self.obj_variable = template.Variable(obj_variable)
+        self.debug = debug
+
+    def render(self, context):
+        hit_count = get_hit_count_from_obj_variable(
+            context,
+            self.obj_variable,
+            'insert_hit_count_js'
+        )
+        template = self.JS_TEMPLATE_DEBUG if self.debug else self.JS_TEMPLATE
+        return template % (str(reverse('hitcount:hit_ajax')), str(hit_count.pk))
+
+
+def insert_hit_count_js(parser, token):
+    """
+    Injects the JavaScript into your template that works with jquery.postcsrf.js.
+
+    {% insert_hit_count_js_variables for [object] %}
+    """
+    return WriteHitCountJavascript.handle_token(parser, token)
+
+
+register.tag('insert_hit_count_js', insert_hit_count_js)
