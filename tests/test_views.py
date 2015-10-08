@@ -154,7 +154,7 @@ class UpdateHitCountTests(TestCase):
         self.assertFalse(responses[2].hit_counted)
         self.assertEqual(responses[2].hit_message,
             'Not counted: hits per IP address limit reached')
-        hit_count = HitCount.objects.get(pk=1)
+        hit_count = HitCount.objects.get(pk=self.hit_count.pk)
         self.assertEqual(hit_count.hits, 2)
 
     @override_settings(HITCOUNT_EXCLUDE_USER_GROUP=('Admin',))

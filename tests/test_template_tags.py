@@ -19,6 +19,9 @@ from blog.models import Post
 
 class TemplateTagGetHitCountTests(TestCase):
 
+
+    fixtures = ['initial_data.json']
+
     def setUp(self):
         self.post = Post.objects.get(pk=1)
         hit_count = HitCount.objects.create(content_object=self.post)
@@ -176,7 +179,8 @@ class TemplateTagGetHitCountTests(TestCase):
             "post": self.post
         }))
 
-        self.assertEqual('pk: 1 || url: /hitcount/hit/ajax/ || hits: 10', out)
+        pk = self.post.hit_count.all()[0].pk
+        self.assertEqual('pk: %s || url: /hitcount/hit/ajax/ || hits: 10' % pk, out)
 
     def test_insert_js_variables(self):
         """
@@ -191,9 +195,10 @@ class TemplateTagGetHitCountTests(TestCase):
             "post": self.post
         }))
 
+        pk = self.post.hit_count.all()[0].pk
         self.assertEqual('<script type="text/javascript">\n'
-            'var hitcountJS = {hitcountPK : \'1\',hitcountURL :'
-            ' \'/hitcount/hit/ajax/\'};\n</script>', out)
+            'var hitcountJS = {hitcountPK : \'%s\',hitcountURL :'
+            ' \'/hitcount/hit/ajax/\'};\n</script>' % pk, out)
 
     def test_parsing_errors(self):
         render = lambda t, c: Template(t).render(Context(c))
