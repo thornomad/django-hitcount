@@ -18,8 +18,6 @@ from blog.models import Post
 
 
 class TemplateTagGetHitCountTests(TestCase):
-
-
     fixtures = ['initial_data.json']
 
     def setUp(self):

@@ -12,7 +12,7 @@ import os
 import sys
 
 # Used to
-sys.path.insert(0, '../../django-hitcount') # our hitcount app
+sys.path.insert(0, '../../django-hitcount')  # our hitcount app
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog', # app to show hits
+    'blog',  # app to show hits
     'hitcount'
 )
 
@@ -90,7 +90,7 @@ STATIC_URL = '/static/'
 # As of v1.1.1 this setting is no longer needed
 # SESSION_SAVE_EVERY_REQUEST = True
 
-HITCOUNT_KEEP_HIT_ACTIVE = { 'minutes': 60 }
-HITCOUNT_HITS_PER_IP_LIMIT = 0 #unlimited
-HITCOUNT_EXCLUDE_USER_GROUP = ( ) # not used
-HITCOUNT_KEEP_HIT_IN_DATABASE = { 'seconds': 10 }
+HITCOUNT_KEEP_HIT_ACTIVE = {'minutes': 60}
+HITCOUNT_HITS_PER_IP_LIMIT = 0  # unlimited
+HITCOUNT_EXCLUDE_USER_GROUP = ()  # not used
+HITCOUNT_KEEP_HIT_IN_DATABASE = {'seconds': 10}
