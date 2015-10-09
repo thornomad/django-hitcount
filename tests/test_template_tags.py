@@ -194,7 +194,8 @@ class TemplateTagGetHitCountTests(TestCase):
         }))
 
         pk = self.post.hit_count.all()[0].pk
-        self.assertEqual('<script type="text/javascript">\n'
+        self.assertEqual(
+            '<script type="text/javascript">\n'
             'var hitcountJS = {hitcountPK : \'%s\',hitcountURL :'
             ' \'/hitcount/hit/ajax/\'};\n</script>' % pk, out)
 
@@ -202,22 +203,26 @@ class TemplateTagGetHitCountTests(TestCase):
         render = lambda t, c: Template(t).render(Context(c))
 
         # invalid date/time
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             '{% load hitcount_tags %}{% get_hit_count for post within "foo=1,bar=30" %}',
             {"post": self.post})
 
         # non-existent context variable
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% get_hit_count for post %}",
             {"post_doesnt_context": self.post})
 
         # wrong number of args
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             '{% load hitcount_tags %}{% get_hit_count post %}',
             {"post": self.post})
 
         # not passed valid object
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             '{% load hitcount_tags %}{% get_hit_count post %}',
             {"post": 'bob the baker'})
 
@@ -225,17 +230,20 @@ class TemplateTagGetHitCountTests(TestCase):
         render = lambda t, c: Template(t).render(Context(c))
 
         # wrong number of variables
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% get_hit_count_js_variables as hit_count_js %}",
             {"post_variable_wrong": self.post})
 
         # wrong number of variables
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% get_hit_count_js_variables as hit_count_js %}",
             {"post": self.post})
 
         # a string not an object
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% get_hit_count_js_variables for post as hit_count_js %}",
             {"post": 'bob the baker'})
 
@@ -243,16 +251,19 @@ class TemplateTagGetHitCountTests(TestCase):
         render = lambda t, c: Template(t).render(Context(c))
 
         # wrong number of variables
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% insert_hit_count_js_variables post %}",
             {"post": self.post})
 
         # non-existent context variable
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% insert_hit_count_js_variables for post %}",
             {"post_doesnt_context": self.post})
 
         # a string not an object
-        self.assertRaises(TemplateSyntaxError, render,
+        self.assertRaises(
+            TemplateSyntaxError, render,
             "{% load hitcount_tags %}{% insert_hit_count_js_variables for post %}",
             {"post": 'bob the baker'})

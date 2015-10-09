@@ -29,8 +29,7 @@ class UpdateHitCountTests(TestCase):
         self.post = Post.objects.create(title='my title', content='my text')
         self.hit_count = HitCount.objects.create(content_object=self.post)
         self.factory = RequestFactory()
-        self.request = self.factory.get('/', REMOTE_ADDR="127.0.0.1",
-            HTTP_USER_AGENT='my_clever_agent')
+        self.request = self.factory.get('/', REMOTE_ADDR="127.0.0.1", HTTP_USER_AGENT='my_clever_agent')
 
         engine = import_module(settings.SESSION_ENGINE)
         store = engine.SessionStore()
@@ -59,8 +58,7 @@ class UpdateHitCountTests(TestCase):
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertFalse(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Not counted: session key has active hit')
+        self.assertEqual(response.hit_message, 'Not counted: session key has active hit')
 
     def test_anonymous_user_hit_counted_after_filter_active(self):
         """
@@ -85,37 +83,31 @@ class UpdateHitCountTests(TestCase):
         """
         Test AnonymousUser Hit
         """
-        self.request.user = User.objects.create_user('john',
-            'lennon@thebeatles.com', 'johnpassword')
+        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         response = _update_hit_count(self.request, self.hit_count)
 
         self.assertTrue(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Hit counted: user authentication')
+        self.assertEqual(response.hit_message, 'Hit counted: user authentication')
 
     def test_registered_user_hit_not_counted(self):
         """
         Test Multiple AnonymousUser Hit, not counted
         """
-        self.request.user = User.objects.create_user('john',
-            'lennon@thebeatles.com', 'johnpassword')
+        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertTrue(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Hit counted: user authentication')
+        self.assertEqual(response.hit_message, 'Hit counted: user authentication')
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertFalse(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Not counted: authenticated user has active hit')
+        self.assertEqual(response.hit_message, 'Not counted: authenticated user has active hit')
 
     def test_registered_user_hit_counted_after_filter_active(self):
         """
         Test Multiple AnonymousUser Hit, counted because of filter active
         """
-        self.request.user = User.objects.create_user('john',
-            'lennon@thebeatles.com', 'johnpassword')
+        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
         # create a Hit ten days ago
         created = timezone.now() - timedelta(days=10)
@@ -152,8 +144,7 @@ class UpdateHitCountTests(TestCase):
         self.assertTrue(responses[1].hit_counted)
         self.assertEqual(responses[1].hit_message, 'Hit counted: session key')
         self.assertFalse(responses[2].hit_counted)
-        self.assertEqual(responses[2].hit_message,
-            'Not counted: hits per IP address limit reached')
+        self.assertEqual(responses[2].hit_message, 'Not counted: hits per IP address limit reached')
         hit_count = HitCount.objects.get(pk=self.hit_count.pk)
         self.assertEqual(hit_count.hits, 2)
 
@@ -162,15 +153,13 @@ class UpdateHitCountTests(TestCase):
         """
         Exclude user by adding a group setting.
         """
-        self.request.user = User.objects.create_user('john',
-            'lennon@thebeatles.com', 'johnpassword')
+        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         group = Group.objects.create(name='Admin')
         group.user_set.add(self.request.user)
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertFalse(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Not counted: user excluded by group')
+        self.assertEqual(response.hit_message, 'Not counted: user excluded by group')
 
     def test_blacklist_ip(self):
         """
@@ -180,8 +169,7 @@ class UpdateHitCountTests(TestCase):
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertFalse(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Not counted: user IP has been blacklisted')
+        self.assertEqual(response.hit_message, 'Not counted: user IP has been blacklisted')
 
     def test_blacklist_user_agent(self):
         """
@@ -191,8 +179,7 @@ class UpdateHitCountTests(TestCase):
 
         response = _update_hit_count(self.request, self.hit_count)
         self.assertFalse(response.hit_counted)
-        self.assertEqual(response.hit_message,
-            'Not counted: user agent has been blacklisted')
+        self.assertEqual(response.hit_message, 'Not counted: user agent has been blacklisted')
 
 
 class UpdateHitCountJSONTests(TestCase):
@@ -201,7 +188,9 @@ class UpdateHitCountJSONTests(TestCase):
         self.post = Post.objects.create(title='my title', content='my text')
         self.hit_count = HitCount.objects.create(content_object=self.post)
         self.factory = RequestFactory()
-        self.request = self.factory.post('/', {'hitcountPK': self.hit_count.pk},
+        self.request = self.factory.post(
+            '/',
+            {'hitcountPK': self.hit_count.pk},
             REMOTE_ADDR="127.0.0.1",
             HTTP_USER_AGENT='my_clever_agent',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -225,12 +214,10 @@ class UpdateHitCountJSONTests(TestCase):
         """
         Test require POST request or raise 404
         """
-        non_ajax_request = self.factory.get('/',
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        non_ajax_request = self.factory.get('/', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         response = update_hit_count_ajax(non_ajax_request)
         json_response = json.loads(response.content.decode())
-        json_expects = json.loads('{"error_message": '
-            '"Hits counted via POST only.", "success": false}')
+        json_expects = json.loads('{"error_message": "Hits counted via POST only.", "success": false}')
         self.assertEqual(json_response, json_expects)
 
     def test_count_hit(self):
@@ -238,17 +225,16 @@ class UpdateHitCountJSONTests(TestCase):
         Test a valid request.
         """
         response = update_hit_count_ajax(self.request)
-        self.assertEqual(response.content,
-            b'[true, "Hit counted: session key"]')
+        self.assertEqual(response.content, b'[true, "Hit counted: session key"]')
 
     def test_count_hit_invalid_hitcount_pk(self):
         """
         Test a valid request with an invalid hitcount pk.
         """
-        request = self.factory.post('/', {'hitcountPK': 15},
+        request = self.factory.post(
+            '/', {'hitcountPK': 15},
             REMOTE_ADDR="127.0.0.1",
             HTTP_USER_AGENT='my_clever_agent',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         response = update_hit_count_ajax(request)
-        self.assertEqual(response.content,
-            b'HitCount object_pk not working')
+        self.assertEqual(response.content, b'HitCount object_pk not working')

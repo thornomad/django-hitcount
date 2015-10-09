@@ -21,8 +21,8 @@ def _update_hit_count(request, hitcount):
     Returns True if the request was considered a Hit; returns False if not.
     """
 
-    UpdateHitCountResponse = namedtuple('UpdateHitCountResponse',
-        'hit_counted hit_message')
+    UpdateHitCountResponse = namedtuple(
+        'UpdateHitCountResponse', 'hit_counted hit_message')
 
     # as of Django 1.8.4 empty sessions are not being saved
     # https://code.djangoproject.com/ticket/25489
@@ -38,21 +38,21 @@ def _update_hit_count(request, hitcount):
 
     # first, check our request against the IP blacklist
     if BlacklistIP.objects.filter(ip__exact=ip):
-        response = UpdateHitCountResponse(False,
-            'Not counted: user IP has been blacklisted')
+        response = UpdateHitCountResponse(
+            False, 'Not counted: user IP has been blacklisted')
         return response
 
     # second, check our request against the user agent blacklist
     if BlacklistUserAgent.objects.filter(user_agent__exact=user_agent):
-        response = UpdateHitCountResponse(False,
-            'Not counted: user agent has been blacklisted')
+        response = UpdateHitCountResponse(
+            False, 'Not counted: user agent has been blacklisted')
         return response
 
     # third, see if we are excluding a specific user group or not
     if exclude_user_group and user.is_authenticated():
         if user.groups.filter(name__in=exclude_user_group):
-            response = UpdateHitCountResponse(False,
-                'Not counted: user excluded by group')
+            response = UpdateHitCountResponse(
+                False, 'Not counted: user excluded by group')
             return response
 
     # eliminated first three possible exclusions, now on to checking our database of
@@ -64,13 +64,13 @@ def _update_hit_count(request, hitcount):
     # check limit on hits from a unique ip address (HITCOUNT_HITS_PER_IP_LIMIT)
     if hits_per_ip_limit:
         if qs.filter(ip__exact=ip).count() >= hits_per_ip_limit:
-            response = UpdateHitCountResponse(False,
-                'Not counted: hits per IP address limit reached')
+            response = UpdateHitCountResponse(
+                False, 'Not counted: hits per IP address limit reached')
             return response
 
     # create a generic Hit object with request data
     hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request),
-        user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
+              user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
 
     # first, use a user's authentication to see if they made an earlier hit
     if user.is_authenticated():
@@ -78,21 +78,21 @@ def _update_hit_count(request, hitcount):
             hit.user = user  # associate this hit with a user
             hit.save()
 
-            response = UpdateHitCountResponse(True,
-                'Hit counted: user authentication')
+            response = UpdateHitCountResponse(
+                True, 'Hit counted: user authentication')
         else:
-            response = UpdateHitCountResponse(False,
-                'Not counted: authenticated user has active hit')
+            response = UpdateHitCountResponse(
+                False, 'Not counted: authenticated user has active hit')
 
     # if not authenticated, see if we have a repeat session
     else:
         if not qs.filter(session=session_key, hitcount=hitcount):
             hit.save()
-            response = UpdateHitCountResponse(True,
-                'Hit counted: session key')
+            response = UpdateHitCountResponse(
+                True, 'Hit counted: session key')
         else:
-            response = UpdateHitCountResponse(False,
-                'Not counted: session key has active hit')
+            response = UpdateHitCountResponse(
+                False, 'Not counted: session key has active hit')
 
     return response
 

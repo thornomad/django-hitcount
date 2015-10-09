@@ -99,8 +99,7 @@ class GetHitCount(template.Node):
         self.period = period
 
     def render(self, context):
-        hit_count = get_hit_count_from_obj_variable(context,
-            self.obj_variable, 'get_hit_count')
+        hit_count = get_hit_count_from_obj_variable(context, self.obj_variable, 'get_hit_count')
 
         if self.period:  # if user sets a time period, use it
             try:
@@ -169,8 +168,7 @@ class WriteHitCountJavascriptVariables(template.Node):
         self.obj_variable = template.Variable(obj_variable)
 
     def render(self, context):
-        hit_count = get_hit_count_from_obj_variable(context,
-            self.obj_variable, 'insert_hit_count_js_variables')
+        hit_count = get_hit_count_from_obj_variable(context, self.obj_variable, 'insert_hit_count_js_variables')
 
         js = '<script type="text/javascript">\n' + \
             "var hitcountJS = {" + \
@@ -220,8 +218,8 @@ class GetHitCountJavascriptVariables(template.Node):
 
         hit_count = get_hit_count_from_obj_variable(context, self.obj_variable, 'get_hit_count_js_variables')
 
-        context[self.as_varname] = HitcountVariables(hit_count.pk,
-            str(reverse('hitcount:hit_ajax')), str(hit_count.hits))
+        context[self.as_varname] = HitcountVariables(
+            hit_count.pk, str(reverse('hitcount:hit_ajax')), str(hit_count.hits))
 
         return ''
 

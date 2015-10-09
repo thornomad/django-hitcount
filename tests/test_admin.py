@@ -43,10 +43,7 @@ class HitAdminTest(TestCase):
         hit_count = HitCount.objects.create(content_object=post)
 
         for x in range(10):
-            Hit.objects.create(hitcount=hit_count,
-                ip="127.0.0.%s" % x, user_agent="agent_%s" % x)
-        # self.user = User.objects.create_user(
-        #     username='jacob', email='jacob@…', password='top_secret')
+            Hit.objects.create(hitcount=hit_count, ip="127.0.0.%s" % x, user_agent="agent_%s" % x)
 
     def test_has_add_permission(self):
         """
@@ -69,8 +66,7 @@ class HitAdminTest(TestCase):
                    'blacklist_delete_user_agents',
                    'delete_queryset',
                    ]
-        self.assertEqual(actions,
-            list(self.admin.get_actions(self.request).keys()))
+        self.assertEqual(actions, list(self.admin.get_actions(self.request).keys()))
 
     def test_blacklist_ips_single(self):
         """
@@ -145,8 +141,7 @@ class HitAdminTest(TestCase):
         """
         Test the `delete_queryset` action.
         """
-        my_admin = User.objects.create_superuser('myuser',
-            'myemail@example.com', '1234')
+        my_admin = User.objects.create_superuser('myuser', 'myemail@example.com', '1234')
         self.request.user = my_admin
 
         qs = Hit.objects.all()[:5]
@@ -160,8 +155,7 @@ class HitAdminTest(TestCase):
         """
         Test the `delete_queryset` action against a single item.
         """
-        my_admin = User.objects.create_superuser('myuser',
-            'myemail@example.com', '1234')
+        my_admin = User.objects.create_superuser('myuser', 'myemail@example.com', '1234')
         self.request.user = my_admin
 
         qs = Hit.objects.filter(ip="127.0.0.5")
@@ -175,8 +169,7 @@ class HitAdminTest(TestCase):
         """
         Test the `delete_queryset` action against an unauthorized user.
         """
-        my_admin = User.objects.create_user('myuser',
-            'myemail@example.com', '1234')
+        my_admin = User.objects.create_user('myuser', 'myemail@example.com', '1234')
         self.request.user = my_admin
 
         qs = Hit.objects.all()[:5]
@@ -187,8 +180,7 @@ class HitAdminTest(TestCase):
         """
         Test the `blacklist_delete_ips` action.
         """
-        my_admin = User.objects.create_superuser('myuser',
-            'myemail@example.com', '1234')
+        my_admin = User.objects.create_superuser('myuser', 'myemail@example.com', '1234')
         self.request.user = my_admin
 
         qs = Hit.objects.all()[:5]
@@ -203,8 +195,7 @@ class HitAdminTest(TestCase):
         """
         Test the `blacklist_delete_user_agents` action.
         """
-        my_admin = User.objects.create_superuser('myuser',
-            'myemail@example.com', '1234')
+        my_admin = User.objects.create_superuser('myuser', 'myemail@example.com', '1234')
         self.request.user = my_admin
 
         qs = Hit.objects.all()[:5]
