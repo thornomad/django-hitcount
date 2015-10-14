@@ -195,10 +195,10 @@ class UpdateHitCountJSONTests(TestCase):
             HTTP_USER_AGENT='my_clever_agent',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        engine = import_module(settings.SESSION_ENGINE)
-        store = engine.SessionStore()
-        store.save()
-        self.request.session = store
+        self.engine = import_module(settings.SESSION_ENGINE)
+        self.store = self.engine.SessionStore()
+        self.store.save()
+        self.request.session = self.store
 
         self.request.user = AnonymousUser()
 
@@ -215,6 +215,7 @@ class UpdateHitCountJSONTests(TestCase):
         Test require POST request or raise 404
         """
         non_ajax_request = self.factory.get('/', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        non_ajax_request.session = self.store
         response = update_hit_count_ajax(non_ajax_request)
         json_response = json.loads(response.content.decode())
         json_expects = json.loads('{"error_message": "Hits counted via POST only.", "success": false}')
@@ -231,10 +232,11 @@ class UpdateHitCountJSONTests(TestCase):
         """
         Test a valid request with an invalid hitcount pk.
         """
-        request = self.factory.post(
+        wrong_pk_request = self.factory.post(
             '/', {'hitcountPK': 15},
             REMOTE_ADDR="127.0.0.1",
             HTTP_USER_AGENT='my_clever_agent',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        response = update_hit_count_ajax(request)
+        wrong_pk_request.session = self.store
+        response = update_hit_count_ajax(wrong_pk_request)
         self.assertEqual(response.content, b'HitCount object_pk not working')
