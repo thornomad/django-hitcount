@@ -71,7 +71,7 @@ Then, on your object detail page (blog, page, poll, etc) you inject the needed j
 
     # or you can use a template variable to inject as you see fit
     {% get_hit_count_js_variables for object as hitcount %}
-    ({ hitcount.ajax_url }}
+    {{ hitcount.ajax_url }}
     {{ hitcount.pk }}
 
 Displaying Hit Information
