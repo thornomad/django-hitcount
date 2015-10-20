@@ -1,26 +1,49 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.generic import DetailView, TemplateView
+
+from hitcount.views import HitCountDetailView
 
 from blog.models import Post
 
 
-def index(request):
-    post_list = Post.objects.all()[:5]
-    template = loader.get_template('blog/index.html')
-    context = RequestContext(request, {
-        'post_list': post_list,
-    })
-    return HttpResponse(template.render(context))
+class PostMixinDetailView(object):
+    """
+    Mixin to same us some typing.  Adds context for us!
+    """
+    model = Post
+
+    def get_context_data(self, **kwargs):
+        context = super(PostMixinDetailView, self).get_context_data(**kwargs)
+        context['post_list'] = Post.objects.all()[:5]
+        context['post_views'] = ["ajax", "detail", "detail-with-count"]
+        return context
 
 
-@ensure_csrf_cookie  # this is required for views that use django-hitcount
-def detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    post_list = Post.objects.all()[:5]
-    return render(request, 'blog/post.html',
-                  {'post': post, 'post_list': post_list})
+class IndexView(PostMixinDetailView, TemplateView):
+    template_name = 'blog/index.html'
+
+
+class PostDetailJSONView(PostMixinDetailView, DetailView):
+    template_name = 'blog/post_ajax.html'
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(PostDetailJSONView, cls).as_view(**initkwargs)
+        return ensure_csrf_cookie(view)
+
+
+class PostDetailView(PostMixinDetailView, HitCountDetailView):
+    """
+    Generic hitcount class based view.
+    """
+    pass
+
+
+class PostCountHitDetailView(PostMixinDetailView, HitCountDetailView):
+    """
+    Generic hitcount class based view that will also perform the hitcount logic.
+    """
+    count_hit = True

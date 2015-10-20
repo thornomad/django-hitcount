@@ -1,0 +1,30 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{object.title}}</h1>
+  </div>
+
+  <div class="col-md-8">
+    <p class="lead">{{ object.content }}</p>
+  </div>
+
+  <div class="col-md-4 bg-info">
+    <h2>Hitcount Info</h2>
+    <dl class="dl-horizontal">
+      <dt>Total Hits:</dt>
+      <dd>{{ hitcount.total_hits }}</dd>
+      <dt>The unique PK is:</dt>
+      <dd>{{ hitcount.pk }}</dd>
+      <dt>Hit counted?</dt>
+      <dd id="hit-counted">
+        <i id="hit-counted-value">{{ hitcount.hit_counted }}</i>
+      </dd>
+      <dt>Hit response:</dt>
+      <dd id="hit-response">{{ hitcount.hit_message }}</dd>
+      </dd>
+    </dl>
+  </div>
+</div>
+{%endblock%}
