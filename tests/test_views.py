@@ -20,7 +20,7 @@ from django.test import TestCase, RequestFactory
 from django.utils import timezone
 
 from hitcount.models import HitCount, BlacklistIP, BlacklistUserAgent
-from hitcount.views import HitCountMixin, HitCountJSONView
+from hitcount.views import HitCountMixin, HitCountJSONView, HitCountDetailView
 from hitcount.views import _update_hit_count, update_hit_count_ajax
 from hitcount.utils import RemovedInHitCount13Warning
 
@@ -33,9 +33,14 @@ class HitCountTestBase(TestCase):
         self.post = Post.objects.create(title='my title', content='my text')
         self.hit_count = HitCount.objects.create(content_object=self.post)
         self.factory = RequestFactory()
-        self.request = self.factory.post(
+        self.request_post = self.factory.post(
             '/',
             {'hitcountPK': self.hit_count.pk},
+            REMOTE_ADDR="127.0.0.1",
+            HTTP_USER_AGENT='my_clever_agent',
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.request_get = self.factory.get(
+            '/',
             REMOTE_ADDR="127.0.0.1",
             HTTP_USER_AGENT='my_clever_agent',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -43,9 +48,10 @@ class HitCountTestBase(TestCase):
         self.engine = import_module(settings.SESSION_ENGINE)
         self.store = self.engine.SessionStore()
         self.store.save()
-        self.request.session = self.store
-
-        self.request.user = AnonymousUser()
+        self.request_post.session = self.store
+        self.request_post.user = AnonymousUser()
+        self.request_get.session = self.store
+        self.request_get.user = AnonymousUser()
 
 
 class UpdateHitCountTests(HitCountTestBase):
@@ -54,7 +60,7 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         Test AnonymousUser Hit
         """
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
 
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: session key')
@@ -64,11 +70,11 @@ class UpdateHitCountTests(HitCountTestBase):
         Test Multiple AnonymousUser Hit, not counted
         """
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: session key')
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertFalse(response.hit_counted)
         self.assertEqual(response.hit_message, 'Not counted: session key has active hit')
 
@@ -81,13 +87,13 @@ class UpdateHitCountTests(HitCountTestBase):
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = created
 
-            response = HitCountMixin.hit_count(self.request, self.hit_count)
+            response = HitCountMixin.hit_count(self.request_post, self.hit_count)
 
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: session key')
 
         # test a Hit today, within the filter time
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: session key')
 
@@ -95,8 +101,8 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         Test AnonymousUser Hit
         """
-        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        self.request_post.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
 
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: user authentication')
@@ -105,13 +111,13 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         Test Multiple AnonymousUser Hit, not counted
         """
-        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.request_post.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: user authentication')
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertFalse(response.hit_counted)
         self.assertEqual(response.hit_message, 'Not counted: authenticated user has active hit')
 
@@ -119,20 +125,20 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         Test Multiple AnonymousUser Hit, counted because of filter active
         """
-        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.request_post.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
         # create a Hit ten days ago
         created = timezone.now() - timedelta(days=10)
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = created
 
-            response = HitCountMixin.hit_count(self.request, self.hit_count)
+            response = HitCountMixin.hit_count(self.request_post, self.hit_count)
 
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: user authentication')
 
         # test a Hit today, within the filter time
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertTrue(response.hit_counted)
         self.assertEqual(response.hit_message, 'Hit counted: user authentication')
 
@@ -148,8 +154,8 @@ class UpdateHitCountTests(HitCountTestBase):
             engine = import_module(settings.SESSION_ENGINE)
             store = engine.SessionStore()
             store.save()
-            self.request.session = store
-            responses.append(HitCountMixin.hit_count(self.request, self.hit_count))
+            self.request_post.session = store
+            responses.append(HitCountMixin.hit_count(self.request_post, self.hit_count))
 
         self.assertTrue(responses[0].hit_counted)
         self.assertEqual(responses[0].hit_message, 'Hit counted: session key')
@@ -165,11 +171,11 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         Exclude user by adding a group setting.
         """
-        self.request.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.request_post.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         group = Group.objects.create(name='Admin')
-        group.user_set.add(self.request.user)
+        group.user_set.add(self.request_post.user)
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertFalse(response.hit_counted)
         self.assertEqual(response.hit_message, 'Not counted: user excluded by group')
 
@@ -179,7 +185,7 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         BlacklistIP.objects.create(ip="127.0.0.1")
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertFalse(response.hit_counted)
         self.assertEqual(response.hit_message, 'Not counted: user IP has been blacklisted')
 
@@ -189,7 +195,7 @@ class UpdateHitCountTests(HitCountTestBase):
         """
         BlacklistUserAgent.objects.create(user_agent="my_clever_agent")
 
-        response = HitCountMixin.hit_count(self.request, self.hit_count)
+        response = HitCountMixin.hit_count(self.request_post, self.hit_count)
         self.assertFalse(response.hit_counted)
         self.assertEqual(response.hit_message, 'Not counted: user agent has been blacklisted')
 
@@ -219,7 +225,7 @@ class UpdateHitCountJSONTests(HitCountTestBase):
         """
         Test a valid request.
         """
-        response = HitCountJSONView.as_view()(self.request)
+        response = HitCountJSONView.as_view()(self.request_post)
         self.assertEqual(response.content, b'{"hit_counted": true, "hit_message": "Hit counted: session key"}')
 
     def test_count_hit_invalid_hitcount_pk(self):
@@ -236,6 +242,40 @@ class UpdateHitCountJSONTests(HitCountTestBase):
         self.assertEqual(response.content, b'HitCount object_pk not working')
 
 
+class UpdateHitCountView(HitCountTestBase):
+
+    def test_count_hit(self):
+        """
+        Test a valid request.
+        """
+        view = HitCountDetailView.as_view(model=Post)
+        response = view(self.request_get, pk=self.post.pk)
+        self.assertEqual(response.context_data['hitcount']['pk'], self.hit_count.pk)
+        self.assertEqual(response.context_data['hitcount']['total_hits'], 0)
+
+    def test_count_hit_incremented(self):
+        """
+        Increment a hit and then get the response.
+        """
+        view = HitCountDetailView.as_view(model=Post, count_hit=True)
+        response = view(self.request_get, pk=self.post.pk)
+        self.assertEqual(response.context_data['hitcount']['total_hits'], 1)
+        self.assertEqual(response.context_data['hitcount']['pk'], self.hit_count.pk)
+
+    def test_count_hit_incremented_only_once(self):
+        """
+        Increment a hit and then get the response.
+        """
+        view = HitCountDetailView.as_view(model=Post, count_hit=True)
+        response = view(self.request_get, pk=self.post.pk)
+        self.assertEqual(response.context_data['hitcount']['total_hits'], 1)
+        self.assertEqual(response.context_data['hitcount']['pk'], self.hit_count.pk)
+        view = HitCountDetailView.as_view(model=Post, count_hit=True)
+        response = view(self.request_get, pk=self.post.pk)
+        self.assertEqual(response.context_data['hitcount']['total_hits'], 1)
+        self.assertEqual(response.context_data['hitcount']['pk'], self.hit_count.pk)
+
+
 class TestDeprecationWarning(HitCountTestBase):
     """
     Remove these tests when functions are removed in 1.3
@@ -243,10 +283,10 @@ class TestDeprecationWarning(HitCountTestBase):
 
     def test_json_warning(self):
         with warnings.catch_warnings(record=True) as w:
-            update_hit_count_ajax(self.request, self.hit_count)
+            update_hit_count_ajax(self.request_post, self.hit_count)
             self.assertTrue(issubclass(w[-1].category, RemovedInHitCount13Warning))
 
     def test_get_hit_count_warning(self):
         with warnings.catch_warnings(record=True) as w:
-            _update_hit_count(self.request, self.hit_count)
+            _update_hit_count(self.request_post, self.hit_count)
             self.assertTrue(issubclass(w[-1].category, RemovedInHitCount13Warning))
