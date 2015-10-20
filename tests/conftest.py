@@ -37,7 +37,7 @@ def pytest_configure():
             'hitcount',
             'tests',
         ),
-        ROOT_URLCONF = 'tests.urls',
+        ROOT_URLCONF = 'example_project.urls',
         SESSION_ENGINE = 'django.contrib.sessions.backends.file',
         TEMPLATES=[
             {

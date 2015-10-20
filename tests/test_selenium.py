@@ -5,6 +5,7 @@ import os
 import unittest
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core.urlresolvers import reverse
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,7 +25,8 @@ class UpdateHitCountSelenium(StaticLiveServerTestCase):
         self.selenium.quit()
 
     def test_ajax_hit(self):
-        self.selenium.get("%s%s" % (self.live_server_url, '/1/'))
+        url = reverse('ajax', args=[1])
+        self.selenium.get("%s%s" % (self.live_server_url, url))
         wait = WebDriverWait(self.selenium, 3)
         response = wait.until(EC.text_to_be_present_in_element((By.ID, 'hit-counted-value'), 'true'))
         self.assertTrue(response)

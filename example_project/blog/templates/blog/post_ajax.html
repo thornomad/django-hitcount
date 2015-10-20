@@ -54,14 +54,14 @@ The code below is used to update the page view so we can test it with selenium.
 
 {% load staticfiles %}
 <script src="{% static 'hitcount/jquery.postcsrf.js' %}"></script>
+
 {% get_hit_count_js_variables for post as hitcount %}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
   $.postCSRF("{{ hitcount.ajax_url }}", { hitcountPK : "{{ hitcount.pk }}" })
     .done(function(data){
-      $('<i />').text(data[0]).attr('id','hit-counted-value').appendTo('#hit-counted');
-      // $('#hit-counted').text(data[0]);
-      $('#hit-response').text(data[1]);
+      $('<i />').text(data.hit_counted).attr('id','hit-counted-value').appendTo('#hit-counted');
+      $('#hit-response').text(data.hit_message);
   }).fail(function(data){
       console.log('POST failed');
       console.log(data);
