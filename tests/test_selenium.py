@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# import os
-# import unittest
+import os
+import unittest
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.urlresolvers import reverse
@@ -13,8 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 
-# @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
-#                  "Skipping this test on Travis CI.")
+@unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+                 "Skipping this test on Travis CI.")
 class UpdateHitCountSelenium(StaticLiveServerTestCase):
 
     def setUp(self):
