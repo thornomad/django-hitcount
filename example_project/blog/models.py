@@ -3,11 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-
-try:
-    from django.contrib.contenttypes.fields import GenericRelation
-except ImportError:
-    from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.contenttypes.fields import GenericRelation
 
 from hitcount.models import HitCount
 
@@ -16,14 +12,8 @@ from hitcount.models import HitCount
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-
-    # from >= Django 1.7
-    try:
-        hit_count = GenericRelation(HitCount, object_id_field='object_pk',
-                                    related_query_name='hit_count_generic_relation')
-    except TypeError:
-        hit_count = GenericRelation(HitCount, object_id_field='object_pk',
-                                    related_name='hit_count_generic_relation')
+    hit_count = GenericRelation(HitCount, object_id_field='object_pk',
+                                related_query_name='hit_count_generic_relation')
 
     def __str__(self):
         return "Post title: %s" % self.title
