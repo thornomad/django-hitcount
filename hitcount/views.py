@@ -6,7 +6,6 @@ from collections import namedtuple
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
 from django.conf import settings
 from django.views.generic import View, DetailView
-from django.contrib.contenttypes.models import ContentType
 
 from hitcount.utils import get_ip
 from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
@@ -145,9 +144,7 @@ class HitCountDetailView(DetailView, HitCountMixin):
     def get_context_data(self, **kwargs):
         context = super(HitCountDetailView, self).get_context_data(**kwargs)
         if self.object:
-            ctype = ContentType.objects.get_for_model(self.object)
-            hit_count, created = HitCount.objects.get_or_create(
-                content_type=ctype, object_pk=self.object.pk)
+            hit_count = HitCount.objects.get_for_object(self.object)
             hits = hit_count.hits
             context['hitcount'] = {'pk': hit_count.pk}
 
