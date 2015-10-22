@@ -177,7 +177,7 @@ class TemplateTagGetHitCountTests(TestCase):
             "post": self.post
         }))
 
-        pk = self.post.hit_count_generic.all()[0].pk
+        pk = self.post.hit_count.pk
         self.assertEqual('pk: %s || url: /hitcount/hit/ajax/ || hits: 10' % pk, out)
 
     def test_insert_js_variables(self):
@@ -193,7 +193,7 @@ class TemplateTagGetHitCountTests(TestCase):
             "post": self.post
         }))
 
-        pk = self.post.hit_count_generic.all()[0].pk
+        pk = self.post.hit_count.pk
         self.assertEqual(
             '<script type="text/javascript">\n'
             'var hitcountJS = {hitcountPK : \'%s\',hitcountURL :'

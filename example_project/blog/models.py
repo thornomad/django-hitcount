@@ -5,11 +5,11 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.contenttypes.fields import GenericRelation
 
-from hitcount.models import HitCount
+from hitcount.models import HitCount, HitCountMixin
 
 
 @python_2_unicode_compatible
-class Post(models.Model):
+class Post(models.Model, HitCountMixin):
     title = models.CharField(max_length=200)
     content = models.TextField()
     hit_count_generic = GenericRelation(

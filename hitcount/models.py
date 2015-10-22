@@ -181,3 +181,17 @@ class BlacklistUserAgent(models.Model):
 
     def __str__(self):
         return '%s' % self.user_agent
+
+
+class HitCountMixin(object):
+    """
+    HitCountMixin provides an easy way to add a `hit_count` property to your
+    model that will return the related HitCount object.
+    """
+
+    @property
+    def hit_count(self):
+        ctype = ContentType.objects.get_for_model(self.__class__)
+        hit_count, created = HitCount.objects.get_or_create(
+            content_type=ctype, object_pk=self.pk)
+        return hit_count

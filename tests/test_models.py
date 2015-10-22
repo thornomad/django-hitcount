@@ -188,3 +188,14 @@ class HitCountTests(TestCase):
 
         self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
                          self.post.hit_count_generic.get().hits)
+
+    def test_hit_count_mixin(self):
+        """
+        Test hitcount mixin.
+
+        """
+        hit_count = HitCount.objects.create(content_object=self.post)
+        hit_count.increase()
+
+        self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
+                         self.post.hit_count.hits)
