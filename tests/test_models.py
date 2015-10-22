@@ -187,4 +187,4 @@ class HitCountTests(TestCase):
         hit_count.increase()
 
         self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
-                         self.post.hit_count.get().hits)
+                         self.post.hit_count_generic.get().hits)

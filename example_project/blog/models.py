@@ -12,8 +12,9 @@ from hitcount.models import HitCount
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    hit_count = GenericRelation(HitCount, object_id_field='object_pk',
-                                related_query_name='hit_count_generic_relation')
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
 
     def __str__(self):
         return "Post title: %s" % self.title
