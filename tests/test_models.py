@@ -189,7 +189,7 @@ class HitCountTests(TestCase):
         self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
                          self.post.hit_count_generic.get().hits)
 
-    def test_hit_count_mixin(self):
+    def test_mixin(self):
         """
         Test hitcount mixin.
 
@@ -199,3 +199,19 @@ class HitCountTests(TestCase):
 
         self.assertEqual(HitCount.objects.get_for_object(self.post).hits,
                          self.post.hit_count.hits)
+
+    def test_mixing_hits_in_last(self):
+        """
+        Test HitCountMixin `hits_in_last` function.
+
+        """
+        hit_count = HitCount.objects.create(content_object=self.post)
+
+        for x in range(10):
+            created = timezone.now() - timedelta(days=x * 5)
+            with mock.patch('django.utils.timezone.now') as mock_now:
+                mock_now.return_value = created
+
+                Hit.objects.create(hitcount=hit_count)
+
+        self.assertEqual(self.post.hit_count.hits_in_last(days=30), 6)
