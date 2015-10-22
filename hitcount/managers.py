@@ -12,7 +12,9 @@ class HitCountManager(models.Manager):
 
     def get_for_object(self, obj):
         ctype = ContentType.objects.get_for_model(obj)
-        return self.get_or_create(content_type=ctype, object_pk=obj.pk)[0]
+        hit_count, created = self.get_or_create(
+            content_type=ctype, object_pk=obj.pk)
+        return hit_count
 
 
 class HitManager(models.Manager):
