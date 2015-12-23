@@ -2,14 +2,13 @@ language: python
 python: 3.5
 sudo: false
 env:
+    - TOX_ENV=py35-django19
+    - TOX_ENV=py34-django19
+    - TOX_ENV=py27-django19
     - TOX_ENV=py34-django18
     - TOX_ENV=py33-django18
     - TOX_ENV=py32-django18
     - TOX_ENV=py27-django18
-    - TOX_ENV=py34-django17
-    - TOX_ENV=py33-django17
-    - TOX_ENV=py32-django17
-    - TOX_ENV=py27-django17
     - TOX_ENV=py27-djangomaster
     - TOX_ENV=py34-djangomaster
     - TOX_ENV=py35-djangomaster
