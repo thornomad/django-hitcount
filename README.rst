@@ -7,6 +7,9 @@ django-hitcount
     :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
 .. image:: https://badge.fury.io/py/django-hitcount.svg
     :target: http://badge.fury.io/py/django-hitcount
+.. image:: https://requires.io/github/thornomad/django-hitcount/requirements.svg?branch=develop
+     :target: https://requires.io/github/thornomad/django-hitcount/requirements/?branch=develop
+     :alt: Requirements Status
 
 Basic app that allows you to track the number of hits/views for a particular object.
 
