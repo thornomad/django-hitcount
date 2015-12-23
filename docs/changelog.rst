@@ -1,8 +1,13 @@
 Changelog
 =========
 
-Version 1.2:
-------------
+Version 1.2.1
+-------------
+
+* fixed system check error in Django 1.9 - `#43`_
+
+Version 1.2
+-----------
 
  * added ``hitcount.models.HitCountMixin`` to provide a reverse lookup property to a model's ``HitCount``
  * deprecated ``hitcount.views_update_hit_count()`` and moved the business logic into ``hitcount.views.HitCountMixin.hit_count()``
@@ -12,17 +17,17 @@ Version 1.2:
  * updated example_project to use new views and jQuery plugin
  * updated tests to rely on the example_project
 
-Version 1.1.1:
---------------
+Version 1.1.1
+-------------
 
- * fixed ``session_key`` returning ``None`` `#40`_ (>=1.8.4)
+ * fixed ``session_key`` returning ``None`` - `#40`_ (>=1.8.4)
  * removed requirement for `SESSION_SAVE_EVERY_REQUEST`
  * removed `patterns` for urls.py (>=1.9)
  * updated management command, using ``BaseCommand`` instead of ``NoArgsCommand`` (>=1.9)
  * added ``TEMPLATES`` to `conftest.py`
 
-Version 1.1.0:
---------------
+Version 1.1.0
+-------------
 
  * added tests (lots of them)
  * added documentation
@@ -36,3 +41,4 @@ Version 1.1.0:
 .. note:: if you are upgrading from version 0.2 (it's so old!) the ``HitCount.object_pk`` was changed from a ``CharField`` to a ``PositiveIntegerField``.  You will have to manually fix this in your database after upgrading.
 
 .. _#40: https://github.com/thornomad/django-hitcount/issues/40
+.. _#43: https://github.com/thornomad/django-hitcount/issues/43
