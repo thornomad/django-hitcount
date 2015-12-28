@@ -1,3 +1,13 @@
+/**
+ * Wrapper for jQuery's $.post() that retrieves the CSRF token from the browser
+ * cookie and sets then sets "X-CSRFToken" header in one fell swoop.
+ *
+ * Based on the example code given at the Django docs:
+ * https://docs.djangoproject.com/en/1.9/ref/csrf/#ajax
+ *
+ * Use as you would $.post().
+ */
+
 (function($) {
 
   $.postCSRF = function(url, data, callback, type) {
@@ -47,18 +57,3 @@
   };
 
 }(jQuery));
-
-
-// $.postCSRF("%s", {
-//   hitcountPK: "%s"
-// });
-
-// $.postCSRF("%s",
-//   { hitcountPK : "%s" }).done(function(data){
-//   console.log('got it to work!');
-//   console.log(data);
-// }).fail(function(data){
-//   console.log('failed');
-//   console.log(data);
-// });
-// });
