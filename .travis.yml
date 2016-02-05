@@ -7,7 +7,7 @@ env:
     - TOX_ENV=py27-django19
     - TOX_ENV=py34-django18
     - TOX_ENV=py33-django18
-    - TOX_ENV=py32-django18
+    # - TOX_ENV=py32-django18 # throwing an error on travis
     - TOX_ENV=py27-django18
     - TOX_ENV=py27-djangomaster
     - TOX_ENV=py34-djangomaster
