@@ -1,4 +1,5 @@
 language: python
+python: 3.5
 sudo: false
 env:
     - TOX_ENV=py35-django19
@@ -12,6 +13,7 @@ env:
     - TOX_ENV=py34-djangomaster
     - TOX_ENV=py35-djangomaster
 install:
+    - pip install --upgrade pip
     - pip install tox coveralls
 script:
     - tox -e $TOX_ENV
