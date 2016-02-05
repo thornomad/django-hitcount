@@ -37,8 +37,8 @@ def pytest_configure():
             'hitcount',
             'tests',
         ),
-        ROOT_URLCONF = 'example_project.urls',
-        SESSION_ENGINE = 'django.contrib.sessions.backends.file',
+        ROOT_URLCONF='example_project.urls',
+        SESSION_ENGINE='django.contrib.sessions.backends.file',
         TEMPLATES=[
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -46,10 +46,10 @@ def pytest_configure():
             },
         ],
         # HitCount Variables (default values)
-        HITCOUNT_KEEP_HIT_ACTIVE = {'days': 7},
-        HITCOUNT_HITS_PER_IP_LIMIT = 0,
-        HITCOUNT_EXCLUDE_USER_GROUP = (),
-        HITCOUNT_KEEP_HIT_IN_DATABASE = {'days': 30},
+        HITCOUNT_KEEP_HIT_ACTIVE={'days': 7},
+        HITCOUNT_HITS_PER_IP_LIMIT=0,
+        HITCOUNT_EXCLUDE_USER_GROUP=(),
+        HITCOUNT_KEEP_HIT_IN_DATABASE={'days': 30},
     )
 
     try:
