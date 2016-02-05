@@ -19,7 +19,7 @@ class UpdateHitCountSelenium(StaticLiveServerTestCase):
 
     def setUp(self):
         self.selenium = webdriver.Firefox()
-        self.delay = 3
+        self.delay = 10
 
     def tearDown(self):
         self.selenium.quit()
@@ -27,6 +27,6 @@ class UpdateHitCountSelenium(StaticLiveServerTestCase):
     def test_ajax_hit(self):
         url = reverse('ajax', args=[1])
         self.selenium.get("%s%s" % (self.live_server_url, url))
-        wait = WebDriverWait(self.selenium, 3)
+        wait = WebDriverWait(self.selenium, self.delay)
         response = wait.until(EC.text_to_be_present_in_element((By.ID, 'hit-counted-value'), 'true'))
         self.assertTrue(response)
