@@ -40,7 +40,7 @@ It works like this. ::
 
     # next, you can attempt to count a hit and get the response
     # you need to pass it the request object as well
-    hit_count_response = HitCountMinxin. hit_count(request, hit_count)
+    hit_count_response = HitCountMixin.hit_count(request, hit_count)
 
     # your response could look like this:
     # UpdateHitCountResponse(hit_counted=True, hit_message='Hit counted: session key')
