@@ -4,7 +4,7 @@ Changelog
 Version 1.2.1
 -------------
 
-* fixed system check error in Django 1.9 - `#43`_
+ * fixed system check error in Django 1.9 - `#43`_
 
 Version 1.2
 -----------
