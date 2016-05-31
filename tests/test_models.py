@@ -215,3 +215,19 @@ class HitCountTests(TestCase):
                 Hit.objects.create(hitcount=hit_count)
 
         self.assertEqual(self.post.hit_count.hits_in_last(days=30), 6)
+
+    def test_on_delete_cascade(self):
+        """
+        Test on_delete=models.CASCADE to ensure that a deleted hitcount
+        also removes the related Hits.
+
+        """
+        hit_count = HitCount.objects.create(content_object=self.post)
+
+        for x in range(10):
+            Hit.objects.create(hitcount=hit_count)
+
+        self.assertEqual(len(Hit.objects.all()), 10)
+        hit_count.delete()
+        self.assertEqual(len(HitCount.objects.all()), 0)
+        self.assertEqual(len(Hit.objects.all()), 0)
