@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.2.2
+-------------
+
+ * added ``on_delete=models.CASCADE`` and test (will be required in version 2.0) `#47`_
+ * removed ``b`` (bytes) flag from _initial_ migration `#48`_
+ * removed testing support for python 3.2
+
 Version 1.2.1
 -------------
 
@@ -42,3 +49,5 @@ Version 1.1.0
 
 .. _#40: https://github.com/thornomad/django-hitcount/issues/40
 .. _#43: https://github.com/thornomad/django-hitcount/issues/43
+.. _#47: https://github.com/thornomad/django-hitcount/issues/47
+.. _#48: https://github.com/thornomad/django-hitcount/pull/48
