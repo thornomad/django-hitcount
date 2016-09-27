@@ -96,7 +96,7 @@ Here is an example implementation from the `example project`_::
     from hitcount.views import HitCountDetailView
 
     class PostCountHitDetailView(HitCountDetailView):
-        modal = Post        # your model goes here
+        model = Post        # your model goes here
         count_hit = True    # set to True if you want it to try and count the hit
 
 .. note:: Unlike the JavaScript implementation (above), this View will do all the HitCount processing *before* the content is delivered to the user; if you have a large dataset of Hits or exclusions, this could slow down page load times.  It will also be triggered by web crawlers and other bots that may not have otherwise executed the JavaScript.

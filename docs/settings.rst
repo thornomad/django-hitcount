@@ -30,7 +30,7 @@ Exclude ``Hits`` from all users in the specified user groups.  By default, this 
 HITCOUNT_KEEP_HIT_IN_DATABASE
 -----------------------------
 
-This setting is used with the ``hitcount_cleanup`` management command and specifies a ``timedelta`` within which to keep/save ``Hits``.  Any ``Hit`` older than the time specified will be removed for the ``Hits`` table.::
+``Hits`` remain in the database indefinitely unless you run the ``hitcount_cleanup`` management command.  This setting specifies a ``timedelta`` within which to keep/save ``Hits``.  Any ``Hit`` older than the time specified will be removed from the ``Hits`` table.::
 
     # default value
     HITCOUNT_KEEP_HIT_IN_DATABASE = { 'days': 30 }

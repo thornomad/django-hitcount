@@ -1,7 +1,7 @@
 Management Commands
 ===================
 
-If you would like to periodically prune your stale ``Hits`` you can do so by running the the management command ``hitcount_cleanup``.::
+By default, your ``Hits`` remain in the database indefinitely.  If you would like to periodically prune your stale ``Hits`` you can do so by running the the management command ``hitcount_cleanup``.::
 
      ./manage.py hitcount_cleanup
 
