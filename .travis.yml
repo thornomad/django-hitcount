@@ -2,16 +2,17 @@ language: python
 python: 3.5
 sudo: false
 env:
-    - TOX_ENV=py35-django19
-    - TOX_ENV=py34-django19
-    - TOX_ENV=py27-django19
+    - TOX_ENV=py27-django18
     - TOX_ENV=py34-django18
     - TOX_ENV=py33-django18
-    # - TOX_ENV=py32-django18 # throwing an error on travis
-    - TOX_ENV=py27-django18
-    - TOX_ENV=py27-djangomaster
-    - TOX_ENV=py34-djangomaster
-    - TOX_ENV=py35-djangomaster
+    - TOX_ENV=py27-django110
+    - TOX_ENV=py34-django110
+    - TOX_ENV=py35-django110
+    - TOX_ENV=py36-django110
+    - TOX_ENV=py27-django111
+    - TOX_ENV=py34-django111
+    - TOX_ENV=py35-django111
+    - TOX_ENV=py36-django111
 install:
     - pip install --upgrade pip
     - pip install tox coveralls
