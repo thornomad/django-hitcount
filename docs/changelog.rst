@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.2.3
+-------------
+
+ * added indexing to `Hit.ip` and `Hit.session` (@maxg0) `#63`_
+ * removed testing support for python 3.3
+
 Version 1.2.2
 -------------
 
@@ -47,6 +53,7 @@ Version 1.1.0
 
 .. note:: if you are upgrading from version 0.2 (it's so old!) the ``HitCount.object_pk`` was changed from a ``CharField`` to a ``PositiveIntegerField``.  You will have to manually fix this in your database after upgrading.
 
+.. _#63: https://github.com/thornomad/django-hitcount/issues/63
 .. _#40: https://github.com/thornomad/django-hitcount/issues/40
 .. _#43: https://github.com/thornomad/django-hitcount/issues/43
 .. _#47: https://github.com/thornomad/django-hitcount/issues/47
