@@ -171,7 +171,12 @@ If you would like to add a reverse lookup in your own model to its related ``Hit
 
     # here is an example model with a GenericRelation
     class MyModel(models.Model, HitCountMixin):
-        pass
+
+      # adding a generic relationship makes sorting by Hits possible:
+      # MyModel.objects.order_by("hit_count_generic__hits")
+      hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
 
     # you would access your hit_count like so:
     my_model = MyModel.objects.get(pk=1)
