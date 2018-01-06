@@ -27,6 +27,6 @@ class Command(BaseCommand):
         grace = getattr(settings, 'HITCOUNT_KEEP_HIT_IN_DATABASE', {'days': 30})
         period = timezone.now() - timedelta(**grace)
         qs = Hit.objects.filter(created__lt=period)
-        number_removed = len(qs)
+        number_removed = qs.count()
         qs.delete()
         self.stdout.write('Successfully removed %s Hits' % number_removed)
