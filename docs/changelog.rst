@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.2.4
+-------------
+
+ * improved querying speed of `hitcount_cleanup` (@dulacp) `#66`_
+
 Version 1.2.3
 -------------
 
@@ -58,3 +63,4 @@ Version 1.1.0
 .. _#43: https://github.com/thornomad/django-hitcount/issues/43
 .. _#47: https://github.com/thornomad/django-hitcount/issues/47
 .. _#48: https://github.com/thornomad/django-hitcount/pull/48
+.. _#66: https://github.com/thornomad/django-hitcount/pull/66
