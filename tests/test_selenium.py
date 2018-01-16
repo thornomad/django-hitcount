@@ -5,7 +5,10 @@ import os
 import unittest
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except ModuleNotFoundError:
+    from django.urls import reverse
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait

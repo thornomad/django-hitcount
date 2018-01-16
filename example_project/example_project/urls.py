@@ -8,7 +8,6 @@ from blog import views
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.IndexView.as_view(), name="index"),
 
     url(r'^generic-detail-view-ajax/(?P<pk>\d+)/$',
@@ -24,3 +23,8 @@ urlpatterns = [
     # for our built-in ajax post view
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
 ]
+
+try:
+    urlpatterns.append(url(r'^admin/', include(admin.site.urls)))
+except:
+    urlpatterns.append(url(r'^admin/', admin.site.urls))
