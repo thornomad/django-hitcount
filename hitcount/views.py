@@ -78,7 +78,7 @@ class HitCountMixin(object):
                   user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
 
         # first, use a user's authentication to see if they made an earlier hit
-        if user.is_authenticated():
+        if user.is_authenticated:
             if not qs.filter(user=user, hitcount=hitcount):
                 hit.user = user  # associate this hit with a user
                 hit.save()
