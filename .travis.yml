@@ -1,19 +1,53 @@
 language: python
-python: 3.6
-sudo: false
+python:
+  - 2.7
+  - 3.4
+  - 3.5
+  - 3.6
 env:
-    - TOX_ENV=py27-django18
-    - TOX_ENV=py34-django18
-    - TOX_ENV=py27-django111
-    - TOX_ENV=py34-django111
-    - TOX_ENV=py35-django111
-    - TOX_ENV=py36-django111
-    - TOX_ENV=py34-django20
-    - TOX_ENV=py35-django20
-    - TOX_ENV=py36-django20
+    - DJANGO=py27-django18
+    - DJANGO=py34-django18
+    - DJANGO=py27-django111
+    - DJANGO=py34-django111
+    - DJANGO=py35-django111
+    - DJANGO=py36-django111
+    - DJANGO=py34-django20
+    - DJANGO=py35-django20
+    - DJANGO=py36-django20
+matrix:
+  exclude:
+    - python: 2.7
+      env: DJANGO=2.0
+    - python: 3.5
+      env: DJANGO=1.8
+  include:
+    - python: 2.7
+      env: TOXENV=flake8
 install:
     - pip install --upgrade pip
+    - pip install tox-travis
     - pip install tox coveralls
 script:
-    - tox -e $TOX_ENV
+    - tox
 after_success: coveralls
+
+#  old config
+# language: python
+# python: 3.6
+# sudo: false
+# env:
+#     - TOX_ENV=py27-django18
+#     - TOX_ENV=py34-django18
+#     - TOX_ENV=py27-django111
+#     - TOX_ENV=py34-django111
+#     - TOX_ENV=py35-django111
+#     - TOX_ENV=py36-django111
+#     - TOX_ENV=py34-django20
+#     - TOX_ENV=py35-django20
+#     - TOX_ENV=py36-django20
+# install:
+#     - pip install --upgrade pip
+#     - pip install tox coveralls
+# script:
+#     - tox -e $TOX_ENV
+# after_success: coveralls
