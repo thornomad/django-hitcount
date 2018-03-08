@@ -5,15 +5,9 @@ python:
   - 3.5
   - 3.6
 env:
-    - DJANGO=py27-django18
-    - DJANGO=py34-django18
-    - DJANGO=py27-django111
-    - DJANGO=py34-django111
-    - DJANGO=py35-django111
-    - DJANGO=py36-django111
-    - DJANGO=py34-django20
-    - DJANGO=py35-django20
-    - DJANGO=py36-django20
+    - DJANGO=1.8
+    - DJANGO=1.11
+    - DJANGO=2.0
 matrix:
   exclude:
     - python: 2.7
