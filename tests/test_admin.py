@@ -5,7 +5,7 @@ from django.test import TestCase, RequestFactory
 from django.core.exceptions import PermissionDenied
 try:
     from django.core.urlresolvers import reverse
-except ModuleNotFoundError:
+except ImportError:
     from django.urls import reverse
 from django.contrib.admin.sites import AdminSite
 from django.contrib.messages.storage.fallback import FallbackStorage

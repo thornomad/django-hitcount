@@ -6,7 +6,7 @@ from django import template
 from django.contrib.contenttypes.models import ContentType
 try:
     from django.core.urlresolvers import reverse
-except ModuleNotFoundError:
+except ImportError:
     from django.urls import reverse
 
 from hitcount.models import HitCount
