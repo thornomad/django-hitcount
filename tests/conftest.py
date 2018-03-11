@@ -21,7 +21,14 @@ def pytest_configure():
         USE_I18N=True,
         USE_L10N=True,
         STATIC_URL='/static/',
+        # remove MIDDLEWARE_CLASSES once we get above Django 1.10
         MIDDLEWARE_CLASSES=(
+            'django.middleware.common.CommonMiddleware',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ),
+        MIDDLEWARE=(
             'django.middleware.common.CommonMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
