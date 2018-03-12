@@ -5,6 +5,8 @@ from django.conf.urls import url
 
 from hitcount.views import HitCountJSONView
 
+app_name = 'hitcount'
+
 urlpatterns = [
     url(r'^hit/ajax/$', HitCountJSONView.as_view(), name='hit_ajax'),
 ]

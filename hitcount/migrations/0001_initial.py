@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('object_pk', models.PositiveIntegerField(verbose_name='object ID')),
                 ('content_type', models.ForeignKey(related_name='content_type_set_for_hitcount',
-                                                   to='contenttypes.ContentType')),
+                                                   to='contenttypes.ContentType', on_delete=models.CASCADE)),
             ],
             options={
                 'get_latest_by': 'modified',
@@ -82,13 +82,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='hit',
             name='hitcount',
-            field=models.ForeignKey(editable=False, to='hitcount.HitCount'),
+            field=models.ForeignKey(editable=False, to='hitcount.HitCount', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='hit',
             name='user',
-            field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

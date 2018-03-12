@@ -39,6 +39,10 @@ class HitCountMixin(object):
             request.session.save()
 
         user = request.user
+        try:
+            is_authenticated_user = user.is_authenticated()
+        except:
+            is_authenticated_user = user.is_authenticated
         session_key = request.session.session_key
         ip = get_ip(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
@@ -56,7 +60,7 @@ class HitCountMixin(object):
                 False, 'Not counted: user agent has been blacklisted')
 
         # third, see if we are excluding a specific user group or not
-        if exclude_user_group and user.is_authenticated():
+        if exclude_user_group and is_authenticated_user:
             if user.groups.filter(name__in=exclude_user_group):
                 return UpdateHitCountResponse(
                     False, 'Not counted: user excluded by group')
@@ -78,7 +82,7 @@ class HitCountMixin(object):
                   user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
 
         # first, use a user's authentication to see if they made an earlier hit
-        if user.is_authenticated():
+        if is_authenticated_user:
             if not qs.filter(user=user, hitcount=hitcount):
                 hit.user = user  # associate this hit with a user
                 hit.save()

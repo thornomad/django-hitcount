@@ -1,20 +1,23 @@
 language: python
-python: 3.5
-sudo: false
+python:
+  - 2.7
+  - 3.4
+  - 3.5
+  - 3.6
 env:
-    - TOX_ENV=py27-django18
-    - TOX_ENV=py34-django18
-    - TOX_ENV=py27-django110
-    - TOX_ENV=py34-django110
-    - TOX_ENV=py35-django110
-    # - TOX_ENV=py36-django110
-    - TOX_ENV=py27-django111
-    - TOX_ENV=py34-django111
-    - TOX_ENV=py35-django111
-    # - TOX_ENV=py36-django111
+    - DJANGO=1.8
+    - DJANGO=1.11
+    - DJANGO=2.0
+matrix:
+  exclude:
+    - python: 2.7
+      env: DJANGO=2.0
+    - python: 3.5
+      env: DJANGO=1.8
 install:
     - pip install --upgrade pip
+    - pip install tox-travis
     - pip install tox coveralls
 script:
-    - tox -e $TOX_ENV
+    - tox
 after_success: coveralls
