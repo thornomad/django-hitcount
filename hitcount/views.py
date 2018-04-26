@@ -6,6 +6,8 @@ from collections import namedtuple
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
 from django.conf import settings
 from django.views.generic import View, DetailView
+from django.contrib.contenttypes.models import ContentType
+from rest_framework.response import Response
 
 from hitcount.utils import get_ip
 from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
@@ -104,6 +106,15 @@ class HitCountMixin(object):
                     False, 'Not counted: session key has active hit')
 
         return response
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        ctype = ContentType.objects.get_for_model(instance)
+        hit_count, created = HitCount.objects.get_or_create(
+            content_type=ctype, object_pk=instance.pk)
+        self.hit_count(request, hit_count)
+        return Response(serializer.data)
 
 
 class HitCountJSONView(View, HitCountMixin):
