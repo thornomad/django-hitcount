@@ -39,6 +39,7 @@ class HitCount(models.Model):
 
     """
     hits = models.PositiveIntegerField(default=0)
+    total_hits = models.PositiveIntegerField(default=0)
     modified = models.DateTimeField(auto_now=True)
     content_type = models.ForeignKey(
         ContentType, related_name="content_type_set_for_%(class)s", on_delete=models.CASCADE)
@@ -60,10 +61,20 @@ class HitCount(models.Model):
 
     def increase(self):
         self.hits = F('hits') + 1
+        self.total_hits = F('total_hits') + 1
         self.save()
 
     def decrease(self):
         self.hits = F('hits') - 1
+        self.total_hits = F('total_hits') - 1
+        self.save()
+        
+    def total_increase(self):
+        self.total_hits = F('total_hits') + 1
+        self.save()
+
+    def total_decrease(self):
+        self.total_hits = F('total_hits') - 1
         self.save()
 
     def hits_in_last(self, **kwargs):
