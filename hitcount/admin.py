@@ -81,8 +81,8 @@ admin.site.register(Hit, HitAdmin)
 
 
 class HitCountAdmin(admin.ModelAdmin):
-    list_display = ('content_object', 'hits', 'modified')
-    fields = ('hits',)
+    list_display = ('content_object', 'hits', 'total_hits', 'modified',)
+    fields = ('hits', 'total_hits',)
 
     def has_add_permission(self, request):
         return False
