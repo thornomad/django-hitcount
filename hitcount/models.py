@@ -151,6 +151,9 @@ class Hit(models.Model):
             self.hitcount.increase()
 
         super(Hit, self).save(*args, **kwargs)
+        
+    def save_total(self, *args, **kwargs):
+        self.hitcount.total_increase()
 
     def delete(self, save_hitcount=False):
         """
