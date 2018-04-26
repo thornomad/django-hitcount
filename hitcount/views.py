@@ -90,6 +90,8 @@ class HitCountMixin(object):
                 response = UpdateHitCountResponse(
                     True, 'Hit counted: user authentication')
             else:
+                hit.user = user
+                hit.save_total()
                 response = UpdateHitCountResponse(
                     False, 'Not counted: authenticated user has active hit')
 
@@ -100,6 +102,7 @@ class HitCountMixin(object):
                 response = UpdateHitCountResponse(
                     True, 'Hit counted: session key')
             else:
+                hit.save_total()
                 response = UpdateHitCountResponse(
                     False, 'Not counted: session key has active hit')
 
