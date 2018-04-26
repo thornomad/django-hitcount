@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import uuid
 from datetime import timedelta
 
 from django.db import models
@@ -11,6 +12,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
+
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
@@ -42,7 +44,7 @@ class HitCount(models.Model):
     modified = models.DateTimeField(auto_now=True)
     content_type = models.ForeignKey(
         ContentType, related_name="content_type_set_for_%(class)s", on_delete=models.CASCADE)
-    object_pk = models.PositiveIntegerField('object ID')
+    object_pk = models.UUIDField(_('ID'), default=uuid.uuid4, editable=False)
     content_object = GenericForeignKey('content_type', 'object_pk')
 
     objects = HitCountManager()
