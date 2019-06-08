@@ -42,7 +42,7 @@ class HitCount(models.Model):
     modified = models.DateTimeField(auto_now=True)
     content_type = models.ForeignKey(
         ContentType, related_name="content_type_set_for_%(class)s", on_delete=models.CASCADE)
-    object_pk = models.PositiveIntegerField('object ID')
+    object_pk = models.TextField('object ID')
     content_object = GenericForeignKey('content_type', 'object_pk')
 
     objects = HitCountManager()
