@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.3.1
+-------------
+
+ * fixed ValueError: invalid literal for int() with base 10 `#64`_
+
 Version 1.3.0
 -------------
 
@@ -63,6 +68,7 @@ Version 1.1.0
 
 .. note:: if you are upgrading from version 0.2 (it's so old!) the ``HitCount.object_pk`` was changed from a ``CharField`` to a ``PositiveIntegerField``.  You will have to manually fix this in your database after upgrading.
 
+.. _#64: https://github.com/thornomad/django-hitcount/issues/64
 .. _#67: https://github.com/thornomad/django-hitcount/pull/67
 .. _#63: https://github.com/thornomad/django-hitcount/issues/63
 .. _#40: https://github.com/thornomad/django-hitcount/issues/40
