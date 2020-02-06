@@ -7,7 +7,6 @@ from django.conf import settings
 from django.db.models import F
 from django.utils import timezone
 from django.dispatch import receiver
-from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
@@ -32,7 +31,6 @@ def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
         instance.hitcount.decrease()
 
 
-@python_2_unicode_compatible
 class HitCount(models.Model):
     """
     Model that stores the hit totals for any content object.
@@ -95,7 +93,6 @@ class HitCount(models.Model):
     #     pass
 
 
-@python_2_unicode_compatible
 class Hit(models.Model):
     """
     Model captures a single Hit by a visitor.
@@ -155,7 +152,6 @@ class Hit(models.Model):
         super(Hit, self).delete()
 
 
-@python_2_unicode_compatible
 class BlacklistIP(models.Model):
 
     ip = models.CharField(max_length=40, unique=True)
@@ -169,7 +165,6 @@ class BlacklistIP(models.Model):
         return '%s' % self.ip
 
 
-@python_2_unicode_compatible
 class BlacklistUserAgent(models.Model):
 
     user_agent = models.CharField(max_length=255, unique=True)
