@@ -27,7 +27,7 @@ class HitManager(models.Manager):
         same user/visitor *ever* be counted twice?  After a week, or a month,
         or a year, should their view be counted again?
 
-        The defaulf is to consider a visitor's hit still 'active' if they
+        The default is to consider a visitor's hit still 'active' if they
         return within a the last seven days..  After that the hit
         will be counted again.  So if one person visits once a week for a year,
         they will add 52 hits to a given object.
