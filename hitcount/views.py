@@ -8,8 +8,8 @@ from django.conf import settings
 from django.views.generic import View, DetailView
 
 from hitcount.utils import get_ip
-from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
-from hitcount.utils import RemovedInHitCount13Warning
+from hitcount.models import Hit, BlacklistIP, BlacklistUserAgent
+from hitcount.utils import RemovedInHitCount13Warning, get_hitcount_model
 
 
 class HitCountMixin(object):
@@ -124,7 +124,7 @@ class HitCountJSONView(View, HitCountMixin):
         hitcount_pk = request.POST.get('hitcountPK')
 
         try:
-            hitcount = HitCount.objects.get(pk=hitcount_pk)
+            hitcount = get_hitcount_model().objects.get(pk=hitcount_pk)
         except:
             return HttpResponseBadRequest("HitCount object_pk not working")
 
@@ -148,7 +148,7 @@ class HitCountDetailView(DetailView, HitCountMixin):
     def get_context_data(self, **kwargs):
         context = super(HitCountDetailView, self).get_context_data(**kwargs)
         if self.object:
-            hit_count = HitCount.objects.get_for_object(self.object)
+            hit_count = get_hitcount_model().objects.get_for_object(self.object)
             hits = hit_count.hits
             context['hitcount'] = {'pk': hit_count.pk}
 

@@ -11,9 +11,12 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
+from etc.toolbox import get_model_class_from_string
+
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 from .managers import HitCountManager, HitManager
+from .settings import MODEL_HITCOUNT
 from .signals import delete_hit_count
 
 
@@ -31,8 +34,10 @@ def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
         instance.hitcount.decrease()
 
 
-class HitCount(models.Model):
+class HitCountBase(models.Model):
     """
+    Base class for hitcount models.
+
     Model that stores the hit totals for any content object.
 
     """
@@ -46,12 +51,12 @@ class HitCount(models.Model):
     objects = HitCountManager()
 
     class Meta:
+        abstract = True
         ordering = ('-hits',)
         get_latest_by = "modified"
         verbose_name = _("hit count")
         verbose_name_plural = _("hit counts")
         unique_together = ("content_type", "object_pk")
-        db_table = "hitcount_hit_count"
 
     def __str__(self):
         return '%s' % self.content_object
@@ -93,6 +98,13 @@ class HitCount(models.Model):
     #     pass
 
 
+class HitCount(HitCountBase):
+    """Built-in hitcount class. Default functionality."""
+
+    class Meta(HitCountBase.Meta):
+        db_table = "hitcount_hit_count"
+
+
 class Hit(models.Model):
     """
     Model captures a single Hit by a visitor.
@@ -113,7 +125,7 @@ class Hit(models.Model):
     session = models.CharField(max_length=40, editable=False, db_index=True)
     user_agent = models.CharField(max_length=255, editable=False)
     user = models.ForeignKey(AUTH_USER_MODEL, null=True, editable=False, on_delete=models.CASCADE)
-    hitcount = models.ForeignKey(HitCount, editable=False, on_delete=models.CASCADE)
+    hitcount = models.ForeignKey(MODEL_HITCOUNT, editable=False, on_delete=models.CASCADE)
 
     objects = HitManager()
 
@@ -187,6 +199,6 @@ class HitCountMixin(object):
     @property
     def hit_count(self):
         ctype = ContentType.objects.get_for_model(self.__class__)
-        hit_count, created = HitCount.objects.get_or_create(
+        hit_count, created = get_model_class_from_string(MODEL_HITCOUNT).objects.get_or_create(
             content_type=ctype, object_pk=self.pk)
         return hit_count

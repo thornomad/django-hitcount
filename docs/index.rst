@@ -15,6 +15,7 @@ Django-Hitcount allows you to track the number of hits/views for a particular ob
 
    overview
    installation
+   models
    settings
    management
    example_project

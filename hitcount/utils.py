@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 import re
 import warnings
 
+from hitcount import settings
+from etc.toolbox import get_model_class_from_settings
+
 
 # this is not intended to be an all-knowing IP address regex
 IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
@@ -38,6 +41,11 @@ def get_ip(request):
             pass
 
     return ip_address
+
+
+def get_hitcount_model():
+    """Returns the HitCount model, set for the project."""
+    return get_model_class_from_settings(settings, 'MODEL_HITCOUNT')
 
 
 class RemovedInHitCount13Warning(DeprecationWarning):
