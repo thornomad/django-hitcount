@@ -4,7 +4,8 @@ from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
+from .models import Hit, BlacklistIP, BlacklistUserAgent
+from .utils import get_hitcount_model
 
 
 class HitAdmin(admin.ModelAdmin):
@@ -87,7 +88,7 @@ class HitCountAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-admin.site.register(HitCount, HitCountAdmin)
+admin.site.register(get_hitcount_model(), HitCountAdmin)
 
 
 class BlacklistIPAdmin(admin.ModelAdmin):

@@ -19,12 +19,14 @@ from django.http import Http404
 from django.test import TestCase, RequestFactory
 from django.utils import timezone
 
-from hitcount.models import HitCount, BlacklistIP, BlacklistUserAgent
+from hitcount.models import BlacklistIP, BlacklistUserAgent
 from hitcount.views import HitCountMixin, HitCountJSONView, HitCountDetailView
 from hitcount.views import _update_hit_count, update_hit_count_ajax
-from hitcount.utils import RemovedInHitCount13Warning
+from hitcount.utils import RemovedInHitCount13Warning, get_hitcount_model
 
 from blog.models import Post
+
+HitCount = get_hitcount_model()
 
 
 class HitCountTestBase(TestCase):

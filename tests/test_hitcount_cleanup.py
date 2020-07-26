@@ -13,10 +13,13 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils.six import StringIO
 
-from hitcount.models import HitCount, Hit
+from hitcount.models import Hit
+from hitcount.utils import get_hitcount_model
 from blog.models import Post
 
 COMMAND_NAME = 'hitcount_cleanup'
+
+HitCount = get_hitcount_model()
 
 
 class HitCountCleanUp(TestCase):

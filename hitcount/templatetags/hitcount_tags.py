@@ -9,7 +9,8 @@ try:
 except ImportError:
     from django.urls import reverse
 
-from hitcount.models import HitCount
+from hitcount.utils import get_hitcount_model
+
 
 register = template.Library()
 
@@ -36,7 +37,7 @@ def get_hit_count_from_obj_variable(context, obj_variable, tag_name):
     except AttributeError:
         raise error_to_raise
 
-    hit_count, created = HitCount.objects.get_or_create(
+    hit_count, created = get_hitcount_model().objects.get_or_create(
         content_type=ctype, object_pk=obj.pk)
 
     return hit_count
