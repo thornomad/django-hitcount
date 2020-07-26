@@ -11,9 +11,12 @@ except ImportError:
 from django.test import TestCase
 from django.utils import timezone
 
-from hitcount.models import Hit, HitCount, BlacklistIP, BlacklistUserAgent
+from hitcount.models import Hit, BlacklistIP, BlacklistUserAgent
+from hitcount.utils import get_hitcount_model
 
 from blog.models import Post
+
+HitCount = get_hitcount_model()
 
 
 class BlacklistUserAgentTests(TestCase):

@@ -12,9 +12,12 @@ from django.test import TestCase
 from django.template import Template, Context, TemplateSyntaxError
 from django.utils import timezone
 
-from hitcount.models import Hit, HitCount
+from hitcount.models import Hit
+from hitcount.utils import get_hitcount_model
 
 from blog.models import Post
+
+HitCount = get_hitcount_model()
 
 
 class TemplateTagGetHitCountTests(TestCase):

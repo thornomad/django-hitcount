@@ -21,6 +21,9 @@ setup(
     long_description=README,
     author='Damon Timm',
     author_email='damontimm@gmail.com',
+    install_requires=[
+        'django-etc>=1.2.0',
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Plugins',

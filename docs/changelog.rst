@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 1.3.3
+-------------
+
+ * Dropped support for Python 2.x `#98`_
+ * Make it possible to customize ``HitCount`` model per project `#98`_
+ * ``order_by("hit_count_generic__hits")`` gives ``django.db.utils.ProgrammingError`` `#90`_
+ * Version 1.3.1 migrate error `#80`_
+
+Version 1.3.2
+-------------
+
+ * Drop ``python_2_unicode_compatible`` `#86`_
+
 Version 1.3.1
 -------------
 
@@ -68,6 +81,10 @@ Version 1.1.0
 
 .. note:: if you are upgrading from version 0.2 (it's so old!) the ``HitCount.object_pk`` was changed from a ``CharField`` to a ``PositiveIntegerField``.  You will have to manually fix this in your database after upgrading.
 
+.. _#98: https://github.com/thornomad/django-hitcount/pull/98          
+.. _#90: https://github.com/thornomad/django-hitcount/issues/90
+.. _#80: https://github.com/thornomad/django-hitcount/issues/80
+.. _#86: https://github.com/thornomad/django-hitcount/issues/86
 .. _#64: https://github.com/thornomad/django-hitcount/issues/64
 .. _#67: https://github.com/thornomad/django-hitcount/pull/67
 .. _#63: https://github.com/thornomad/django-hitcount/issues/63
