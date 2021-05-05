@@ -2,14 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.contenttypes.fields import GenericRelation
 
 from hitcount.models import HitCountMixin
 from hitcount.settings import MODEL_HITCOUNT
 
 
-@python_2_unicode_compatible
 class Post(models.Model, HitCountMixin):
     title = models.CharField(max_length=200)
     content = models.TextField()
