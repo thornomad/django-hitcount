@@ -78,7 +78,7 @@ class HitCountMixin(object):
                     False, 'Not counted: hits per IP address limit reached')
 
         # create a generic Hit object with request data
-        hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request),
+        hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request), domain=request.get_host(),
                   user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
 
         # first, use a user's authentication to see if they made an earlier hit
