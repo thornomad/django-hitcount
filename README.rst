@@ -34,3 +34,5 @@ Changelog
 `<http://django-hitcount.readthedocs.org/en/latest/changelog.html>`_
 
 .. _issue tracker: https://github.com/thornomad/django-hitcount/issues
+
+i was added additional field in model hit, name is domain. it use for support for project with Site ID.
