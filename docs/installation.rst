@@ -13,6 +13,10 @@ Add django-hitcount to your ``INSTALLED_APPS``::
         'hitcount'
     )
 
+Perform database migration::
+
+    python manage.py migrate
+
 View the :doc:`additional settings section </settings>` for a list of the django-hitcount settings that are available.
 
 For a working implementation, you can view the `example project`_ on Github.
