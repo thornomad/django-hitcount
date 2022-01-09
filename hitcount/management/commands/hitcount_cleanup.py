@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from datetime import timedelta
 
 from django.conf import settings
@@ -18,7 +15,7 @@ class Command(BaseCommand):
     help = "Can be run as a cronjob or directly to clean out old Hits objects from the database."
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def handle(self, *args, **kwargs):
         self.handle_noargs()

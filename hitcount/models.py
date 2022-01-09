@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 from datetime import timedelta
 
 from django.db import models
@@ -9,7 +7,7 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from etc.toolbox import get_model_class_from_string
 
@@ -148,7 +146,7 @@ class Hit(models.Model):
         if self.pk is None:
             self.hitcount.increase()
 
-        super(Hit, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, save_hitcount=False):
         """
@@ -161,7 +159,7 @@ class Hit(models.Model):
         """
         delete_hit_count.send(
             sender=self, instance=self, save_hitcount=save_hitcount)
-        super(Hit, self).delete()
+        super().delete()
 
 
 class BlacklistIP(models.Model):
@@ -190,7 +188,7 @@ class BlacklistUserAgent(models.Model):
         return '%s' % self.user_agent
 
 
-class HitCountMixin(object):
+class HitCountMixin:
     """
     HitCountMixin provides an easy way to add a `hit_count` property to your
     model that will return the related HitCount object.

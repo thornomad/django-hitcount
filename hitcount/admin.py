@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
@@ -20,14 +18,14 @@ class HitAdmin(admin.ModelAdmin):
                ]
 
     def __init__(self, *args, **kwargs):
-        super(HitAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.list_display_links = None
 
     def has_add_permission(self, request):
         return False
 
     def get_actions(self, request):
-        actions = super(HitAdmin, self).get_actions(request)
+        actions = super().get_actions(request)
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
