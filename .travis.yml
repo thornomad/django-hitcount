@@ -1,20 +1,19 @@
+# Config file for automatic testing at travis-ci.org
+dist: xenial
 language: python
+cache: pip
+sudo: false
+
 python:
-  - 3.4
-  - 3.5
-  - 3.6
-env:
-    - DJANGO=1.8
-    - DJANGO=1.11
-    - DJANGO=2.0
-matrix:
-  exclude:
-    - python: 3.5
-      env: DJANGO=1.8
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+
 install:
-    - pip install --upgrade pip
-    - pip install tox-travis
-    - pip install tox coveralls
+  - pip install tox-travis coveralls
+
 script:
-    - tox
+  - tox
+
 after_success: coveralls
