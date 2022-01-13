@@ -11,7 +11,7 @@ from blog.models import Post
 
 class PostMixinDetailView(object):
     """
-    Mixin to same us some typing.  Adds context for us!
+    Mixin to save us some typing.  Adds context for us!
     """
     model = Post
 
