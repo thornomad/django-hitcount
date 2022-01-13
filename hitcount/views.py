@@ -110,7 +110,7 @@ class HitCountJSONView(View, HitCountMixin):
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.is_ajax():
+        if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
             raise Http404()
         return super().dispatch(request, *args, **kwargs)
 
