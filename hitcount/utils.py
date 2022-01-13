@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import re
 import warnings
 
@@ -8,7 +6,7 @@ from etc.toolbox import get_model_class_from_settings
 
 
 # this is not intended to be an all-knowing IP address regex
-IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
+IP_RE = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
 
 
 def get_ip(request):
@@ -25,7 +23,7 @@ def get_ip(request):
     """
 
     # if neither header contain a value, just use local loopback
-    ip_address = request.META.get('HTTP_X_FORWARDED_FOR',
+    ip_address = request.headers.get('X-Forwarded-For',
                                   request.META.get('REMOTE_ADDR', '127.0.0.1'))
     if ip_address:
         # make sure we have one and only one IP

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.3.4
+-------------
+
+ * Django 3.x support `#108`_
+ * Dropped support for Django < 2.2
+
 Version 1.3.3
 -------------
 
@@ -81,7 +87,8 @@ Version 1.1.0
 
 .. note:: if you are upgrading from version 0.2 (it's so old!) the ``HitCount.object_pk`` was changed from a ``CharField`` to a ``PositiveIntegerField``.  You will have to manually fix this in your database after upgrading.
 
-.. _#98: https://github.com/thornomad/django-hitcount/pull/98          
+.. _#108: https://github.com/thornomad/django-hitcount/issues/108
+.. _#98: https://github.com/thornomad/django-hitcount/pull/98
 .. _#90: https://github.com/thornomad/django-hitcount/issues/90
 .. _#80: https://github.com/thornomad/django-hitcount/issues/80
 .. _#86: https://github.com/thornomad/django-hitcount/issues/86

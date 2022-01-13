@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models, migrations
 from django.conf import settings
 
@@ -77,7 +74,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='hitcount',
-            unique_together=set([('content_type', 'object_pk')]),
+            unique_together=('content_type', 'object_pk'),
         ),
         migrations.AddField(
             model_name='hit',

@@ -52,7 +52,7 @@ The code below is used to update the page view so we can test it with selenium.
 
 {% block inline_javascript %}
 
-{% load staticfiles %}
+{% load static %}
 <script src="{% static 'hitcount/jquery.postcsrf.js' %}"></script>
 
 {% get_hit_count_js_variables for post as hitcount %}

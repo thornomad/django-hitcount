@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import warnings
 from collections import namedtuple
 
@@ -12,7 +10,7 @@ from hitcount.models import Hit, BlacklistIP, BlacklistUserAgent
 from hitcount.utils import RemovedInHitCount13Warning, get_hitcount_model
 
 
-class HitCountMixin(object):
+class HitCountMixin:
     """
     Mixin to evaluate a HttpRequest and a HitCount and determine whether or not
     the HitCount should be incremented and the Hit recorded.
@@ -45,7 +43,7 @@ class HitCountMixin(object):
             is_authenticated_user = user.is_authenticated
         session_key = request.session.session_key
         ip = get_ip(request)
-        user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
+        user_agent = request.headers.get('User-Agent', '')[:255]
         hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
         exclude_user_group = getattr(settings, 'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
@@ -79,7 +77,7 @@ class HitCountMixin(object):
 
         # create a generic Hit object with request data
         hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request),
-                  user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],)
+                  user_agent=request.headers.get('User-Agent', '')[:255],)
 
         # first, use a user's authentication to see if they made an earlier hit
         if is_authenticated_user:
@@ -114,7 +112,7 @@ class HitCountJSONView(View, HitCountMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.is_ajax():
             raise Http404()
-        return super(HitCountJSONView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         msg = "Hits counted via POST only."
@@ -146,7 +144,7 @@ class HitCountDetailView(DetailView, HitCountMixin):
     count_hit = False
 
     def get_context_data(self, **kwargs):
-        context = super(HitCountDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if self.object:
             hit_count = get_hitcount_model().objects.get_for_object(self.object)
             hits = hit_count.hits
