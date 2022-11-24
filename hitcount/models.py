@@ -125,6 +125,10 @@ class Hit(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, null=True, editable=False, on_delete=models.CASCADE)
     hitcount = models.ForeignKey(MODEL_HITCOUNT, editable=False, on_delete=models.CASCADE)
 
+    # additional field to support multi site hitcount
+    # this is to store domain name, and we can compare to Site model
+    domain = models.CharField(max_length=255, editable=False, default='')
+
     objects = HitManager()
 
     class Meta:

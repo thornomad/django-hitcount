@@ -47,6 +47,9 @@ class HitCountMixin:
         hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
         exclude_user_group = getattr(settings, 'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
+        # additional get host name
+        domain = request.get_host()
+
         # first, check our request against the IP blacklist
         if BlacklistIP.objects.filter(ip__exact=ip):
             return UpdateHitCountResponse(
@@ -76,7 +79,7 @@ class HitCountMixin:
                     False, 'Not counted: hits per IP address limit reached')
 
         # create a generic Hit object with request data
-        hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request),
+        hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request), domain=request.get_host(),
                   user_agent=request.headers.get('User-Agent', '')[:255],)
 
         # first, use a user's authentication to see if they made an earlier hit
