@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: django-hitcount
+Version: 1.3.5
+Summary: Hit counting application for Django.
+Home-page: http://github.com/thornomad/django-hitcount
+Author: Damon Timm
+Author-email: damontimm@gmail.com
+License: BSD
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Plugins
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+License-File: LICENSE
+
+django-hitcount
+===============
+
+.. image:: https://travis-ci.org/thornomad/django-hitcount.svg?branch=master
+    :target: https://travis-ci.org/thornomad/django-hitcount
+.. image:: https://coveralls.io/repos/thornomad/django-hitcount/badge.svg?branch=master
+    :target: https://coveralls.io/r/thornomad/django-hitcount?branch=master
+.. image:: https://badge.fury.io/py/django-hitcount.svg
+    :target: http://badge.fury.io/py/django-hitcount
+.. image:: https://requires.io/github/thornomad/django-hitcount/requirements.svg?branch=develop
+     :target: https://requires.io/github/thornomad/django-hitcount/requirements/?branch=develop
+     :alt: Requirements Status
+
+Basic app that allows you to track the number of hits/views for a particular object.
+
+Documentation:
+--------------
+
+`<http://django-hitcount.rtfd.org>`_
+
+Source Code:
+------------
+
+`<https://github.com/thornomad/django-hitcount>`_
+
+Issues
+------
+
+Use the GitHub `issue tracker`_ for django-hitcount to submit bugs, issues, and feature requests.
+
+Changelog
+---------
+
+`<http://django-hitcount.readthedocs.org/en/latest/changelog.html>`_
+
+.. _issue tracker: https://github.com/thornomad/django-hitcount/issues
