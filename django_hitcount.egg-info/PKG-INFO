@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: django-hitcount
-Version: 1.3.5
+Version: 1.3.52
 Summary: Hit counting application for Django.
 Home-page: http://github.com/thornomad/django-hitcount
 Author: Damon Timm

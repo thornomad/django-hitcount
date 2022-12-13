@@ -49,7 +49,7 @@ class HitCountMixin:
 
         # additional get host name
         domain = request.get_host()
-        print('session_key = ', session_key)
+        # print('session_key = ', session_key)
         # first, check our request against the IP blacklist
         if BlacklistIP.objects.filter(ip__exact=ip):
             return UpdateHitCountResponse(
