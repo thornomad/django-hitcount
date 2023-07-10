@@ -38,7 +38,11 @@ class HitCountBase(models.Model):
 
     Model that stores the hit totals for any content object.
 
+    ** Added id to avoid warning of default_auto_field as new change
+    came on Django 3.2
+
     """
+    id = models.BigAutoField(primary_key=True)
     hits = models.PositiveIntegerField(default=0)
     modified = models.DateTimeField(auto_now=True)
     content_type = models.ForeignKey(
@@ -117,7 +121,11 @@ class Hit(models.Model):
     to clean up your Hit table by using the management `hitcount_cleanup`
     management command.
 
+    ** Added id to avoid warning of default_auto_field as new change
+    came on Django 3.2
+
     """
+    id = models.BigAutoField(primary_key=True)
     created = models.DateTimeField(editable=False, auto_now_add=True, db_index=True)
     ip = models.CharField(max_length=40, editable=False, db_index=True)
     session = models.CharField(max_length=40, editable=False, db_index=True)
@@ -164,6 +172,7 @@ class Hit(models.Model):
 
 class BlacklistIP(models.Model):
 
+    id = models.BigAutoField(primary_key=True)
     ip = models.CharField(max_length=40, unique=True)
 
     class Meta:
@@ -177,6 +186,7 @@ class BlacklistIP(models.Model):
 
 class BlacklistUserAgent(models.Model):
 
+    id = models.BigAutoField(primary_key=True)
     user_agent = models.CharField(max_length=255, unique=True)
 
     class Meta:
