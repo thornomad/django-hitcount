@@ -4,3 +4,7 @@
 .AppleDouble
 *.swp
 *.sublime-*
+
+.venv/
+.idea/
+db.sqlite3
