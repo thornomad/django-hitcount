@@ -48,6 +48,10 @@ msgstr "删除选定的点击和黑名单相关的用户代理"
 msgid "Delete selected hits"
 msgstr "删除选中的点击"
 
+#: apps.py:7
+msgid "Hit Count"
+msgstr "点击数"
+
 #: models.py:59
 msgid "hit count"
 msgstr "点击数"
