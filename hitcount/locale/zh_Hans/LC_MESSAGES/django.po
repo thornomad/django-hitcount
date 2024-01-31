@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-30 16:50+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: admin.py:38
+#, python-format
+msgid "Successfully blacklisted %d IPs"
+msgstr "已成功将 %d 个 IP 列入黑名单"
+
+#: admin.py:40
+msgid "Blacklist selected IP addresses"
+msgstr "黑名单选中的 IP 地址"
+
+#: admin.py:48
+#, python-format
+msgid "Successfully blacklisted %d User Agents"
+msgstr "已成功将 %d 个用户代理列入黑名单"
+
+#: admin.py:50
+msgid "Blacklist selected User Agents"
+msgstr "黑名单选中的用户代理"
+
+#: admin.py:56
+msgid "Delete selected hits and blacklist related IP addresses"
+msgstr "删除选定的点击和黑名单相关的 IP 地址"
+
+#: admin.py:62
+msgid "Delete selected hits and blacklist related User Agents"
+msgstr "删除选定的点击和黑名单相关的用户代理"
+
+#: admin.py:77
+msgid "Delete selected hits"
+msgstr "删除选中的点击"
+
+#: apps.py:7
+msgid "Hit Count"
+msgstr "点击数"
+
+#: models.py:59
+msgid "hit count"
+msgstr "点击数"
+
+#: models.py:60
+msgid "hit counts"
+msgstr "点击数"
+
+#: models.py:141
+msgid "hit"
+msgstr "点击"
+
+#: models.py:142
+msgid "hits"
+msgstr "点击"
+
+#: models.py:180
+msgid "Blacklisted IP"
+msgstr "黑名单 IP"
+
+#: models.py:181
+msgid "Blacklisted IPs"
+msgstr "黑名单 IP"
+
+#: models.py:194
+msgid "Blacklisted User Agent"
+msgstr "黑名单用户代理"
+
+#: models.py:195
+msgid "Blacklisted User Agents"
+msgstr "黑名单用户代理"
