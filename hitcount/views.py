@@ -47,6 +47,9 @@ class HitCountMixin:
         hits_per_ip_limit = getattr(settings, 'HITCOUNT_HITS_PER_IP_LIMIT', 0)
         exclude_user_group = getattr(settings, 'HITCOUNT_EXCLUDE_USER_GROUP', None)
 
+        # additional get host name
+        domain = request.get_host()
+        # print('session_key = ', session_key)
         # first, check our request against the IP blacklist
         if BlacklistIP.objects.filter(ip__exact=ip):
             return UpdateHitCountResponse(
@@ -76,30 +79,35 @@ class HitCountMixin:
                     False, 'Not counted: hits per IP address limit reached')
 
         # create a generic Hit object with request data
-        hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request),
-                  user_agent=request.headers.get('User-Agent', '')[:255],)
+        if session_key: # if not None
+            hit = Hit(session=session_key, hitcount=hitcount, ip=get_ip(request), domain=request.get_host(),
+                    user_agent=request.headers.get('User-Agent', '')[:255],)
 
-        # first, use a user's authentication to see if they made an earlier hit
-        if is_authenticated_user:
-            if not qs.filter(user=user, hitcount=hitcount):
-                hit.user = user  # associate this hit with a user
-                hit.save()
+            # first, use a user's authentication to see if they made an earlier hit
+            if is_authenticated_user:
+                if not qs.filter(user=user, hitcount=hitcount):
+                    hit.user = user  # associate this hit with a user
+                    hit.save()
 
-                response = UpdateHitCountResponse(
-                    True, 'Hit counted: user authentication')
+                    response = UpdateHitCountResponse(
+                        True, 'Hit counted: user authentication')
+                else:
+                    response = UpdateHitCountResponse(
+                        False, 'Not counted: authenticated user has active hit')
+
+            # if not authenticated, see if we have a repeat session
             else:
-                response = UpdateHitCountResponse(
-                    False, 'Not counted: authenticated user has active hit')
-
-        # if not authenticated, see if we have a repeat session
+                print('session_key = ', session_key)
+                if not qs.filter(session=session_key, hitcount=hitcount):
+                    hit.save()
+                    response = UpdateHitCountResponse(
+                        True, 'Hit counted: session key')
+                else:
+                    response = UpdateHitCountResponse(
+                        False, 'Not counted: session key has active hit')
         else:
-            if not qs.filter(session=session_key, hitcount=hitcount):
-                hit.save()
-                response = UpdateHitCountResponse(
-                    True, 'Hit counted: session key')
-            else:
-                response = UpdateHitCountResponse(
-                    False, 'Not counted: session key has active hit')
+            response = UpdateHitCountResponse(
+                False, 'Not counted: session key is nothing!')
 
         return response
 
@@ -146,7 +154,7 @@ class HitCountDetailView(DetailView, HitCountMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
-            hit_count = get_hitcount_model().objects.get_for_object(self.object)
+            hit_count = get_hitcount_model().objects.get_for_object(self.request, self.object)
             hits = hit_count.hits
             context['hitcount'] = {'pk': hit_count.pk}
 

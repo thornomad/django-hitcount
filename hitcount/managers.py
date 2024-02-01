@@ -8,10 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 
 class HitCountManager(models.Manager):
 
-    def get_for_object(self, obj):
+    def get_for_object(self, request, obj):
         ctype = ContentType.objects.get_for_model(obj)
+        domain = request.get_host()
         hit_count, created = self.get_or_create(
-            content_type=ctype, object_pk=obj.pk)
+            content_type=ctype, object_pk=obj.pk, domain=domain)
         return hit_count
 
 

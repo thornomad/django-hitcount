@@ -16,7 +16,7 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 from .managers import HitCountManager, HitManager
 from .settings import MODEL_HITCOUNT
 from .signals import delete_hit_count
-
+exposed_request = None
 
 @receiver(delete_hit_count)
 def delete_hit_count_handler(sender, instance, save_hitcount=False, **kwargs):
@@ -49,6 +49,9 @@ class HitCountBase(models.Model):
         ContentType, related_name="content_type_set_for_%(class)s", on_delete=models.CASCADE)
     object_pk = models.PositiveIntegerField(verbose_name='object ID')
     content_object = GenericForeignKey('content_type', 'object_pk')
+
+    # For counting hitcount and make different from one site to other
+    domain = models.CharField(max_length=255, editable=False, default='')
 
     objects = HitCountManager()
 
@@ -133,6 +136,10 @@ class Hit(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, null=True, editable=False, on_delete=models.CASCADE)
     hitcount = models.ForeignKey(MODEL_HITCOUNT, editable=False, on_delete=models.CASCADE)
 
+    # additional field to support multi site hitcount
+    # this is to store domain name, and we can compare to Site model
+    domain = models.CharField(max_length=255, editable=False, default='')
+
     objects = HitManager()
 
     class Meta:
@@ -207,6 +214,8 @@ class HitCountMixin:
     @property
     def hit_count(self):
         ctype = ContentType.objects.get_for_model(self.__class__)
+        domain = exposed_request.get_host()
+        print('domain = ',domain)
         hit_count, created = get_model_class_from_string(MODEL_HITCOUNT).objects.get_or_create(
-            content_type=ctype, object_pk=self.pk)
+            content_type=ctype, object_pk=self.pk, domain=domain)
         return hit_count
