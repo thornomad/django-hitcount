@@ -7,8 +7,8 @@ from .utils import get_hitcount_model
 
 
 class HitAdmin(admin.ModelAdmin):
-    list_display = ('created', 'user', 'ip', 'user_agent', 'hitcount')
-    search_fields = ('ip', 'user_agent')
+    list_display = ('created', 'user', 'ip', 'domain', 'user_agent', 'hitcount')
+    search_fields = ('ip', 'user_agent', 'domain')
     date_hierarchy = 'created'
     actions = ['blacklist_ips',
                'blacklist_user_agents',
